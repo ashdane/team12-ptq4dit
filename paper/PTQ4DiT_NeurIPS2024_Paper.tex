@@ -1,0 +1,352 @@
+\documentclass[10pt,a4paper]{article}
+
+\usepackage[a4paper,margin=20mm]{geometry}
+\usepackage{mathptmx}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{microtype}
+\usepackage{caption}
+
+\definecolor{primary}{RGB}{20, 54, 109}
+\definecolor{accent}{RGB}{180, 55, 35}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=primary,
+    citecolor=primary,
+    urlcolor=primary,
+    pdftitle={PTQ4DiT: Post-training Quantization for Diffusion Transformers (NeurIPS 2024)},
+    pdfauthor={Junyi Wu, Haoxuan Wang, Yuzhang Shang, Mubarak Shah, Yan Yan}
+}
+
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+\setlength{\parindent}{0pt}
+
+\newcommand{\takeaway}[2]{%
+  \vspace{6pt}\noindent\colorbox{primary!8}{%
+    \parbox{\dimexpr\textwidth-2\fboxsep\relax}{%
+      \vspace{3pt}\textbf{\color{primary}#1:}\hspace{0.5em}#2\vspace{3pt}%
+    }%
+  }\vspace{6pt}%
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\footnotesize\textit{PTQ4DiT: Post-training Quantization for Diffusion Transformers (NeurIPS 2024 --- arXiv:2405.16005v3)}}
+\fancyhead[R]{\footnotesize\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\title{\vspace{-10mm}\textbf{\LARGE\color{primary} PTQ4DiT: Post-training Quantization for Diffusion Transformers}\\[0.5em]
+\large NeurIPS 2024 $\cdot$ arXiv:2405.16005v3 [cs.CV]}
+
+\author{
+\textbf{Junyi Wu}$^{1,3,*}$, \textbf{Haoxuan Wang}$^{1,*}$, \textbf{Yuzhang Shang}$^{2}$, \textbf{Mubarak Shah}$^{3}$, \textbf{Yan Yan}$^{1,\dagger}$\\[0.3em]
+\small $^{1}$University of Illinois Chicago \quad $^{2}$Illinois Institute of Technology \quad $^{3}$University of Central Florida\\
+\small $^{*}$Equal Contribution \quad $^{\dagger}$Corresponding Author\\
+\small Official Repository: \url{https://github.com/adreamwu/PTQ4DiT}
+}
+\date{October 17, 2024}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent
+The recent introduction of Diffusion Transformers (DiTs) has demonstrated exceptional capabilities in image generation by using a different backbone architecture, departing from traditional U-Nets and embracing the scalable nature of transformers. Despite their advanced capabilities, the wide deployment of DiTs, particularly for real-time applications, is currently hampered by considerable computational demands at the inference stage. Post-training Quantization (PTQ) has emerged as a fast and data-efficient solution that can significantly reduce computation and memory footprint by using low-bit weights and activations. However, its applicability to DiTs has not yet been explored and faces non-trivial difficulties due to the unique design of DiTs. In this paper, we propose \textbf{PTQ4DiT}, a specifically designed PTQ method for DiTs. We discover two primary quantization challenges inherent in DiTs, notably the presence of salient channels with extreme magnitudes and the temporal variability in distributions of salient activation over multiple timesteps. To tackle these challenges, we propose \textbf{Channel-wise Salience Balancing (CSB)} and \textbf{Spearman's $\rho$-guided Salience Calibration (SSC)}. CSB leverages the complementarity property of channel magnitudes to redistribute the extremes, alleviating quantization errors for both activations and weights. SSC extends this approach by dynamically adjusting the balanced salience to capture the temporal variations in activation. Additionally, to eliminate extra computational costs caused by PTQ4DiT during inference, we design an offline re-parameterization strategy for DiTs. Experiments demonstrate that our PTQ4DiT successfully quantizes DiTs to 8-bit precision (W8A8) while preserving comparable generation ability and further enables effective quantization to 4-bit weight precision (W4A8) for the first time.
+\end{abstract}
+
+\takeaway{CS3406 Accelerator Project Note}{This document contains the complete mathematical specification, algorithms, experimental benchmarks, and re-parameterization proofs from the NeurIPS 2024 paper \textit{PTQ4DiT} (\texttt{arXiv:2405.16005v3}) for offline reference during your GPU cluster slots.}
+
+\section{Introduction}
+
+Diffusion models have spearheaded recent breakthroughs in generation tasks \cite{yang2023diffusion,croitoru2023diffusion}. Traditionally, these models were based on convolutional U-Nets \cite{ronneberger2015u} as their backbone architectures \cite{sohl2015deep,ho2020denoising,dhariwal2021diffusion,rombach2022high}. However, recent work \cite{bao2022all,yang2022your,liu2024sora} has revealed that the U-Net inductive bias is not essential for the success of diffusion models and even limits their scalability. Among this trend, Diffusion Transformers (DiTs) \cite{peebles2023scalable} have demonstrated exceptional capabilities in image generation by using a different backbone architecture. Different from U-Nets that carefully design downsampling and upsampling blocks with skip-connections, DiTs are constructed by repeatedly and sequentially stacking transformer blocks \cite{vaswani2017attention}. This architectural choice inherits the scaling property of transformers \cite{carion2020end,touvron2021training,xie2021segformer,liu2021swin}, facilitating more flexible parameter expansion for enhanced performance. With their versatility and scalability, DiTs have been integrated into advanced frameworks like Sora \cite{brooks2024video}, demonstrating their potential as a leading architecture for generative models \cite{gao2023masked,chen2024pixart,liu2024sora,zhu2024sora}.
+
+Nonetheless, the widespread adoption of Diffusion Transformers is constrained by their massive parameter count and computational complexity. DiTs consist of a large number of repeated transformer blocks and employ a lengthy iterative image sampling process, demanding high computational costs during inference. For instance, generating a $512 \times 512$ resolution image using DiTs can take more than 20 seconds and $10^5$ GFLOPs on an NVIDIA RTX A6000 GPU.
+
+Model quantization \cite{nagel2021white,nagel2020up,liu2023oscillation} is a prominent technique for accelerating deep learning models because of its high compression rate and reduction in inference time. Among various methods, Post-training Quantization (PTQ) stands out since it circumvents the need to re-train the original model \cite{yuan2022ptq4vit,shang2023post,li2023q,zhang2024magr}. Practically, PTQ requires only a small dataset for fast calibration, making it highly suitable for quantizing DiTs.
+
+However, quantizing DiTs in a post-training manner is non-trivial due to the complex distribution patterns in weights and activations. We discover two major challenges that impede the effective quantization of DiTs:
+\begin{enumerate}
+    \item \textbf{Salient Channels with Extreme Magnitudes:} The emergence of salient channels---channels with extreme magnitudes---in both weights and activations of linear layers within DiT blocks. When low-bit representations are used for these salient channels, pronounced errors compared to the full-precision (FP) counterparts are observed.
+    \item \textbf{Temporal Variability Across Timesteps:} The extreme magnitudes within salient activation channels significantly vary as inference proceeds across multiple timesteps $t = t_1, t_2, \ldots, t_T$. Quantization strategies optimized for one timestep fail to generalize to other timesteps.
+\end{enumerate}
+
+Targeting these two challenges, we propose \textbf{PTQ4DiT}:
+\begin{itemize}
+    \item \textbf{Channel-wise Salience Balancing (CSB):} Capitalizes on the observation that extreme values do not coincide in the same channel of activation and weight within the same layer (complementarity property). We introduce diagonal Salience Balancing Matrices to channel-wise transform both activations and weights toward their geometric mean equilibrium.
+    \item \textbf{Spearman's $\rho$-guided Salience Calibration (SSC):} Extends channel salience along the temporal dimension by weighting timesteps inversely to the Spearman rank correlation $\rho(\mathbf{s}(\mathbf{X}^{(t)}), \mathbf{s}(\mathbf{W}))$, emphasizing timesteps where complementarity between activation and weight salience is strongest.
+    \item \textbf{Offline Re-Parameterization:} Absorbs the Salience Balancing Matrices into the linear weights and preceding adaptive LayerNorm (\texttt{adaLN}) MLPs or attention matrix multiplications offline, avoiding runtime rescaling overhead.
+\end{itemize}
+
+\section{Background and Related Works}
+
+\subsection{Diffusion Transformers (DiTs)}
+
+DiTs consist of $n_B$ blocks, each containing a Multi-Head Self-Attention (MHSA) and a Pointwise Feedforward (PF) module \cite{vaswani2017attention,dosovitskiy2021image,peebles2023scalable}, both preceded by their respective adaptive Layer Norm (\texttt{adaLN}) \cite{perez2018film}. In each block, conditional input $\mathbf{c} \in \mathbb{R}^{d_{in}}$ is converted to scale and shift parameters ($\boldsymbol{\gamma}, \boldsymbol{\beta} \in \mathbb{R}^{d_{in}}$), which are regressed through MLPs and injected into the noised latent $\mathbf{Z} \in \mathbb{R}^{n \times d_{in}}$ via \texttt{adaLN}:
+\begin{equation}
+(\boldsymbol{\gamma}, \boldsymbol{\beta}) = \mathrm{MLPs}(\mathbf{c}), \quad \mathrm{adaLN}(\mathbf{Z}) = \mathrm{LN}(\mathbf{Z}) \odot (\mathbf{1} + \boldsymbol{\gamma}) + \boldsymbol{\beta},
+\label{eq:1}
+\end{equation}
+where $\mathrm{LN}(\cdot)$ is standard Layer Normalization \cite{ba2016layer}.
+
+\subsection{Model Quantization}
+
+Model quantization transforms full-precision tensors into $b$-bit integer approximations:
+\begin{equation}
+Q(\mathbf{x}) = \mathrm{clamp}\!\left(\left\lfloor \frac{\mathbf{x}}{\boldsymbol{\delta}} \right\rceil + \boldsymbol{\lambda},\, 0,\, 2^b - 1\right),
+\label{eq:2}
+\end{equation}
+where $\mathbf{x}$ denotes the full-precision tensor, $\lfloor \cdot \rceil$ is the round-to-nearest operator, $\boldsymbol{\delta}$ is the step size (scale), and $\boldsymbol{\lambda}$ is the zero-point offset.
+
+\section{Diffusion Transformer Quantization Challenges}
+
+\textbf{Challenge 1: Pronounced Quantization Error in Salient Channels.} Activation and weight channels with high absolute values incur substantial MSE errors after uniform quantization (Eq.~\ref{eq:2}). Truncating these extreme values to preserve precision for standard channels causes severe deviations across DiT's deep sequential blocks.
+
+\textbf{Challenge 2: Temporal Variation in Salient Activation.} DiTs operate across a sequence of timesteps $t \in \{1, \ldots, T\}$ to transform noise into images. The distribution of maximal absolute values across activation channels varies significantly across timesteps, meaning static single-step calibration leads to cumulative quantization error.
+
+\section{PTQ4DiT Methodology}
+
+\subsection{Channel-wise Salience Balancing (CSB)}
+
+A linear layer $f(\cdot; \mathbf{W})$ within MHSA and PF modules takes a token sequence $\mathbf{X} \in \mathbb{R}^{n \times d_{in}}$ and weight matrix $\mathbf{W} \in \mathbb{R}^{d_{in} \times d_{out}}$ to compute $f(\mathbf{X}; \mathbf{W}) = \mathbf{X} \cdot \mathbf{W}$. Because large values rarely coincide in the same input channel $j$ of $\mathbf{X}$ and $\mathbf{W}$, CSB employs diagonal Salience Balancing Matrices $\mathbf{B}^{\mathbf{X}}$ and $\mathbf{B}^{\mathbf{W}}$:
+\begin{equation}
+\widetilde{\mathbf{X}} = \mathbf{X}\mathbf{B}^{\mathbf{X}}, \quad \widetilde{\mathbf{W}} = \mathbf{B}^{\mathbf{W}}\mathbf{W}.
+\label{eq:3}
+\end{equation}
+We measure the salience $s$ of channel $j \in \{1, 2, \ldots, d_{in}\}$ as its maximum absolute value:
+\begin{equation}
+s(\mathbf{X}_j) = \max(|\mathbf{X}_j|), \quad s(\mathbf{W}_j) = \max(|\mathbf{W}_j|), \quad j = 1, 2, \ldots, d_{in}.
+\label{eq:4}
+\end{equation}
+The balanced salience $\widetilde{s}$ representing the equilibrium between activation and weight channels is quantified via the geometric mean:
+\begin{equation}
+\widetilde{s}(\mathbf{X}_j, \mathbf{W}_j) = \left(s(\mathbf{X}_j) \cdot s(\mathbf{W}_j)\right)^{\frac{1}{2}}.
+\label{eq:5}
+\end{equation}
+We construct the diagonal Salience Balancing Matrices as:
+\begin{equation}
+\mathbf{B}^{\mathbf{X}} = \mathrm{diag}\!\left(\frac{\widetilde{s}(\mathbf{X}_1, \mathbf{W}_1)}{s(\mathbf{X}_1)},\, \frac{\widetilde{s}(\mathbf{X}_2, \mathbf{W}_2)}{s(\mathbf{X}_2)},\, \ldots,\, \frac{\widetilde{s}(\mathbf{X}_{d_{in}}, \mathbf{W}_{d_{in}})}{s(\mathbf{X}_{d_{in}})}\right),
+\label{eq:6}
+\end{equation}
+\begin{equation}
+\mathbf{B}^{\mathbf{W}} = \mathrm{diag}\!\left(\frac{\widetilde{s}(\mathbf{X}_1, \mathbf{W}_1)}{s(\mathbf{W}_1)},\, \frac{\widetilde{s}(\mathbf{X}_2, \mathbf{W}_2)}{s(\mathbf{W}_2)},\, \ldots,\, \frac{\widetilde{s}(\mathbf{X}_{d_{in}}, \mathbf{W}_{d_{in}})}{s(\mathbf{W}_{d_{in}})}\right).
+\label{eq:7}
+\end{equation}
+After transformation, $s(\widetilde{\mathbf{X}}_j) = s(\widetilde{\mathbf{W}}_j) = \widetilde{s}(\mathbf{X}_j, \mathbf{W}_j)$, reducing overall channel salience $s_o(\mathbf{X}) = \max_j s(\mathbf{X}_j)$:
+\begin{equation}
+\max\!\left(s_o(\widetilde{\mathbf{X}}),\, s_o(\widetilde{\mathbf{W}})\right) \le \max\!\left(s_o(\mathbf{X}),\, s_o(\mathbf{W})\right).
+\label{eq:8}
+\end{equation}
+
+\subsection{Spearman's $\rho$-guided Salience Calibration (SSC)}
+
+Across $T$ denoising timesteps, the linear layer receives $\mathbf{X}^{(1:T)} = (\mathbf{X}^{(1)}, \mathbf{X}^{(2)}, \ldots, \mathbf{X}^{(T)})$. At timestep $t$, the salience vectors are:
+\begin{equation}
+\mathbf{s}(\mathbf{X}^{(t)}) = \left(s(\mathbf{X}_1^{(t)}), s(\mathbf{X}_2^{(t)}), \ldots, s(\mathbf{X}_{d_{in}}^{(t)})\right), \quad \mathbf{s}(\mathbf{W}) = \left(s(\mathbf{W}_1), s(\mathbf{W}_2), \ldots, s(\mathbf{W}_{d_{in}})\right).
+\label{eq:9}
+\end{equation}
+The lower the correlation between $\mathbf{s}(\mathbf{X}^{(t)})$ and $\mathbf{s}(\mathbf{W})$, the stronger their complementarity and the greater the salience reduction from CSB. We formulate the Spearman's $\rho$-calibrated Temporal Salience $\mathbf{s}_\rho \in \mathbb{R}^{d_{in}}$ as:
+\begin{equation}
+\mathbf{s}_\rho(\mathbf{X}^{(1:T)}) = (\eta_1, \eta_2, \ldots, \eta_T) \cdot \left(\mathbf{s}(\mathbf{X}^{(1)}), \mathbf{s}(\mathbf{X}^{(2)}), \ldots, \mathbf{s}(\mathbf{X}^{(T)})\right)^{\mathsf{T}} \in \mathbb{R}^{d_{in}},
+\label{eq:10}
+\end{equation}
+where the normalized temporal weighting factors $\{\eta_t\}_{t=1}^T$ are computed from the inverse Spearman rank correlation $\rho(\cdot, \cdot)$:
+\begin{equation}
+\eta_t = \frac{\exp\!\left[-\rho(\mathbf{s}(\mathbf{X}^{(t)}), \mathbf{s}(\mathbf{W}))\right]}{\sum_{\tau=1}^T \exp\!\left[-\rho(\mathbf{s}(\mathbf{X}^{(\tau)}), \mathbf{s}(\mathbf{W}))\right]}.
+\label{eq:11}
+\end{equation}
+Substituting $\mathbf{s}_\rho(\mathbf{X}^{(1:T)})$ into Eqs.~\ref{eq:5}--\ref{eq:7} yields the refined Salience Balancing Matrices $\mathbf{B}_\rho^{\mathbf{X}}$ and $\mathbf{B}_\rho^{\mathbf{W}}$.
+
+\subsection{Offline Re-Parameterization}
+
+Since $\mathbf{B}_\rho^{\mathbf{X}}$ and $\mathbf{B}_\rho^{\mathbf{W}}$ are mutual inverses ($\mathbf{B}_\rho^{\mathbf{X}} \mathbf{B}_\rho^{\mathbf{W}} = \mathbf{I}$), the linear transformation maintains exact mathematical equivalence:
+\begin{equation}
+\widetilde{\mathbf{X}} \cdot \widetilde{\mathbf{W}} = (\mathbf{X}\mathbf{B}_\rho^{\mathbf{X}}) \cdot (\mathbf{B}_\rho^{\mathbf{W}}\mathbf{W}) = \mathbf{X} \cdot \mathbf{W}.
+\label{eq:12}
+\end{equation}
+\textbf{Post-adaLN Integration:} For linear layers following an \texttt{adaLN} module (\texttt{attn.qkv} and \texttt{mlp.fc1}), we absorb $\mathbf{B}_\rho^{\mathbf{X}}$ into the \texttt{adaLN} scale and shift parameters:
+\begin{equation}
+\widetilde{\mathbf{X}} = \widetilde{\mathrm{adaLN}}(\mathbf{Z}) = \mathrm{LN}(\mathbf{Z}) \odot (\mathbf{B}_\rho^{\mathbf{X}} + \widetilde{\boldsymbol{\gamma}}) + \widetilde{\boldsymbol{\beta}}, \quad \text{where} \quad \widetilde{\boldsymbol{\gamma}} = \boldsymbol{\gamma}\mathbf{B}_\rho^{\mathbf{X}}, \quad \widetilde{\boldsymbol{\beta}} = \boldsymbol{\beta}\mathbf{B}_\rho^{\mathbf{X}}.
+\label{eq:13}
+\end{equation}
+\textbf{Post-Matrix-Multiplication:} For linear layers following matrix multiplication (\texttt{attn.proj} and \texttt{mlp.fc2}), $\mathbf{B}_\rho^{\mathbf{X}}$ is absorbed into the preceding dequantization scale or upstream projection weights.
+
+\section{Experiments}
+
+We evaluate PTQ4DiT on class-conditional ImageNet generation using pre-trained \texttt{DiT-XL/2} models at $256 \times 256$ and $512 \times 512$ resolutions with 250, 100, and 50 DDPM sampling steps. Weights use channel-wise uniform quantization and activations use tensor-wise (or dynamic) uniform quantization. Calibration uses 25 timesteps for $256 \times 256$ and 10 timesteps for $512 \times 512$, with 32 samples per timestep.
+
+\begin{table}[htbp]
+\centering
+\caption{Performance comparison on ImageNet $256 \times 256$ across 250, 100, and 50 timesteps.}
+\label{tab:imagenet256}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}cc l r r r r r@{}}
+\toprule
+\textbf{Timesteps} & \textbf{Bit-width (W/A)} & \textbf{Method} & \textbf{Size (MB)} & \textbf{FID $\downarrow$} & \textbf{sFID $\downarrow$} & \textbf{IS $\uparrow$} & \textbf{Precision $\uparrow$} \\
+\midrule
+250 & 32/32 & FP Baseline & 2575.42 & 4.53 & 17.93 & 278.50 & 0.8231 \\
+250 & 8/8 & PTQ4DM & 645.72 & 21.65 & 100.14 & 134.22 & 0.6342 \\
+250 & 8/8 & Q-Diffusion & 645.72 & 5.57 & 18.22 & 227.50 & 0.7612 \\
+250 & 8/8 & PTQD & 645.72 & 5.69 & 18.42 & 224.26 & 0.7594 \\
+250 & 8/8 & RepQ* & 645.72 & 4.51 & 18.01 & 264.68 & 0.8076 \\
+250 & 8/8 & \textbf{PTQ4DiT (Ours)} & \textbf{645.72} & \textbf{4.63} & \textbf{17.72} & \textbf{274.86} & \textbf{0.8299} \\
+\cmidrule(lr){2-8}
+250 & 4/8 & PTQ4DM & 323.79 & 72.58 & 52.39 & 35.79 & 0.2642 \\
+250 & 4/8 & Q-Diffusion & 323.79 & 15.31 & 26.04 & 134.71 & 0.6194 \\
+250 & 4/8 & PTQD & 323.79 & 16.45 & 22.29 & 130.45 & 0.6111 \\
+250 & 4/8 & RepQ* & 323.79 & 23.21 & 28.58 & 104.28 & 0.4640 \\
+250 & 4/8 & \textbf{PTQ4DiT (Ours)} & \textbf{323.79} & \textbf{7.09} & \textbf{23.23} & \textbf{201.91} & \textbf{0.7217} \\
+\midrule
+100 & 32/32 & FP Baseline & 2575.42 & 5.00 & 19.02 & 274.78 & 0.8149 \\
+100 & 8/8 & PTQ4DM & 645.72 & 15.36 & 79.31 & 172.37 & 0.6926 \\
+100 & 8/8 & Q-Diffusion & 645.72 & 7.93 & 19.46 & 202.84 & 0.7299 \\
+100 & 8/8 & PTQD & 645.72 & 8.12 & 19.64 & 199.00 & 0.7295 \\
+100 & 8/8 & RepQ* & 645.72 & 5.20 & 19.87 & 254.70 & 0.7929 \\
+100 & 8/8 & \textbf{PTQ4DiT (Ours)} & \textbf{645.72} & \textbf{4.73} & \textbf{17.83} & \textbf{277.27} & \textbf{0.8270} \\
+\cmidrule(lr){2-8}
+100 & 4/8 & PTQ4DM & 323.79 & 89.78 & 57.20 & 26.02 & 0.2146 \\
+100 & 4/8 & Q-Diffusion & 323.79 & 54.95 & 36.13 & 42.80 & 0.3846 \\
+100 & 4/8 & PTQD & 323.79 & 55.96 & 37.24 & 42.87 & 0.3948 \\
+100 & 4/8 & RepQ* & 323.79 & 26.64 & 29.42 & 91.39 & 0.4347 \\
+100 & 4/8 & \textbf{PTQ4DiT (Ours)} & \textbf{323.79} & \textbf{7.75} & \textbf{22.01} & \textbf{190.38} & \textbf{0.7292} \\
+\midrule
+50 & 32/32 & FP Baseline & 2575.42 & 6.02 & 21.77 & 246.24 & 0.7812 \\
+50 & 8/8 & PTQ4DM & 645.72 & 17.52 & 84.28 & 154.08 & 0.6574 \\
+50 & 8/8 & Q-Diffusion & 645.72 & 14.61 & 27.57 & 153.01 & 0.6601 \\
+50 & 8/8 & PTQD & 645.72 & 15.21 & 27.52 & 151.60 & 0.6578 \\
+50 & 8/8 & RepQ* & 645.72 & 7.17 & 23.67 & 224.83 & 0.7496 \\
+50 & 8/8 & \textbf{PTQ4DiT (Ours)} & \textbf{645.72} & \textbf{5.45} & \textbf{19.50} & \textbf{250.68} & \textbf{0.7882} \\
+\cmidrule(lr){2-8}
+50 & 4/8 & PTQ4DM & 323.79 & 102.52 & 58.66 & 19.29 & 0.1710 \\
+50 & 4/8 & Q-Diffusion & 323.79 & 22.89 & 29.49 & 109.22 & 0.5752 \\
+50 & 4/8 & PTQD & 323.79 & 25.62 & 29.77 & 104.28 & 0.5667 \\
+50 & 4/8 & RepQ* & 323.79 & 31.39 & 30.77 & 80.64 & 0.4091 \\
+50 & 4/8 & \textbf{PTQ4DiT (Ours)} & \textbf{323.79} & \textbf{9.17} & \textbf{24.29} & \textbf{179.95} & \textbf{0.7052} \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{Performance on ImageNet $512 \times 512$ under W4A8 quantization.}
+\label{tab:imagenet512}
+\begin{tabularx}{\textwidth}{@{}c X r r r r@{}}
+\toprule
+\textbf{Timesteps} & \textbf{Method} & \textbf{FID $\downarrow$} & \textbf{sFID $\downarrow$} & \textbf{IS $\uparrow$} & \textbf{Precision $\uparrow$} \\
+\midrule
+250 & FP Baseline & 8.39 & 36.25 & 257.06 & 0.8426 \\
+250 & PTQ4DM & 68.43 & 57.76 & 35.16 & 0.4712 \\
+250 & Q-Diffusion & 58.81 & 56.75 & 31.29 & 0.4878 \\
+250 & PTQD & 87.53 & 74.55 & 34.40 & 0.5144 \\
+250 & RepQ* & 59.65 & 73.71 & 33.19 & 0.3676 \\
+250 & \textbf{PTQ4DiT (Ours)} & \textbf{17.55} & \textbf{46.92} & \textbf{123.49} & \textbf{0.7592} \\
+\midrule
+50 & FP Baseline & 11.28 & 41.70 & 213.86 & 0.8100 \\
+50 & PTQ4DM & 71.69 & 59.10 & 33.77 & 0.4604 \\
+50 & Q-Diffusion & 53.49 & 50.27 & 38.99 & 0.5430 \\
+50 & PTQD & 73.45 & 59.14 & 39.63 & 0.5508 \\
+50 & RepQ* & 65.92 & 74.19 & 30.92 & 0.3542 \\
+50 & \textbf{PTQ4DiT (Ours)} & \textbf{19.71} & \textbf{52.27} & \textbf{118.32} & \textbf{0.7336} \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{Ablation study of CSB and SSC on ImageNet $256 \times 256$ (250 steps, W4A8).}
+\label{tab:ablation}
+\begin{tabularx}{\textwidth}{@{}X r r r r r@{}}
+\toprule
+\textbf{Method Variant} & \textbf{Size (MB)} & \textbf{FID $\downarrow$} & \textbf{sFID $\downarrow$} & \textbf{IS $\uparrow$} & \textbf{Precision $\uparrow$} \\
+\midrule
+FP Baseline (32/32) & 2575.42 & 4.53 & 17.93 & 278.50 & 0.8231 \\
+Q-Diffusion (W4A8) & 323.79 & 15.31 & 26.04 & 134.71 & 0.6194 \\
+Linear Quantization Baseline (W4A8) & 323.79 & 22.54 & 27.31 & 105.55 & 0.4791 \\
+Baseline + CSB (Midpoint Timestep $T/2$) & 323.79 & 8.17 & 24.96 & 187.94 & 0.7183 \\
+\textbf{Baseline + CSB + SSC (Full PTQ4DiT)} & \textbf{323.79} & \textbf{7.09} & \textbf{23.23} & \textbf{201.91} & \textbf{0.7217} \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section*{Appendices: Algorithm \& Mathematical Derivations}
+
+\subsection*{Appendix B: PTQ4DiT Pipeline (Algorithm 1)}
+Given a pre-trained DiT model and calibration activation sequences $\mathbf{X}^{(1:T)}$:
+\begin{enumerate}
+    \item \textbf{Preparation:} Estimate activation salience $\mathbf{s}(\mathbf{X}^{(t)})$ at each calibration timestep $t$ and weight salience $\mathbf{s}(\mathbf{W})$ via Eq.~\ref{eq:9}.
+    \item \textbf{Spearman's $\rho$-guided Salience Calibration (SSC):} Compute correlation coefficients $\{\rho(\mathbf{s}(\mathbf{X}^{(t)}), \mathbf{s}(\mathbf{W}))\}_{t=1}^T$, weighting factors $\{\eta_t\}_{t=1}^T$ via Eq.~\ref{eq:11}, and temporal salience $\mathbf{s}_\rho(\mathbf{X}^{(1:T)})$ via Eq.~\ref{eq:10}.
+    \item \textbf{Channel-wise Salience Balancing (CSB):} Compute balanced salience for each channel $j$:
+    \begin{equation}
+    \widetilde{s_\rho}(\mathbf{X}_j^{(1:T)}, \mathbf{W}_j) = \left(s_\rho(\mathbf{X}_j^{(1:T)}) \cdot s(\mathbf{W}_j)\right)^{\frac{1}{2}},
+    \label{eq:14}
+    \end{equation}
+    and construct refined diagonal matrices $\mathbf{B}_\rho^{\mathbf{X}}$ and $\mathbf{B}_\rho^{\mathbf{W}}$.
+    \item \textbf{Offline Re-Parameterization:} Absorb $\mathbf{B}_\rho^{\mathbf{W}}$ into linear weights $\widetilde{\mathbf{W}} = \mathbf{B}_\rho^{\mathbf{W}}\mathbf{W}$, and absorb $\mathbf{B}_\rho^{\mathbf{X}}$ into the \texttt{adaLN} regression MLPs via Eqs.~\ref{eq:13} and \ref{eq:20}.
+    \item \textbf{Quantization:} Quantize the balanced activations $\widetilde{\mathbf{X}}$ and weights $\widetilde{\mathbf{W}}$ to target bit-widths ($W8A8$ or $W4A8$).
+\end{enumerate}
+
+\subsection*{Appendix C: Proof of Mathematical Equivalence}
+\begin{align}
+\mathbf{B}_\rho^{\mathbf{X}} \cdot \mathbf{B}_\rho^{\mathbf{W}}
+&= \mathrm{diag}\!\left(\frac{\widetilde{s_\rho}(\mathbf{X}_1^{(1:T)}, \mathbf{W}_1)}{s_\rho(\mathbf{X}_1^{(1:T)})} \cdot \frac{\widetilde{s_\rho}(\mathbf{X}_1^{(1:T)}, \mathbf{W}_1)}{s(\mathbf{W}_1)}, \ldots\right) \nonumber \\
+&= \mathrm{diag}\!\left(\frac{(s_\rho(\mathbf{X}_1^{(1:T)}) \cdot s(\mathbf{W}_1))^{\frac{1}{2}\cdot 2}}{s_\rho(\mathbf{X}_1^{(1:T)}) \cdot s(\mathbf{W}_1)}, \ldots\right) = \mathbf{I}. \label{eq:15}
+\end{align}
+Hence $\widetilde{\mathbf{X}} \cdot \widetilde{\mathbf{W}} = (\mathbf{X}\mathbf{B}_\rho^{\mathbf{X}}) \cdot (\mathbf{B}_\rho^{\mathbf{W}}\mathbf{W}) = \mathbf{X} \cdot (\mathbf{B}_\rho^{\mathbf{X}}\mathbf{B}_\rho^{\mathbf{W}}) \cdot \mathbf{W} = \mathbf{X} \cdot \mathbf{W}$.
+
+\subsection*{Appendix D: Derivations of Post-adaLN Integration}
+Recall that \texttt{adaLN} modulates normalized tokens $\mathrm{LN}(\mathbf{Z})$ using parameters regressed from conditioning vector $\mathbf{c}$:
+\begin{equation}
+(\boldsymbol{\gamma}, \boldsymbol{\beta}) = \mathrm{MLPs}(\mathbf{c}) = \mathbf{c} \cdot (\mathbf{W}_{\boldsymbol{\gamma}}, \mathbf{W}_{\boldsymbol{\beta}}) + (\mathbf{b}_{\boldsymbol{\gamma}}, \mathbf{b}_{\boldsymbol{\beta}}).
+\label{eq:18}
+\end{equation}
+Applying $\mathbf{B}_\rho^{\mathbf{X}}$ to the output of \texttt{adaLN} yields:
+\begin{equation}
+\widetilde{\mathbf{X}} = \mathbf{X}\mathbf{B}_\rho^{\mathbf{X}} = \mathrm{LN}(\mathbf{Z}) \odot \left(\mathbf{B}_\rho^{\mathbf{X}} + \boldsymbol{\gamma}\mathbf{B}_\rho^{\mathbf{X}}\right) + \boldsymbol{\beta}\mathbf{B}_\rho^{\mathbf{X}}.
+\label{eq:19}
+\end{equation}
+We pre-absorb $\mathbf{B}_\rho^{\mathbf{X}}$ into the MLP weights and biases offline:
+\begin{equation}
+(\widetilde{\mathbf{W}}_{\boldsymbol{\gamma}}, \widetilde{\mathbf{W}}_{\boldsymbol{\beta}}) = (\mathbf{W}_{\boldsymbol{\gamma}}\mathbf{B}_\rho^{\mathbf{X}}, \mathbf{W}_{\boldsymbol{\beta}}\mathbf{B}_\rho^{\mathbf{X}}), \quad (\widetilde{\mathbf{b}}_{\boldsymbol{\gamma}}, \widetilde{\mathbf{b}}_{\boldsymbol{\beta}}) = (\mathbf{b}_{\boldsymbol{\gamma}}\mathbf{B}_\rho^{\mathbf{X}}, \mathbf{b}_{\boldsymbol{\beta}}\mathbf{B}_\rho^{\mathbf{X}}),
+\label{eq:20}
+\end{equation}
+so that $\widetilde{\mathrm{MLPs}}(\mathbf{c}) = (\boldsymbol{\gamma}\mathbf{B}_\rho^{\mathbf{X}}, \boldsymbol{\beta}\mathbf{B}_\rho^{\mathbf{X}})$ with zero extra runtime overhead.
+
+\begin{thebibliography}{99}
+\bibitem{ba2016layer} J. L. Ba, J. R. Kiros, and G. E. Hinton. Layer normalization. \textit{arXiv:1607.06450}, 2016.
+\bibitem{bao2022all} F. Bao, C. Li, Y. Cao, and J. Zhu. All are worth words: a ViT backbone for score-based diffusion models. \textit{NeurIPS}, 2022.
+\bibitem{brooks2024video} T. Brooks et al. Video generation models as world simulators. \textit{OpenAI Technical Report}, 2024.
+\bibitem{carion2020end} N. Carion et al. End-to-end object detection with transformers. \textit{ECCV}, 2020.
+\bibitem{chen2024pixart} J. Chen et al. PixArt-$\alpha$: Fast training of diffusion transformer for photorealistic text-to-image synthesis. \textit{ICLR}, 2024.
+\bibitem{croitoru2023diffusion} F.-A. Croitoru et al. Diffusion models in vision: A survey. \textit{IEEE TPAMI}, 2023.
+\bibitem{dhariwal2021diffusion} P. Dhariwal and A. Nichol. Diffusion models beat GANs on image synthesis. \textit{NeurIPS}, 2021.
+\bibitem{dosovitskiy2021image} A. Dosovitskiy et al. An image is worth 16x16 words: Transformers for image recognition at scale. \textit{ICLR}, 2021.
+\bibitem{gao2023masked} S. Gao, P. Zhou, M.-M. Cheng, and S. Yan. Masked diffusion transformer is a strong image synthesizer. \textit{ICCV}, 2023.
+\bibitem{ho2020denoising} J. Ho, A. Jain, and P. Abbeel. Denoising diffusion probabilistic models. \textit{NeurIPS}, 2020.
+\bibitem{li2023q} X. Li et al. Q-Diffusion: Quantizing diffusion models. \textit{ICCV}, 2023.
+\bibitem{liu2023oscillation} S.-Y. Liu, Z. Liu, and K.-T. Cheng. Oscillation-free quantization for low-bit vision transformers. \textit{ICML}, 2023.
+\bibitem{liu2024sora} Y. Liu et al. Sora: A review on background, technology, limitations, and opportunities of large vision models. \textit{arXiv:2402.17177}, 2024.
+\bibitem{liu2021swin} Z. Liu et al. Swin Transformer: Hierarchical vision transformer using shifted windows. \textit{ICCV}, 2021.
+\bibitem{nagel2020up} M. Nagel et al. Up or down? Adaptive rounding for post-training quantization. \textit{ICML}, 2020.
+\bibitem{nagel2021white} M. Nagel et al. A white paper on neural network quantization. \textit{arXiv:2106.08295}, 2021.
+\bibitem{peebles2023scalable} W. Peebles and S. Xie. Scalable diffusion models with transformers. \textit{CVPR}, 2023.
+\bibitem{perez2018film} E. Perez et al. FiLM: Visual reasoning with a general conditioning layer. \textit{AAAI}, 2018.
+\bibitem{rombach2022high} R. Rombach et al. High-resolution image synthesis with latent diffusion models. \textit{CVPR}, 2022.
+\bibitem{ronneberger2015u} O. Ronneberger, P. Fischer, and T. Brox. U-Net: Convolutional networks for biomedical image segmentation. \textit{MICCAI}, 2015.
+\bibitem{shang2023post} Y. Shang et al. Post-training quantization on diffusion models (PTQ4DM). \textit{CVPR}, 2023.
+\bibitem{sohl2015deep} J. Sohl-Dickstein et al. Deep unsupervised learning using nonequilibrium thermodynamics. \textit{ICML}, 2015.
+\bibitem{touvron2021training} H. Touvron et al. Training data-efficient image transformers (DeiT). \textit{ICML}, 2021.
+\bibitem{vaswani2017attention} A. Vaswani et al. Attention is all you need. \textit{NeurIPS}, 2017.
+\bibitem{xie2021segformer} E. Xie et al. SegFormer: Simple and efficient design for semantic segmentation with transformers. \textit{NeurIPS}, 2021.
+\bibitem{yang2023diffusion} L. Yang et al. Diffusion models: A comprehensive survey of methods and applications. \textit{ACM Computing Surveys}, 2023.
+\bibitem{yang2022your} X. Yang et al. Your ViT is secretly a hybrid discriminative-generative diffusion model. \textit{arXiv:2208.07791}, 2022.
+\bibitem{yuan2022ptq4vit} Z. Yuan et al. PTQ4ViT: Post-training quantization for vision transformers with twin uniform quantization. \textit{ECCV}, 2022.
+\bibitem{zhang2024magr} A. Zhang et al. MagR: Weight magnitude reduction for enhancing post-training quantization. \textit{NeurIPS}, 2024.
+\bibitem{zhu2024sora} Z. Zhu et al. Is Sora a world simulator? A comprehensive survey on general world models and beyond. \textit{arXiv:2405.03520}, 2024.
+\end{thebibliography}
+
+\end{document}
