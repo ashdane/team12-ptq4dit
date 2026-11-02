@@ -1,0 +1,8 @@
+# Use CUDA-enabled PyTorch on the GPU host; its Linux wheel selects matching Triton.
+torch>=2.5
+numpy>=1.24
+# Optional for full pretrained DiT-XL/2 evaluation (fc1bench.full_model):
+# timm>=0.9.16
+# torchvision>=0.20
+# diffusers>=0.30
+# accelerate>=0.33

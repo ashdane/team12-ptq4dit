@@ -1,0 +1,124 @@
+import importlib.util
+import unittest
+
+HAS_TORCH = importlib.util.find_spec("torch") is not None
+if HAS_TORCH:
+    import torch
+HAS_CUDA = HAS_TORCH and torch.cuda.is_available() and importlib.util.find_spec("triton") is not None
+
+
+@unittest.skipUnless(HAS_CUDA, "CUDA and Triton are required")
+class OptimizedTests(unittest.TestCase):
+    def setUp(self):
+        torch.manual_seed(912)
+        torch.backends.cuda.matmul.allow_tf32 = False
+
+    def test_every_triton_candidate_with_tails_and_groups(self):
+        from fc1bench.optimized import candidates, gemm, prepare_weight
+        # Includes multiple M groups and partial M/N/K tiles. Signed extrema
+        # exercise -128 and -8, even though symmetric absmax avoids those codes.
+        m, n, k = 257, 67, 65
+        a = torch.randint(-128, 128, (m, k), dtype=torch.int8)
+        for bits in (8, 4):
+            w = torch.randint(-128 if bits == 8 else -8, 128 if bits == 8 else 8,
+                              (n, k), dtype=torch.int8)
+            expected = (a.long() @ w.long().T).cuda().int()
+            x, w = a.cuda(), w.cuda()
+            sx, sw = torch.rand(m, device="cuda"), torch.rand(n, device="cuda")
+            bias = torch.randn(n, device="cuda")
+            ref = expected.float()*sx[:, None]*sw[None, :]+bias
+            for config in candidates(bits):
+                if config.backend != "triton":
+                    continue
+                with self.subTest(bits=bits, config=config):
+                    stored = prepare_weight(w, bits, config)
+                    raw = gemm(x, stored, sx, sw, bias, bits=bits, config=config, raw=True)
+                    torch.testing.assert_close(raw, expected, rtol=0, atol=0)
+                    out = gemm(x, stored, sx, sw, bias, bits=bits, config=config)
+                    torch.testing.assert_close(out, ref, rtol=2e-5, atol=2e-5)
+
+    def test_native_dtypes_quantization_and_store(self):
+        from fc1bench.optimized import Config, gemm, prepare_weight, quantize_native
+        from fc1bench.quantization import quantize_rows
+        for dtype in (torch.float32, torch.float16, torch.bfloat16):
+            x = torch.randn(17, 129, device="cuda", dtype=dtype)
+            x[0] = 0
+            a, sx = quantize_native(x)
+            ar, sr = quantize_rows(x)
+            torch.testing.assert_close(a, ar, rtol=0, atol=0)
+            torch.testing.assert_close(sx, sr, rtol=0, atol=0)
+            for bits in (8, 4):
+                w, sw = quantize_rows(torch.randn(31, 129, device="cuda"), bits)
+                config = Config(layout="nk" if bits == 8 else "kn_packed")
+                raw = (a.cpu().long() @ w.cpu().long().T).cuda().int()
+                ref = (raw.float()*sx[:, None]*sw[None, :]).to(dtype)
+                out = gemm(a, prepare_weight(w, bits, config), sx, sw,
+                           bits=bits, config=config, dtype=dtype)
+                rtol = {torch.float32: 2e-5, torch.float16: 1e-3, torch.bfloat16: 1e-2}[dtype]
+                torch.testing.assert_close(out.float(), ref.float(), rtol=rtol, atol=2e-5)
+
+    def test_optional_torch_integer_backend(self):
+        if not hasattr(torch, "_int_mm"):
+            self.skipTest("torch._int_mm is unavailable")
+        from fc1bench.optimized import Config, gemm
+        a = torch.randint(-128, 128, (32, 128), dtype=torch.int8, device="cuda")
+        w = torch.randint(-128, 128, (64, 128), dtype=torch.int8, device="cuda")
+        expected = (a.cpu().long() @ w.cpu().long().T).cuda().int()
+        sx, sw = torch.ones(32, device="cuda"), torch.ones(64, device="cuda")
+        config = Config(backend="torch_int_mm")
+        raw = gemm(a, w, sx, sw, config=config, raw=True)
+        torch.testing.assert_close(raw, expected, rtol=0, atol=0)
+        out = gemm(a, w, sx, sw, config=config)
+        torch.testing.assert_close(out, expected.float(), rtol=0, atol=0)
+
+    def test_tuned_linear_fake_weight_layout_and_shape_gate(self):
+        from fc1bench.model_layers import TunedLinear
+        from fc1bench.optimized import Config
+        from fc1bench.quantization import quantize_rows
+        for bits in (8, 4):
+            w = torch.randn(33, 65, device="cuda")
+            q, _ = quantize_rows(w, bits)
+            config = Config(layout="nk" if bits == 8 else "kn_packed")
+            layer = TunedLinear(w, None, bits, config, 6).eval()
+            torch.testing.assert_close(layer.unpack(), q, rtol=0, atol=0)
+            x = torch.randn(2, 3, 65, device="cuda")
+            with torch.inference_mode():
+                actual = layer(x)
+                reference = layer.reference(x)
+                torch.testing.assert_close(actual, reference, rtol=2e-4, atol=2e-5)
+                with self.assertRaises(ValueError):
+                    layer(x[:1])
+
+    def test_rng_restored_and_replayed(self):
+        from fc1bench.eval_utils import matched_rng
+        before_cpu = torch.get_rng_state().clone()
+        before_gpu = torch.cuda.get_rng_state().clone()
+        with matched_rng(131):
+            first = torch.randn(19, device="cuda")
+            first_cpu = torch.randn(3)
+        torch.testing.assert_close(torch.get_rng_state(), before_cpu, rtol=0, atol=0)
+        torch.testing.assert_close(torch.cuda.get_rng_state(), before_gpu, rtol=0, atol=0)
+        with matched_rng(131):
+            torch.testing.assert_close(torch.randn(19, device="cuda"), first, rtol=0, atol=0)
+            torch.testing.assert_close(torch.randn(3), first_cpu, rtol=0, atol=0)
+
+    def test_tune_and_bank_roundtrip(self):
+        import tempfile
+        from pathlib import Path
+        from fc1bench.tuning import Bank, tune
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            # Reuse (257, 67, 65) FP32 so Triton hits the JIT cache from the first test.
+            x = torch.randn(257, 65, device="cuda", dtype=torch.float32)
+            w = torch.randn(67, 65, device="cuda")
+            b = torch.randn(67, device="cuda")
+            bank = Bank(root / "bank.json")
+            for bits in (8, 4):
+                config, report = tune(x, w, b, bits, root, rounds=2, inner=1)
+                self.assertEqual(report["status"], "ok")
+                bank.add(257, 67, 65, bits, torch.float32, config)
+            reloaded = Bank(root / "bank.json")
+            self.assertEqual(reloaded.get(257, 67, 65, 8, torch.float32),
+                             bank.get(257, 67, 65, 8, torch.float32))
+            self.assertEqual(reloaded.get(257, 67, 65, 4, torch.float32),
+                             bank.get(257, 67, 65, 4, torch.float32))
