@@ -1,7 +1,0 @@
-__pycache__/
-*.pyc
-results/
-third_party/
-*.pt
-*.cubin
-*.ptx
