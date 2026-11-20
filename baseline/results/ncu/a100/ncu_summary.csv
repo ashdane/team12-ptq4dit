@@ -1,0 +1,159 @@
+tag,kernel,compute_sol_pct,dram_pct,dram_read_MB,dram_write_MB,kernels_in_target,l2_hit_pct,memory_sol_pct,ms,occupancy_pct,regs,target_TOPS,target_total_ms,tensor_pipe_pct,top_stalls
+block13_fp16_b32,void at::elementwise_kernel,65.010913,,736.5480960000001,,12,,94.759528,1.6860480000000004,,,,,,
+block13_fp16_b32,ampere_fp16_s16816gemm_fp16_128x256_ldg8_relu_f2f_,58.195149,,507.00544,,1,,41.783125,1.23792,,,,,,
+block13_fp16_b32,ampere_fp16_s16816gemm_fp16_128x128_ldg8_relu_f2f_,85.83695,,415.148544,,2,,66.184651,1.109088,,,,,,
+block13_fp16_b32,void cutlass::Kernel2,82.74537,,266.12864,,1,,65.377086,0.653216,,,,,,
+block13_fp16_b32,void pytorch_flash::flash_fwd_kernel,41.077032,,164.466048,,1,,43.575607,0.259712,,,,,,
+block13_fp16_b32,void at::vectorized_elementwise_kernel,72.695504,,289.18592,,2,,81.991625,0.23161600000000002,,,,,,
+block13_fp16_b32,void at::,79.313643,,125.524096,,2,,46.261916,0.17456,,,,,,
+block13_fp16_b32,ampere_fp16_s16816gemm_fp16_128x64_ldg8_relu_f2f_s,17.737188,,16.130432000000003,,1,,43.371077,0.023968,,,,,,
+block13_fp16_b4,void at::elementwise_kernel,50.489769,,57.054208,,12,,75.467782,0.27184,,,,,,
+block13_fp16_b4,ampere_fp16_s16816gemm_fp16_128x128_ldg8_relu_f2f_,65.952363,,53.776896,,2,,56.293146,0.24198399999999998,,,,,,
+block13_fp16_b4,sm80_xmma_gemm_f16f16_f16f32_f32_tn_n_tilesize192x,81.336205,,39.32032,,2,,51.1975,0.151584,,,,,,
+block13_fp16_b4,void pytorch_flash::flash_fwd_kernel,27.904224,,15.962368,,1,,29.426706,0.048159999999999994,,,,,,
+block13_fp16_b4,void at::vectorized_elementwise_kernel,67.901174,,24.918784,,2,,52.288888,0.035392,,,,,,
+block13_fp16_b4,void at::,53.348288,,9.486079999999998,,2,,18.701016,0.033472,,,,,,
+block13_fp16_b4,ampere_fp16_s16816gemm_fp16_64x64_ldg8_relu_f2f_st,20.955756,,15.988608000000001,,1,,50.747124,0.02032,,,,,,
+block13_int8_b32,void at::elementwise_kernel,65.07562,,736.418432,,12,,94.527623,1.6858239999999998,,,,,,
+block13_int8_b32,_tiled,43.967548,,325.874816,,3,,90.191719,1.671648,,,,,,
+block13_int8_b32,_quantize_fused,84.391564,,365.88659199999995,,4,,65.185013,0.5550080000000001,,,,,,
+block13_int8_b32,void cutlass::Kernel2,66.685365,,229.225728,,1,,70.44255,0.539872,,,,,,
+block13_int8_b32,void pytorch_flash::flash_fwd_kernel,40.696177,,164.535936,,1,,43.131143,0.262176,,,,,,
+block13_int8_b32,void at::vectorized_elementwise_kernel,72.453661,,289.178752,,2,,81.705723,0.23241599999999998,,,,,,
+block13_int8_b32,void at::,79.363798,,125.74246400000001,,2,,46.396063,0.175008,,,,,,
+block13_int8_b32,_epilogue,21.464104,,104.65907200000001,,1,,86.886328,0.077504,,,,,,
+block13_int8_b32,ampere_fp16_s16816gemm_fp16_128x64_ldg8_relu_f2f_s,18.495955,,16.126464000000002,,1,,45.129814,0.023039999999999998,,,,,,
+block13_int8_b4,_tiled,39.888088,,38.946687999999995,,4,,76.875138,0.349664,,,,,,
+block13_int8_b4,void at::elementwise_kernel,50.601788,,57.03910400000001,,12,,74.566408,0.27276799999999995,,,,,,
+block13_int8_b4,_quantize_fused,57.807792,,35.065984,,4,,32.140211,0.10505600000000001,,,,,,
+block13_int8_b4,void pytorch_flash::flash_fwd_kernel,27.478224,,15.835904,,1,,28.989448,0.048896,,,,,,
+block13_int8_b4,void at::vectorized_elementwise_kernel,66.148396,,24.94848,,2,,51.033452,0.036256,,,,,,
+block13_int8_b4,void at::,53.18263,,9.486464000000002,,2,,18.631736,0.033568,,,,,,
+block13_int8_b4,ampere_fp16_s16816gemm_fp16_64x64_ldg8_relu_f2f_st,21.531928,,15.979648000000001,,1,,52.037898,0.019808,,,,,,
+compiled_fp16_b32,ampere_fp16_s16816gemm_fp16_128x256_ldg8_relu_f2f_,58.315719,,0.0,,28,,41.870973,34.653119999999994,,,,,,
+compiled_fp16_b32,ampere_fp16_s16816gemm_fp16_128x128_ldg8_relu_f2f_,85.961006,,0.0,,56,,66.388088,31.032703999999995,,,,,,
+compiled_fp16_b32,void cutlass::Kernel2,82.845373,,0.0,,29,,65.667868,18.351775999999997,,,,,,
+compiled_fp16_b32,triton_red_fused_add_mul_native_layer_norm_split_u,81.552913,,0.0,,55,,71.742398,7.6869119999999995,,,,,,
+compiled_fp16_b32,void pytorch_flash::flash_fwd_kernel,41.417848,,0.0,,28,,43.87081,7.298272000000001,,,,,,
+compiled_fp16_b32,triton_poi_fused_gelu_view,78.243843,,0.0,,28,,84.383575,6.104831999999999,,,,,,
+compiled_fp16_b32,ampere_fp16_s16816gemm_fp16_128x64_ldg8_relu_f2f_s,19.142793,,0.0,,28,,49.995221,0.704128,,,,,,
+compiled_fp16_b32,triton_red_fused__to_copy_add_cat_convolution_mul_,54.179148,,0.0,,2,,67.001887,0.37961599999999995,,,,,,
+compiled_fp16_b32,void cudnn::nhwcToNchwKernel,51.203915,,0.0,,1,,70.616907,0.059008,,,,,,
+compiled_fp16_b32,sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f16f,51.771715,,0.0,,1,,64.213616,0.03856,,,,,,
+compiled_fp16_b32,triton_poi_fused_add_embedding_silu,5.738052,,0.0,,6,,7.500261,0.027808,,,,,,
+compiled_fp16_b32,sm80_xmma_gemm_f16f16_f16f32_f32_tn_n_tilesize32x3,9.530417,,0.0,,2,,18.517252,0.019008,,,,,,
+compiled_fp16_b32,void cudnn::nchwToNhwcKernel,48.668089,,0.0,,2,,24.699522,0.016288,,,,,,
+compiled_fp16_b32,ampere_fp16_s16816gemm_fp16_64x64_sliced1x2_ldg8_r,10.15995,,0.0,,1,,26.182417,0.014208,,,,,,
+compiled_fp16_b32,triton_poi_fused__unsafe_view_add_cat_clone_mul_pe,24.775866,,0.0,,1,,31.347619,0.006592,,,,,,
+compiled_fp16_b32,triton_poi_fused__to_copy_cat_convolution_slice,5.156989,,0.0,,1,,8.247196,0.00416,,,,,,
+compiled_fp16_b32,triton_poi_fused__to_copy_cat_cos_mul_sin_unsqueez,3.07978,,0.0,,1,,1.212602,0.004064,,,,,,
+compiled_fp16_b32,triton_poi_fused_silu,2.992298,,0.0,,1,,2.50126,0.003968,,,,,,
+compiled_fp16_b4,ampere_fp16_s16816gemm_fp16_128x128_ldg8_relu_f2f_,66.365476,,0.0,,56,,56.285936,6.80784,,,,,,
+compiled_fp16_b4,sm80_xmma_gemm_f16f16_f16f32_f32_tn_n_tilesize192x,82.081276,,0.0,,56,,51.46474,4.234848,,,,,,
+compiled_fp16_b4,triton_red_fused_add_mul_native_layer_norm_split_u,64.490209,,0.0,,55,,41.014837,1.4063680000000003,,,,,,
+compiled_fp16_b4,void pytorch_flash::flash_fwd_kernel,28.161909,,0.0,,28,,29.705057,1.3510719999999998,,,,,,
+compiled_fp16_b4,triton_poi_fused_gelu_view,72.586093,,0.0,,28,,47.363207,0.829312,,,,,,
+compiled_fp16_b4,ampere_fp16_s16816gemm_fp16_64x64_ldg8_relu_f2f_st,22.297633,,0.0,,29,,53.705885,0.5624640000000001,,,,,,
+compiled_fp16_b4,triton_red_fused__to_copy_add_cat_convolution_mul_,40.368384,,0.0,,1,,25.689458,0.032192,,,,,,
+compiled_fp16_b4,triton_poi_fused_add_embedding_silu,0.843522,,0.0,,7,,1.393139,0.029568000000000004,,,,,,
+compiled_fp16_b4,sm80_xmma_gemm_f16f16_f16f32_f32_tn_n_tilesize32x3,9.082001,,0.0,,2,,30.005601,0.021696,,,,,,
+compiled_fp16_b4,triton_red_fused__to_copy_add_cat_convolution_nati,35.857843,,0.0,,1,,30.387401,0.016032,,,,,,
+compiled_fp16_b4,ampere_fp16_s16816gemm_fp16_64x64_sliced1x2_ldg8_r,9.65581,,0.0,,1,,23.859248,0.012992000000000002,,,,,,
+compiled_fp16_b4,void cudnn::nchwToNhwcKernel,45.361986,,0.0,,2,,16.752941,0.011936,,,,,,
+compiled_fp16_b4,triton_poi_fused__to_copy_add_cat_convolution_mul_,30.122002,,0.0,,1,,29.171764,0.011872,,,,,,
+compiled_fp16_b4,void cudnn::nhwcToNchwKernel,35.235978,,0.0,,1,,29.896058,0.01088,,,,,,
+compiled_fp16_b4,sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f16f,24.140218,,0.0,,1,,29.215132,0.01072,,,,,,
+compiled_fp16_b4,triton_per_fused__to_copy_add_cat_convolution_nati,18.954823,,0.0,,1,,10.527069,0.0060160000000000005,,,,,,
+compiled_fp16_b4,triton_poi_fused__unsafe_view_add_cat_clone_mul_pe,4.68019,,0.0,,1,,6.160823,0.004128000000000001,,,,,,
+compiled_fp16_b4,triton_poi_fused__to_copy_cat_cos_mul_sin_unsqueez,0.341113,,0.0,,1,,0.584433,0.0038079999999999998,,,,,,
+compiled_fp16_b4,triton_poi_fused__to_copy_cat_convolution_slice,0.78292,,0.0,,1,,1.435031,0.0038079999999999998,,,,,,
+compiled_fp16_b4,triton_poi_fused_silu,0.831941,,0.0,,1,,0.783453,0.003648,,,,,,
+compiled_int8_b32,_tiled,43.997898,,0.0,,84,,90.253537,46.83283199999998,,,,,,
+compiled_int8_b32,_quantize_fused,84.642023,,0.0,,112,,65.440631,15.702816000000006,,,,,,
+compiled_int8_b32,void cutlass::Kernel2,67.030668,,0.0,,29,,70.95799,15.192896,,,,,,
+compiled_int8_b32,triton_red_fused_add_mul_native_layer_norm_quant_l,78.168808,,0.0,,54,,66.792157,7.412159999999998,,,,,,
+compiled_int8_b32,void pytorch_flash::flash_fwd_kernel,41.523668,,0.0,,28,,43.983851,7.27792,,,,,,
+compiled_int8_b32,triton_poi_fused_gelu_quant_linear_view,78.663554,,0.0,,28,,84.734879,6.104896000000001,,,,,,
+compiled_int8_b32,_epilogue,22.160629,,0.0,,28,,87.363133,2.1669759999999996,,,,,,
+compiled_int8_b32,ampere_fp16_s16816gemm_fp16_128x64_ldg8_relu_f2f_s,18.949331,,0.0,,28,,46.025085,0.6487679999999997,,,,,,
+compiled_int8_b32,triton_red_fused__to_copy_add_cat_convolution_mul_,56.813307,,0.0,,2,,63.957223,0.28921600000000003,,,,,,
+compiled_int8_b32,triton_red_fused_add_mul_native_layer_norm_split_u,81.875653,,0.0,,1,,39.942635,0.164192,,,,,,
+compiled_int8_b32,void cudnn::nhwcToNchwKernel,50.984508,,0.0,,1,,70.047962,0.059616,,,,,,
+compiled_int8_b32,sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f16f,51.287087,,0.0,,1,,63.990449,0.038848,,,,,,
+compiled_int8_b32,triton_poi_fused_add_embedding_silu,5.815111,,0.0,,6,,7.338437,0.027936000000000002,,,,,,
+compiled_int8_b32,sm80_xmma_gemm_f16f16_f16f32_f32_tn_n_tilesize32x3,9.607462,,0.0,,2,,19.391971,0.018656,,,,,,
+compiled_int8_b32,void cudnn::nchwToNhwcKernel,49.072205,,0.0,,2,,24.898172,0.016224,,,,,,
+compiled_int8_b32,ampere_fp16_s16816gemm_fp16_64x64_sliced1x2_ldg8_r,10.322915,,0.0,,1,,25.205623,0.014048,,,,,,
+compiled_int8_b32,triton_poi_fused__unsafe_view_add_cat_clone_mul_pe,25.097371,,0.0,,1,,31.71604,0.006656,,,,,,
+compiled_int8_b32,triton_poi_fused__to_copy_cat_convolution_slice,5.351784,,0.0,,1,,8.247196,0.0041600000000000005,,,,,,
+compiled_int8_b32,triton_poi_fused__to_copy_cat_cos_mul_sin_unsqueez,3.125589,,0.0,,1,,1.003246,0.004064,,,,,,
+compiled_int8_b32,triton_poi_fused_silu,3.099663,,0.0,,1,,2.468087,0.004032,,,,,,
+compiled_int8_b4,_tiled,40.247275,,0.0,,112,,77.569217,9.783840000000001,,,,,,
+compiled_int8_b4,_quantize_fused,60.592521,,0.0,,112,,32.343192,2.9700800000000003,,,,,,
+compiled_int8_b4,triton_red_fused_add_mul_native_layer_norm_quant_l,60.462936,,0.0,,54,,31.211242,1.3647679999999998,,,,,,
+compiled_int8_b4,void pytorch_flash::flash_fwd_kernel,28.169575,,0.0,,28,,29.693264,1.351232,,,,,,
+compiled_int8_b4,triton_poi_fused_gelu_quant_linear_view,68.490877,,0.0,,28,,39.419946,0.9553600000000001,,,,,,
+compiled_int8_b4,ampere_fp16_s16816gemm_fp16_64x64_ldg8_relu_f2f_st,22.190772,,0.0,,29,,53.656009,0.5617599999999999,,,,,,
+compiled_int8_b4,triton_red_fused__to_copy_add_cat_convolution_mul_,40.244181,,0.0,,1,,25.608554,0.032096,,,,,,
+compiled_int8_b4,triton_poi_fused_add_embedding_silu,0.846099,,0.0,,7,,1.330508,0.030112000000000003,,,,,,
+compiled_int8_b4,triton_red_fused_add_mul_native_layer_norm_split_u,64.761713,,0.0,,1,,22.870578,0.026784,,,,,,
+compiled_int8_b4,sm80_xmma_gemm_f16f16_f16f32_f32_tn_n_tilesize32x3,9.034133,,0.0,,2,,29.523937,0.022144,,,,,,
+compiled_int8_b4,triton_red_fused__to_copy_add_cat_convolution_nati,36.047793,,0.0,,1,,30.31861,0.016064000000000002,,,,,,
+compiled_int8_b4,ampere_fp16_s16816gemm_fp16_64x64_sliced1x2_ldg8_r,9.716983,,0.0,,1,,23.781275,0.013056,,,,,,
+compiled_int8_b4,triton_poi_fused__to_copy_add_cat_convolution_mul_,29.250553,,0.0,,1,,28.709911,0.012096,,,,,,
+compiled_int8_b4,void cudnn::nchwToNhwcKernel,45.228852,,0.0,,2,,16.702803,0.011968,,,,,,
+compiled_int8_b4,void cudnn::nhwcToNchwKernel,36.080036,,0.0,,1,,30.660592,0.01104,,,,,,
+compiled_int8_b4,sm80_xmma_fprop_implicit_gemm_indexed_wo_smem_f16f,23.67028,,0.0,,1,,29.12035,0.01088,,,,,,
+compiled_int8_b4,triton_per_fused__to_copy_add_cat_convolution_nati,19.468093,,0.0,,1,,10.803168,0.005984,,,,,,
+compiled_int8_b4,triton_poi_fused__unsafe_view_add_cat_clone_mul_pe,4.515009,,0.0,,1,,5.942785,0.00432,,,,,,
+compiled_int8_b4,triton_poi_fused__to_copy_cat_cos_mul_sin_unsqueez,0.329763,,0.0,,1,,0.575247,0.00384,,,,,,
+compiled_int8_b4,triton_poi_fused_silu,0.810933,,0.0,,1,,0.730913,0.003776,,,,,,
+compiled_int8_b4,triton_poi_fused__to_copy_cat_convolution_slice,0.805571,,0.0,,1,,1.490124,0.003648,,,,,,
+layer_fc1_fp16_m16384,ampere_fp16_s16816gemm_fp16_256x128_ldg8_relu_f2f_stages_32x3_nn,77.200501,13.488479,57.468672,139.158528,1,96.667154,47.137005,0.937408,12.488989,218.0,185.56079688673447,0.937408,80.022152,"wait:3.25, math_pipe_throttle:3.11, selected:1.00"
+layer_fc1_fp16_m2048,ampere_fp16_s16816gemm_fp16_256x128_ldg8_relu_f2f_stages_32x3_nn,68.27521,9.550333,15.374336,4.342784,1,91.474136,41.514312,0.1328,12.481378,218.0,163.7294573493976,0.1328,78.475164,"wait:3.25, math_pipe_throttle:3.10, selected:1.00"
+layer_fc1_int4_m16384,_tiled,65.335428,7.719639,21.67808,134.294016,1,97.465189,70.191505,1.299232,24.58206,128.0,133.88384483140808,1.299232,27.965542,"wait:1.63, math_pipe_throttle:1.16, not_selected:1.12"
+layer_fc1_int4_m2048,_tiled,59.997642,2.738512,5.077632,2.462848,1,94.652467,64.363929,0.177088,22.44038,128.0,122.78229996385978,0.177088,26.690397,"wait:1.61, math_pipe_throttle:1.04, not_selected:1.00"
+layer_fc1_int8_m16384,_tiled,43.927177,12.595644,25.149568,135.527808,1,97.861263,90.084191,0.820352,18.547632,148.0,212.03846091433923,0.820352,44.812141,"long_scoreboard:6.86, wait:3.14, short_scoreboard:2.13"
+layer_fc1_int8_m2048,_tiled,37.771589,6.610466,7.746944,4.5344,1,94.529863,71.721274,0.119488,23.879171,112.0,181.97033958221746,0.119488,41.469863,"long_scoreboard:5.06, mio_throttle:3.78, wait:2.91"
+layer_fc1_int8lt_m16384,void cutlass::Kernel2<cutlass_80_tensorop_i16832gemm_s8_128x64_128x3_t,56.327037,38.948778,99.715456,287.667072,2,93.095531,59.516085,0.6395839999999999,12.396885,148.0,180.9225489765352,0.9614399999999999,56.80018,"long_scoreboard:2.18, wait:1.84, selected:1.00"
+layer_fc1_int8lt_m16384,_epilogue,20.570452,88.87697,302.17024,142.62848,2,50.058552,88.87697,0.321856,92.734588,30.0,180.9225489765352,0.9614399999999999,0.783408,"long_scoreboard:61.22, drain:2.45, short_scoreboard:1.94"
+layer_fc1_int8lt_m2048,void cutlass::Kernel2<cutlass_80_tensorop_i16832gemm_s8_128x64_128x3_t,47.273938,19.520237,7.908224,21.131392,2,95.271708,49.972645,0.095712,11.984946,148.0,162.63217999042604,0.133696,52.369877,"long_scoreboard:2.49, wait:1.79, selected:1.00"
+layer_fc1_int8lt_m2048,_epilogue,22.046397,82.093282,37.801856,10.645632,2,47.164854,82.093282,0.037984000000000004,81.785115,30.0,162.63217999042604,0.133696,0.899637,"long_scoreboard:44.74, drain:1.87, wait:1.58"
+layer_fc1_quant_m16384,_quantize_fused,84.535619,27.998107,37.757952,11.242624,1,45.380842,27.998107,0.112608,92.342883,32.0,,0.112608,0.0,"not_selected:4.62, wait:2.69, math_pipe_throttle:2.03"
+layer_fc1_quant_m2048,_quantize_fused,57.215092,14.424219,4.726528,0.0,1,39.289619,14.424219,0.02112,71.575375,32.0,,0.02112,0.0,"not_selected:3.60, long_scoreboard:2.87, wait:2.67"
+layer_fc2_fp16_m16384,ampere_fp16_s16816gemm_fp16_128x128_ldg8_relu_f2f_stages_32x5_nn,89.643977,24.900604,275.208704,35.996032,1,87.537013,63.079228,0.80368,11.92798,222.0,216.43710866016326,0.80368,92.775473,"wait:3.38, math_pipe_throttle:2.95, selected:1.00"
+layer_fc2_fp16_m2048,sm80_xmma_gemm_f16f16_f16f32_f32_nn_n_tilesize192x128x32_stage3_warpsi,80.923847,17.818687,29.543808,2.38144,1,87.101018,50.764114,0.115232,12.410674,204.0,188.69126575951125,0.115232,90.483048,"math_pipe_throttle:2.60, wait:2.20, selected:1.00"
+layer_fc2_int4_m16384,_tiled,64.019678,5.444779,78.280192,31.7632,1,89.985098,65.95569,1.299616,23.642653,128.0,133.844285918302,1.299616,28.470698,"wait:1.65, math_pipe_throttle:1.12, not_selected:1.06"
+layer_fc2_int4_m2048,_tiled,49.244441,3.757717,12.127104,0.213888,1,85.118597,50.4098,0.211264,15.020387,128.0,102.91991033020297,0.211264,24.005005,"wait:1.54, long_scoreboard:1.12, selected:1.00"
+layer_fc2_int8_m16384,_tiled,44.055021,10.214697,98.869248,30.990208,1,90.553902,86.267022,0.817504,23.818639,127.0,212.77715520413355,0.817504,48.187841,"long_scoreboard:11.11, wait:3.28, barrier:2.19"
+layer_fc2_int8_m2048,_tiled,39.707492,8.795234,14.775296,0.774656,1,86.70794,76.52771,0.113728,16.605758,127.0,191.18662014631403,0.113728,42.155244,"long_scoreboard:8.26, wait:3.25, barrier:1.64"
+layer_fc2_int8lt_m16384,void cutlass::Kernel2<cutlass_80_tensorop_i16832gemm_s8_128x64_128x3_t,66.208783,27.131907,157.404416,72.221568,2,88.791858,69.869269,0.544256,12.196671,148.0,279.74978045391384,0.621792,68.21455,"long_scoreboard:3.12, wait:2.07, selected:1.00"
+layer_fc2_int8lt_m16384,_epilogue,21.450955,87.057699,75.591552,29.316736,2,47.53721,87.057699,0.07753600000000001,87.501756,30.0,279.74978045391384,0.621792,0.841043,"long_scoreboard:52.85, drain:2.31, short_scoreboard:1.82"
+layer_fc2_int8lt_m2048,void cutlass::Kernel2<cutlass_80_tensorop_i16832gemm_s8_128x64_128x3_t,47.453957,11.772158,15.085056,2.350848,2,89.460025,50.246349,0.095296,11.568533,148.0,205.90219636363634,0.1056,65.392951,"long_scoreboard:2.99, wait:2.04, selected:1.00"
+layer_fc2_int8lt_m2048,_epilogue,21.156564,59.49253,9.457792,0.00192,2,38.519407,59.49253,0.010304,72.997781,30.0,205.90219636363634,0.1056,1.043735,"long_scoreboard:29.80, imc_miss:1.73, wait:1.57"
+layer_fc2_quant_m16384,_quantize_fused,82.449791,65.273842,151.496576,67.183872,1,60.534367,65.273842,0.21545599999999998,91.4077,32.0,,0.21545599999999998,0.0,"long_scoreboard:6.21, mio_throttle:3.99, not_selected:2.59"
+layer_fc2_quant_m2048,_quantize_fused,53.818568,32.350886,18.887936,1.972992,1,48.256355,32.350886,0.041504,73.015714,32.0,,0.041504,0.0,"long_scoreboard:7.33, mio_throttle:6.09, not_selected:2.38"
+layer_proj_fp16_m16384,ampere_fp16_s16816gemm_fp16_128x128_ldg8_relu_f2f_stages_32x5_nn,78.765234,18.700207,40.425088,26.25024,1,94.066172,55.52584,0.22931200000000002,11.939721,222.0,189.6391984370639,0.22931200000000002,82.343331,"wait:3.17, math_pipe_throttle:1.71, selected:1.00"
+layer_proj_fp16_m2048,ampere_fp16_s16816gemm_fp16_128x128_ldg8_relu_f2f_stages_32x5_nn,50.225505,10.52907,7.394432,0.023424,1,88.434791,38.738939,0.045344,10.844168,222.0,119.87954269583626,0.045344,58.504935,"wait:2.88, selected:1.00, math_pipe_throttle:0.93"
+layer_proj_int4_m16384,_tiled,61.906694,7.985594,19.632128,22.97984,1,91.000478,64.955906,0.34313600000000005,23.576845,128.0,126.73267704933319,0.34313600000000005,27.147185,"wait:1.62, math_pipe_throttle:1.07, not_selected:1.04"
+layer_proj_int4_m2048,_tiled,48.291937,3.379762,3.05984,0.000128,1,88.639278,41.59906,0.058272,14.129268,165.0,93.28353212520594,0.058272,22.469257,"wait:1.20, selected:1.00, math_pipe_throttle:0.65"
+layer_proj_int8_m16384,_tiled,39.895142,12.571649,20.29568,23.8816,1,93.377167,75.992297,0.226016,24.257605,112.0,192.40471414413136,0.226016,41.581068,"long_scoreboard:5.48, mio_throttle:3.78, wait:2.94"
+layer_proj_int8_m2048,_tiled,34.021207,7.204244,3.734016,0.0,1,87.699,68.456097,0.033375999999999996,16.526363,148.0,162.86607094918506,0.033375999999999996,38.730475,"long_scoreboard:6.33, wait:3.08, barrier:2.26"
+layer_proj_int8lt_m16384,void cutlass::Kernel2<cutlass_80_tensorop_i16832gemm_s8_128x64_128x3_t,49.523708,36.660024,38.754944,65.04128,2,90.366734,52.322766,0.182112,11.973758,148.0,167.73074500123428,0.259264,52.180752,"long_scoreboard:2.56, wait:1.82, selected:1.00"
+layer_proj_int8lt_m16384,_epilogue,21.573762,87.324942,75.589504,29.12576,2,47.850928,87.324942,0.077152,87.63099,30.0,167.73074500123428,0.259264,0.844121,"long_scoreboard:52.70, drain:2.29, short_scoreboard:1.85"
+layer_proj_int8lt_m2048,void cutlass::Kernel2<cutlass_80_tensorop_i16832gemm_s8_128x64_128x3_t,33.702671,7.085398,3.710592,0.00768,2,91.155363,35.950249,0.033824,11.248027,148.0,122.82668980477222,0.044256000000000004,47.754491,"long_scoreboard:2.22, wait:1.77, selected:1.00"
+layer_proj_int8lt_m2048,_epilogue,20.766125,58.733486,9.457664,0.011264,2,38.741444,58.733486,0.010432,70.634768,30.0,122.82668980477222,0.044256000000000004,1.02572,"long_scoreboard:29.33, imc_miss:1.73, wait:1.57"
+layer_proj_quant_m16384,_quantize_fused,84.56122,27.993585,37.766656,11.230592,1,44.998613,27.993585,0.11264,92.481777,32.0,,0.11264,0.0,"not_selected:4.62, wait:2.69, math_pipe_throttle:2.03"
+layer_proj_quant_m2048,_quantize_fused,57.242668,14.454298,4.726656,0.004992,1,38.819203,14.454298,0.02112,71.556795,32.0,,0.02112,0.0,"not_selected:3.59, long_scoreboard:2.89, wait:2.67"
+layer_qkv_fp16_m16384,void Kernel2<cutlass_80_tensorop_f16_s16816gemm_relu_f16_128x128_32x5_,82.716063,26.198997,159.091968,107.172608,1,92.340673,65.288235,0.653568,12.292423,222.0,199.6114124559342,0.653568,84.190901,"wait:2.54, math_pipe_throttle:1.86, selected:1.00"
+layer_qkv_fp16_m2048,ampere_fp16_s16816gemm_fp16_128x128_ldg8_relu_f2f_stages_32x5_tn,64.820858,9.970844,13.001856,3.246976,1,93.2629,55.095073,0.104832,11.621858,226.0,155.55797802197804,0.104832,68.325409,"wait:2.90, selected:1.00, mio_throttle:0.51"
+layer_qkv_int4_m16384,_tiled,65.596694,7.759336,20.97728,96.231808,1,96.738207,68.992896,0.971328,24.466854,128.0,134.31058470053372,0.971328,27.974256,"wait:1.64, math_pipe_throttle:1.15, not_selected:1.12"
+layer_qkv_int4_m2048,_tiled,60.417908,2.263518,4.404096,0.243456,1,94.466172,63.45762,0.13209600000000002,21.858993,128.0,123.45153488372091,0.13209600000000002,26.385272,"wait:1.61, math_pipe_throttle:1.02, selected:1.00"
+layer_qkv_int8_m16384,_tiled,42.999511,12.331843,23.021056,97.478528,1,97.254586,88.098909,0.628352,18.437972,148.0,207.6218928498676,0.628352,44.243575,"long_scoreboard:7.09, wait:3.13, short_scoreboard:2.10"
+layer_qkv_int8_m2048,_tiled,39.317884,5.29743,6.395264,0.700288,1,93.566235,74.766695,0.086176,24.182751,112.0,189.2342874118084,0.086176,41.277798,"long_scoreboard:5.14, mio_throttle:3.86, wait:2.90"
+layer_qkv_int8lt_m16384,void cutlass::Kernel2<cutlass_80_tensorop_i16832gemm_s8_128x64_128x3_t,55.313531,38.542116,79.513728,213.08608,2,92.836221,58.403812,0.488224,12.2129,148.0,178.67657834071085,0.730144,56.138001,"long_scoreboard:2.18, wait:1.84, selected:1.00"
+layer_qkv_int8lt_m16384,_epilogue,20.535048,88.177945,226.688512,105.01632,2,49.511791,88.177945,0.24192,92.050051,30.0,178.67657834071085,0.730144,0.786998,"long_scoreboard:60.64, drain:2.36, short_scoreboard:2.03"
+layer_qkv_int8lt_m2048,void cutlass::Kernel2<cutlass_80_tensorop_i16832gemm_s8_128x64_128x3_t,47.500439,15.96553,6.412672,11.332864,2,94.807055,50.34725,0.07152,12.148257,148.0,163.3882449503046,0.09980800000000001,51.741576,"long_scoreboard:2.58, wait:1.79, selected:1.00"
+layer_qkv_int8lt_m2048,_epilogue,22.276322,78.230606,28.35584,5.968896,2,44.631857,78.230606,0.028288,75.853379,30.0,163.3882449503046,0.09980800000000001,0.954567,"long_scoreboard:38.32, wait:1.58, drain:1.51"
+layer_qkv_quant_m16384,_quantize_fused,84.423533,27.952216,37.757568,11.277184,1,45.154996,27.952216,0.112864,92.307808,32.0,,0.112864,0.0,"not_selected:4.62, wait:2.69, math_pipe_throttle:2.03"
+layer_qkv_quant_m2048,_quantize_fused,56.834243,14.360082,4.726528,0.004864,1,38.379195,14.360082,0.021248000000000003,71.677253,32.0,,0.021248000000000003,0.0,"not_selected:3.61, long_scoreboard:2.86, wait:2.67"

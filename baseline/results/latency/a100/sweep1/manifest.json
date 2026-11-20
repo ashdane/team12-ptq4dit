@@ -1,0 +1,106 @@
+{
+  "config": {
+    "dit_repo": "/content/dit_pretrained_eval/assets/DiT",
+    "checkpoint": "/content/dit_pretrained_eval/assets/pretrained_models/DiT-XL-2-256x256.pt",
+    "output": "/content/latency/sweep1",
+    "modes": [
+      "fp16",
+      "int8",
+      "int4"
+    ],
+    "batches": [
+      4,
+      8,
+      16,
+      32
+    ],
+    "scaffolds": [
+      "baseline",
+      "sdpa",
+      "sdpa_graph",
+      "sdpa_graph_fp16io",
+      "sdpa_graph_fp16io_tuned"
+    ],
+    "scope": "all",
+    "image_size": 256,
+    "cfg": 1.5,
+    "steps": 50,
+    "seed": 1,
+    "warmup": 10,
+    "repeats": 50,
+    "tune_rounds": 5,
+    "profile": true,
+    "sampling": false,
+    "sampling_repeats": 2
+  },
+  "environment": {
+    "python": "3.13.16 (main, Oct  1 2026, 15:40:24) [GCC 13.3.0]",
+    "platform": "Linux-6.6.159+-x86_64-with-glibc2.39",
+    "packages": {
+      "torch": "2.14.1+cu130",
+      "triton": "3.8.0",
+      "numpy": "2.4.6",
+      "nvidia-cublas-cu12": "12.9.3.13"
+    },
+    "cuda": "13.0",
+    "cudnn": 92800,
+    "torch_build": "PyTorch built with:\n  - GCC 13.3\n  - C++ Version: 202002\n  - Intel(R) oneAPI Math Kernel Library Version 2024.2-Product Build 20240605 for Intel(R) 64 architecture applications\n  - Intel(R) MKL-DNN v3.12.0 (Git Hash 80afa71049cd69a3df32adcccb623b12cd7baa22)\n  - OpenMP 201511 (a.k.a. OpenMP 4.5)\n  - LAPACK is enabled (usually provided by MKL)\n  - NNPACK is enabled\n  - CPU capability usage: AVX512\n  - CUDA Runtime 13.0\n  - NVCC architecture flags: -gencode;arch=compute_75,code=sm_75;-gencode;arch=compute_80,code=sm_80;-gencode;arch=compute_86,code=sm_86;-gencode;arch=compute_90,code=sm_90;-gencode;arch=compute_100,code=sm_100;-gencode;arch=compute_120,code=sm_120\n  - CuDNN 92.8  (built against CUDA 12.9)\n    - Built with CuDNN 92.4\n  - Magma 2.6.1\n  - Build settings: BLAS_INFO=mkl, BUILD_TYPE=Release, COMMIT_SHA=5c4886908584029761b579af026dcfb627c84070, CUDA_FLAGS= -DLIBCUDACXX_ENABLE_SIMPLIFIED_COMPLEX_OPERATIONS -Xfatbin -compress-all -DONNX_NAMESPACE=onnx_torch -gencode arch=compute_75,code=sm_75 -gencode arch=compute_80,code=sm_80 -gencode arch=compute_86,code=sm_86 -gencode arch=compute_90,code=sm_90 -gencode arch=compute_100,code=sm_100 -gencode arch=compute_120,code=sm_120 -Xcudafe --diag_suppress=cc_clobber_ignored,--diag_suppress=field_without_dll_interface,--diag_suppress=base_class_has_different_dll_interface,--diag_suppress=dll_interface_conflict_none_assumed,--diag_suppress=dll_interface_conflict_dllexport_assumed,--diag_suppress=bad_friend_decl --expt-relaxed-constexpr --expt-extended-lambda -Xfatbin -compress-all --threads 2 -compress-mode=size -Wno-deprecated-gpu-targets --expt-extended-lambda -DCUB_WRAPPED_NAMESPACE=at_cuda_detail -DDISABLE_CUSPARSE_DEPRECATED -DCUDA_HAS_FP16=1 -D__CUDA_NO_HALF_OPERATORS__ -D__CUDA_NO_HALF_CONVERSIONS__ -D__CUDA_NO_HALF2_OPERATORS__ -D__CUDA_NO_BFLOAT16_CONVERSIONS__ -DC10_NODEPRECATED, CUDA_VERSION=13.0, CUDNN_VERSION=9.24.0, CXX_COMPILER=/opt/rh/gcc-toolset-13/root/usr/bin/c++, CXX_FLAGS= -fvisibility-inlines-hidden -DUSE_PTHREADPOOL -DNDEBUG -DUSE_KINETO -DHAS_CUPTI -DUSE_FBGEMM -DUSE_MSLK -DUSE_PYTORCH_QNNPACK -DSYMBOLICATE_MOBILE_DEBUG_HANDLE -O2 -fPIC -DC10_NODEPRECATED -Wall -Wextra -Werror=return-type -Werror=non-virtual-dtor -Werror=range-loop-construct -Werror=bool-operation -Wnarrowing -Wno-missing-field-initializers -Wno-unknown-pragmas -Wno-unused-parameter -Wno-strict-overflow -Wno-strict-aliasing -Wno-stringop-overflow -Wsuggest-override -Wno-psabi -Wno-error=old-style-cast -faligned-new -Wno-maybe-uninitialized -fno-math-errno -fno-trapping-math -Werror=format -Wno-dangling-reference -Wno-error=dangling-reference -Wno-stringop-overflow, LAPACK_INFO=mkl, PERF_WITH_AVX=1, PERF_WITH_AVX2=1, TORCH_VERSION=2.14.1, USE_CUDA=1, USE_CUDNN=ON, USE_CUSPARSELT=1, USE_GFLAGS=OFF, USE_GLOG=OFF, USE_GLOO=ON, USE_HIPSPARSELT=OFF, USE_MKL=ON, USE_MKLDNN=ON, USE_MPI=OFF, USE_NCCL=ON, USE_NNPACK=ON, USE_OPENMP=ON, USE_ROCM=OFF, USE_ROCM_KERNEL_ASSERT=OFF, USE_XCCL=OFF, USE_XPU=OFF, \n",
+    "device": "cuda",
+    "tf32": false,
+    "float32_matmul_precision": "highest",
+    "gpu": "NVIDIA A100-SXM4-40GB",
+    "compute_capability": [
+      8,
+      0
+    ],
+    "gpu_total_memory_bytes": 42405855232,
+    "nvidia_smi": "name, driver_version, memory.total [MiB], pstate, clocks.current.sm [MHz], clocks.current.memory [MHz]\nNVIDIA A100-SXM4-40GB, 580.82.07, 40960 MiB, P0, 210 MHz, 1215 MHz\n"
+  },
+  "dit_commit": {
+    "commit": "ed81ce2229091fd4ecc9a223645f95cf379d582b",
+    "status": "",
+    "diff": ""
+  },
+  "scaffolds": [
+    {
+      "name": "baseline",
+      "attention": "explicit",
+      "graphs": false,
+      "fp16io": false,
+      "tuned": false
+    },
+    {
+      "name": "sdpa",
+      "attention": "sdpa",
+      "graphs": false,
+      "fp16io": false,
+      "tuned": false
+    },
+    {
+      "name": "sdpa_graph",
+      "attention": "sdpa",
+      "graphs": true,
+      "fp16io": false,
+      "tuned": false
+    },
+    {
+      "name": "sdpa_graph_fp16io",
+      "attention": "sdpa",
+      "graphs": true,
+      "fp16io": true,
+      "tuned": false
+    },
+    {
+      "name": "sdpa_graph_fp16io_tuned",
+      "attention": "sdpa",
+      "graphs": true,
+      "fp16io": true,
+      "tuned": true
+    }
+  ],
+  "timed_region": "one forward_with_cfg at batch 2xB (CFG); CUDA events; median of repeats",
+  "excluded": "construction, conversion, tuning, compilation, warmup, diagnostics",
+  "patches": "TimestepEmbedder frequency table cached on GPU (bit-identical; all modes)",
+  "quantization": "symmetric absmax per-token A8, per-channel W8/W4; not calibrated PTQ4DiT",
+  "status": "ok"
+}

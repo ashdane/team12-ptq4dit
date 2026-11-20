@@ -1,0 +1,6 @@
+# Isolated Python 3.11 environment. Do not install over Colab's PyTorch environment.
+tensorflow==2.15.1
+numpy==1.23.5  # ADM evaluator.py uses np.bool (removed in NumPy 1.24); TF 2.15 supports >=1.23.5
+scipy==1.11.4
+requests==2.32.4
+tqdm==4.67.1

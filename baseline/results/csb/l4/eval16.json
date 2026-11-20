@@ -1,0 +1,69 @@
+{
+  "images": 16,
+  "seed": 2,
+  "scales_sha256": "bb9205483620a0d81f4ecb02d727326a184c6f337ef6180e6e71cbcbefcb5b09",
+  "scaffold": "sdpa, pure FP16 (FP32 reference: explicit attention, FP32)",
+  "note": "Paired, matched noise; latent-space and decoded-pixel error vs FP32",
+  "results": [
+    {
+      "mode": "fp32",
+      "csb": false,
+      "final_latent_rel_l2_vs_fp32": 0.0,
+      "per_image_rel_l2_median": 0.0,
+      "per_image_rel_l2_max": 0.0,
+      "wall_s": 55.16234454000005,
+      "decoded_psnr_db_median": 126.02059936523438,
+      "decoded_psnr_db_min": 126.02059936523438
+    },
+    {
+      "mode": "fp16",
+      "csb": false,
+      "final_latent_rel_l2_vs_fp32": 0.016705283895134926,
+      "per_image_rel_l2_median": 0.007633302826434374,
+      "per_image_rel_l2_max": 0.05672037601470947,
+      "wall_s": 14.299921060999623,
+      "decoded_psnr_db_median": 50.34312438964844,
+      "decoded_psnr_db_min": 32.871124267578125
+    },
+    {
+      "mode": "int8",
+      "csb": false,
+      "final_latent_rel_l2_vs_fp32": 0.1323627233505249,
+      "per_image_rel_l2_median": 0.09818726778030396,
+      "per_image_rel_l2_max": 0.28749457001686096,
+      "wall_s": 12.815606762000243,
+      "decoded_psnr_db_median": 28.688587188720703,
+      "decoded_psnr_db_min": 21.298505783081055
+    },
+    {
+      "mode": "int8",
+      "csb": true,
+      "final_latent_rel_l2_vs_fp32": 0.1320747435092926,
+      "per_image_rel_l2_median": 0.09648620337247849,
+      "per_image_rel_l2_max": 0.33624330163002014,
+      "wall_s": 11.226410376000786,
+      "decoded_psnr_db_median": 28.847864151000977,
+      "decoded_psnr_db_min": 20.742164611816406
+    },
+    {
+      "mode": "int4",
+      "csb": false,
+      "final_latent_rel_l2_vs_fp32": 0.8536690473556519,
+      "per_image_rel_l2_median": 0.9320214986801147,
+      "per_image_rel_l2_max": 1.0851895809173584,
+      "wall_s": 11.893114130999493,
+      "decoded_psnr_db_median": 13.313121795654297,
+      "decoded_psnr_db_min": 11.196882247924805
+    },
+    {
+      "mode": "int4",
+      "csb": true,
+      "final_latent_rel_l2_vs_fp32": 0.881829559803009,
+      "per_image_rel_l2_median": 0.957709789276123,
+      "per_image_rel_l2_max": 1.1702072620391846,
+      "wall_s": 11.952747389999786,
+      "decoded_psnr_db_median": 13.212955474853516,
+      "decoded_psnr_db_min": 10.778380393981934
+    }
+  ]
+}

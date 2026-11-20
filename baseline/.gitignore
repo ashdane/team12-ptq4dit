@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+*.ncu-rep
+*.nsys-rep
+traces/
+*.npz
+*.pt.part
+runs/
+assets/
+.venv-adm/

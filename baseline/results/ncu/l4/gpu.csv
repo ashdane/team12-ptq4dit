@@ -1,0 +1,2 @@
+name, driver_version, clocks.current.sm [MHz], clocks.max.sm [MHz], power.limit [W]
+NVIDIA L4, 580.82.07, 210 MHz, 2040 MHz, 72.00 W
