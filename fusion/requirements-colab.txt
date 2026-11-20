@@ -1,0 +1,9 @@
+# Retain Colab's paired CUDA torch/torchvision and torch's matching Triton dependency.
+timm==0.9.16
+diffusers==0.35.1
+accelerate>=0.26
+huggingface-hub>=0.34
+safetensors>=0.4
+Pillow>=10
+numpy>=1.26
+uv>=0.8

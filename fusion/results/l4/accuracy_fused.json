@@ -1,0 +1,39 @@
+{
+  "images": 16,
+  "seed": 2,
+  "scales_sha256": "bb9205483620a0d81f4ecb02d727326a184c6f337ef6180e6e71cbcbefcb5b09",
+  "scaffold": "sdpa, pure FP16 (FP32 reference: explicit attention, FP32)",
+  "note": "Paired, matched noise; latent-space and decoded-pixel error vs FP32",
+  "results": [
+    {
+      "mode": "fp32",
+      "csb": false,
+      "final_latent_rel_l2_vs_fp32": 0.0,
+      "per_image_rel_l2_median": 0.0,
+      "per_image_rel_l2_max": 0.0,
+      "wall_s": 57.83276340399971,
+      "decoded_psnr_db_median": 126.02059936523438,
+      "decoded_psnr_db_min": 126.02059936523438
+    },
+    {
+      "mode": "fp16",
+      "csb": false,
+      "final_latent_rel_l2_vs_fp32": 0.016705283895134926,
+      "per_image_rel_l2_median": 0.007633302826434374,
+      "per_image_rel_l2_max": 0.05672037601470947,
+      "wall_s": 13.880781826999737,
+      "decoded_psnr_db_median": 50.34312438964844,
+      "decoded_psnr_db_min": 32.871124267578125
+    },
+    {
+      "mode": "int8",
+      "csb": false,
+      "final_latent_rel_l2_vs_fp32": 0.13349764049053192,
+      "per_image_rel_l2_median": 0.10105836391448975,
+      "per_image_rel_l2_max": 0.281173437833786,
+      "wall_s": 16.204573381000046,
+      "decoded_psnr_db_median": 29.496591567993164,
+      "decoded_psnr_db_min": 21.62343978881836
+    }
+  ]
+}
