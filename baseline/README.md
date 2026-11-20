@@ -104,8 +104,8 @@ Paired evaluation, 16 images, full sampling, identical noise, vs FP32:
 | | A100 FP16 (cuBLAS) | A100 INT8 (ours) | L4 FP16 (cuBLAS) | L4 INT8 (ours) |
 |---|---:|---:|---:|---:|
 | fc1 GEMM (ms, base clock) | 0.94 | 0.82 | 4.03 | 2.27 |
-| Tensor pipe busy | 80–93 % | 42–48 % | 90–95 % | 77–86 % |
+| Tensor pipe busy | 80–93% | 42–48% | 90–95% | 77–86% |
 | Top stall | math pipe | `long_scoreboard` | math pipe | math pipe |
 
-Activation quantization is ~15 % of a W8A8 step on both GPUs (DRAM-bound at 90 % on L4).
-W4A8 GEMM tensor pipe: 28 % (A100), 54 % (L4).
+Activation quantization is ~15% of a W8A8 step on both GPUs (DRAM-bound at 90% on L4).
+W4A8 GEMM tensor pipe: 28% (A100), 54% (L4).
