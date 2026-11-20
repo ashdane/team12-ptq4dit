@@ -56,7 +56,7 @@ bash scripts/ncu_profile.sh <out_dir> <tuning_bank.json> all && python3 scripts/
 ## Results
 
 ### Image quality, 250 images/mode (`results/quality_250img/`)
-† FID/sFID via the stable eigen-decomposition (fewer than 2,048 images).
+† FID/sFID via the stable eigen-decomposition (fewer than 2,048 images need more for better result).
 
 | GPU | Mode | FID ↓ | sFID ↓ | IS ↑ | Precision ↑ |
 |---|---|---:|---:|---:|---:|
