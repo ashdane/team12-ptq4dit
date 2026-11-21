@@ -1,6 +1,6 @@
-# Fusion v2 for DiT-XL/2
+# Our approach to W8A8 inference for DiT-XL/2
 
-Sweep 5 measured one classifier-free guidance step of DiT-XL/2 at 256×256 on an A100 and an L4. At batch 32, fused W8A8 reduced median step latency from 91.10 to 69.08 ms on A100 and from 474.46 to 310.04 ms on L4. The FP16 comparison used scaled dot-product attention, CUDA graphs, and `torch.compile`.
+Sweep 5 measured one classifier-free guidance step of DiT-XL/2 at 256×256 on an A100 and an L4. At batch 32, our approach reduced median step latency from 91.10 to 69.08 ms on A100 and from 474.46 to 310.04 ms on L4. The FP16 comparison used scaled dot-product attention, CUDA graphs, and `torch.compile`.
 
 The attention and MLP projections use per-channel INT8 weights and dynamic per-token INT8 activations. The fused Triton kernels combine activation quantization with its producers, including modulated layer normalization and GELU. Version 2 tunes multi-row tiles by shape, uses reciprocal multiplication for quantization and an approximate tanh for GELU, and batches the adaLN projections across blocks. Sweep 5 also includes updated GEMM tiles and fresh tuning on each GPU.
 
