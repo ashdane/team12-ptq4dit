@@ -1,0 +1,258 @@
+{
+  "gpu": "NVIDIA A100-SXM4-40GB",
+  "torch": "2.14.1+cu130",
+  "results": [
+    {
+      "layer": "qkv",
+      "m": 2048,
+      "n": 3456,
+      "k": 1152,
+      "v2_config": {
+        "bm": 64,
+        "bn": 128,
+        "bk": 128,
+        "warps": 4,
+        "stages": 3,
+        "group_m": 8,
+        "layout": "nk",
+        "backend": "triton"
+      },
+      "v3_plain_cfg": "BM: 128, BN: 64, BK: 128, num_warps: 4, num_ctas: 1, num_stages: 3, maxnreg: None",
+      "ms": {
+        "fp16": 0.12421120405197143,
+        "lt_main": 0.06635519862174988,
+        "v2": 0.09082880020141601,
+        "v3_plain": 0.118886399269104
+      },
+      "tops": {
+        "fp16": 131.28810783588224,
+        "lt_main": 245.76000510463018,
+        "v2": 179.54056329972053,
+        "v3_plain": 137.1683729363141
+      }
+    },
+    {
+      "layer": "proj",
+      "m": 2048,
+      "n": 1152,
+      "k": 1152,
+      "v2_config": {
+        "bm": 64,
+        "bn": 128,
+        "bk": 128,
+        "warps": 4,
+        "stages": 3,
+        "group_m": 8,
+        "layout": "nk",
+        "backend": "triton"
+      },
+      "v3_plain_cfg": "BM: 64, BN: 128, BK: 128, num_warps: 4, num_ctas: 1, num_stages: 4, maxnreg: None",
+      "ms": {
+        "fp16": 0.06113280057907104,
+        "lt_main": 0.027852800488471986,
+        "v2": 0.059084802865982056,
+        "v3_plain": 0.11438080072402954,
+        "v3_res": 0.11939840316772461
+      },
+      "tops": {
+        "fp16": 88.91819011250999,
+        "lt_main": 195.1623495184922,
+        "v2": 92.0002728337723,
+        "v3_plain": 47.52386720141244,
+        "v3_res": 45.52672263433916
+      }
+    },
+    {
+      "layer": "fc1",
+      "m": 2048,
+      "n": 4608,
+      "k": 1152,
+      "v2_config": {
+        "bm": 64,
+        "bn": 128,
+        "bk": 128,
+        "warps": 4,
+        "stages": 3,
+        "group_m": 8,
+        "layout": "nk",
+        "backend": "triton"
+      },
+      "v3_plain_cfg": "BM: 64, BN: 128, BK: 128, num_warps: 4, num_ctas: 1, num_stages: 3, maxnreg: None",
+      "v3_gelu_gq_cfg": "BM: 64, BN: 128, BK: 128, num_warps: 4, num_ctas: 1, num_stages: 3, maxnreg: None",
+      "ms": {
+        "fp16": 0.15104000568389891,
+        "lt_main": 0.07741439938545228,
+        "v2": 0.09308159947395325,
+        "v3_plain": 0.1223680019378662,
+        "v3_gelu_gq": 0.1325055956840515
+      },
+      "tops": {
+        "fp16": 143.9570386504419,
+        "lt_main": 280.868573658223,
+        "v2": 233.59366468648142,
+        "v3_plain": 177.68756203962866,
+        "v3_gelu_gq": 164.0932356384783
+      }
+    },
+    {
+      "layer": "fc2",
+      "m": 2048,
+      "n": 1152,
+      "k": 4608,
+      "v2_config": {
+        "bm": 64,
+        "bn": 128,
+        "bk": 128,
+        "warps": 4,
+        "stages": 3,
+        "group_m": 8,
+        "layout": "nk",
+        "backend": "triton"
+      },
+      "v3_plain_cfg": "BM: 64, BN: 128, BK: 128, num_warps: 4, num_ctas: 1, num_stages: 3, maxnreg: None",
+      "v3_res_grouped_cfg": "BM: 64, BN: 128, BK: 128, num_warps: 4, num_ctas: 1, num_stages: 3, maxnreg: None",
+      "ms": {
+        "fp16": 0.1252351999282837,
+        "lt_main": 0.0762880027294159,
+        "v2": 0.09103360176086425,
+        "v3_plain": 0.12922879457473754,
+        "v3_res": 0.1257472038269043,
+        "v3_res_grouped": 0.13905919790267945
+      },
+      "tops": {
+        "fp16": 173.61949314930106,
+        "lt_main": 285.01561396384557,
+        "v2": 238.84885927195654,
+        "v3_plain": 168.2540799637739,
+        "v3_res": 172.91256802759943,
+        "v3_res_grouped": 156.35982562776627
+      }
+    },
+    {
+      "layer": "qkv",
+      "m": 16384,
+      "n": 3456,
+      "k": 1152,
+      "v2_config": {
+        "bm": 64,
+        "bn": 128,
+        "bk": 128,
+        "warps": 4,
+        "stages": 3,
+        "group_m": 8,
+        "layout": "nk",
+        "backend": "triton"
+      },
+      "v3_plain_cfg": "BM: 64, BN: 128, BK: 128, num_warps: 4, num_ctas: 1, num_stages: 3, maxnreg: None",
+      "ms": {
+        "fp16": 0.6024191856384278,
+        "lt_main": 0.41656317710876467,
+        "v2": 0.4848639965057373,
+        "v3_plain": 0.5057536125183105
+      },
+      "tops": {
+        "fp16": 216.5595564121059,
+        "lt_main": 313.1809021658604,
+        "v2": 269.0643820868978,
+        "v3_plain": 257.95096344719985
+      }
+    },
+    {
+      "layer": "proj",
+      "m": 16384,
+      "n": 1152,
+      "k": 1152,
+      "v2_config": {
+        "bm": 64,
+        "bn": 128,
+        "bk": 128,
+        "warps": 4,
+        "stages": 3,
+        "group_m": 8,
+        "layout": "nk",
+        "backend": "triton"
+      },
+      "v3_plain_cfg": "BM: 64, BN: 128, BK: 128, num_warps: 4, num_ctas: 1, num_stages: 3, maxnreg: None",
+      "ms": {
+        "fp16": 0.24197120666503907,
+        "lt_main": 0.15800319910049437,
+        "v2": 0.1739776015281677,
+        "v3_plain": 0.18677760362625123,
+        "v3_res": 0.20992000102996827
+      },
+      "tops": {
+        "fp16": 179.71784524015064,
+        "lt_main": 275.2257177042432,
+        "v2": 249.95484183036828,
+        "v3_plain": 232.82525863763706,
+        "v3_res": 207.1576965445605
+      }
+    },
+    {
+      "layer": "fc1",
+      "m": 16384,
+      "n": 4608,
+      "k": 1152,
+      "v2_config": {
+        "bm": 64,
+        "bn": 128,
+        "bk": 128,
+        "warps": 4,
+        "stages": 3,
+        "group_m": 8,
+        "layout": "nk",
+        "backend": "triton"
+      },
+      "v3_plain_cfg": "BM: 64, BN: 128, BK: 128, num_warps: 4, num_ctas: 1, num_stages: 3, maxnreg: None",
+      "v3_gelu_gq_cfg": "BM: 64, BN: 128, BK: 128, num_warps: 4, num_ctas: 1, num_stages: 3, maxnreg: None",
+      "ms": {
+        "fp16": 1.0371071815490722,
+        "lt_main": 0.5363711833953857,
+        "v2": 0.6343679904937745,
+        "v3_plain": 0.6623231887817382,
+        "v3_gelu_gq": 0.7352320194244385
+      },
+      "tops": {
+        "fp16": 167.72246743888687,
+        "lt_main": 324.3018657096194,
+        "v2": 274.2038975715107,
+        "v3_plain": 262.63035695300437,
+        "v3_gelu_gq": 236.58677926482343
+      }
+    },
+    {
+      "layer": "fc2",
+      "m": 16384,
+      "n": 1152,
+      "k": 4608,
+      "v2_config": {
+        "bm": 32,
+        "bn": 64,
+        "bk": 64,
+        "warps": 4,
+        "stages": 2,
+        "group_m": 8,
+        "layout": "nk",
+        "backend": "torch_int_mm"
+      },
+      "v3_plain_cfg": "BM: 64, BN: 128, BK: 128, num_warps: 4, num_ctas: 1, num_stages: 3, maxnreg: None",
+      "v3_res_grouped_cfg": "BM: 64, BN: 128, BK: 128, num_warps: 4, num_ctas: 1, num_stages: 3, maxnreg: None",
+      "ms": {
+        "fp16": 0.774451208114624,
+        "lt_main": 0.4819968223571777,
+        "v2": 0.5327871799468994,
+        "v3_plain": 0.5899263858795166,
+        "v3_res": 0.6083583831787109,
+        "v3_res_grouped": 0.8156160354614258
+      },
+      "tops": {
+        "fp16": 224.60572553236278,
+        "lt_main": 360.886560698318,
+        "v2": 326.48341032780945,
+        "v3_plain": 294.86081594513695,
+        "v3_res": 285.9271447516187,
+        "v3_res_grouped": 213.2696856426957
+      }
+    }
+  ]
+}

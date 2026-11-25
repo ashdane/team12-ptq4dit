@@ -1,0 +1,71 @@
+== tests
+test_gelu_group_quant (__main__.FusedGemmTests.test_gelu_group_quant) ... gelu_gq M=2048 G=128: INT8 mismatch fraction 4.26e-05 (max |dq| 1), scale max rel diff 4.23e-06
+gelu_gq M=16384 G=128: INT8 mismatch fraction 4.30e-05 (max |dq| 1), scale max rel diff 4.85e-06
+gelu_gq M=2048 G=256: INT8 mismatch fraction 3.97e-05 (max |dq| 1), scale max rel diff 4.14e-06
+gelu_gq M=16384 G=256: INT8 mismatch fraction 3.84e-05 (max |dq| 1), scale max rel diff 4.33e-06
+fc1 -> GELU -> group quant -> fc2 is at least as close to FP32 as per-token quant. ... MLP chain rel L2 vs FP32: group-128 8.83e-03, group-256 9.64e-03, per-token 1.25e-02
+test_plain (__main__.FusedGemmTests.test_plain) ... plain qkv M=2048: rel L2 2.07e-04
+plain qkv M=16384: rel L2 2.07e-04
+test_residual (__main__.FusedGemmTests.test_residual) ... residual proj group=0 M=2048: rel L2 2.08e-04
+residual fc2 group=128 M=2048: rel L2 2.08e-04
+residual fc2 group=256 M=2048: rel L2 2.08e-04
+residual proj group=0 M=16384: rel L2 2.08e-04
+residual fc2 group=128 M=16384: rel L2 2.08e-04
+residual fc2 group=256 M=16384: rel L2 2.08e-04
+OK
+== per-shape
+M= 2048 qkv  fp16   107.0us/ 152T  lt_main    55.0us/ 297T  v2    83.5us/ 195T  v3_plain    67.9us/ 240T  cutlass_plain    41.2us/ 396T
+M= 2048 proj fp16    31.0us/ 175T  lt_main    24.7us/ 220T  v2    26.5us/ 205T  v3_plain    26.8us/ 203T  v3_res    30.6us/ 178T  cutlass_plain    21.9us/ 248T  cutlass_res    23.2us/ 234T
+M= 2048 fc1  fp16   142.8us/ 152T  lt_main    73.0us/ 298T  v2    85.6us/ 254T  v3_plain    88.6us/ 245T  v3_gelu_gq   100.6us/ 216T  v3_gelu_gq256   127.5us/ 171T  cutlass_plain    59.3us/ 367T
+M= 2048 fc2  fp16   115.0us/ 189T  lt_main    72.2us/ 301T  v2    82.4us/ 264T  v3_plain    84.2us/ 258T  v3_res    88.0us/ 247T  v3_res_grouped   111.2us/ 196T  v3_res_grouped256    99.9us/ 218T  cutlass_plain    63.2us/ 344T  cutlass_res    67.1us/ 324T
+M=16384 qkv  fp16   597.6us/ 218T  lt_main   436.2us/ 299T  v2   484.8us/ 269T  v3_plain   490.1us/ 266T  cutlass_plain   318.7us/ 409T
+M=16384 proj fp16   230.2us/ 189T  lt_main   156.2us/ 278T  v2   166.7us/ 261T  v3_plain   170.4us/ 255T  v3_res   195.2us/ 223T  cutlass_plain   110.6us/ 393T  cutlass_res   128.4us/ 339T
+M=16384 fc1  fp16  1026.9us/ 169T  lt_main   536.0us/ 325T  v2   629.7us/ 276T  v3_plain   647.0us/ 269T  v3_gelu_gq   718.3us/ 242T  v3_gelu_gq256   896.3us/ 194T  cutlass_plain   427.4us/ 407T
+M=16384 fc2  fp16   761.0us/ 229T  lt_main   465.9us/ 373T  v2   525.2us/ 331T  v3_plain   575.7us/ 302T  v3_res   592.9us/ 293T  v3_res_grouped   705.1us/ 247T  v3_res_grouped256   659.8us/ 264T  cutlass_plain   360.4us/ 483T  cutlass_res   372.6us/ 467T
+== bench
+mode   batch scaffold                          median_ms   p90_ms  x_same  x_bestfp16  relL2_fp16  relL2_fp32
+fp16   4     sdpa_graph_pure16_compile_tuned_fused     12.49    12.50   1.00       1.00  -  -
+int8   4     sdpa_graph_pure16_compile_tuned_fused     10.42    10.43   1.20       1.20      0.0138  -
+fp16   4     sdpa_graph_pure16_compile_v3          12.49    12.50   1.00       1.00  -  -
+int8   4     sdpa_graph_pure16_compile_v3          10.96    10.98   1.14       1.14      0.0118  -
+fp16   4     sdpa_graph_pure16_compile_v4          12.49    12.50   1.00       1.00  -  -
+int8   4     sdpa_graph_pure16_compile_v4          10.07    12.76   1.24       1.24      0.0118  -
+fp16   4     sdpa_graph_pure16_compile_v4w         12.49    12.50   1.00       1.00  -  -
+int8   4     sdpa_graph_pure16_compile_v4w         11.36    11.37   1.10       1.10      0.0113  -
+fp16   4     sdpa_graph_pure16_compile_v4c         12.49    12.50   1.00       1.00  -  -
+int8   4     sdpa_graph_pure16_compile_v4c          8.41     8.42   1.49       1.49      0.0138  -
+fp16   8     sdpa_graph_pure16_compile_tuned_fused     23.76    23.76   1.00       1.00  -  -
+int8   8     sdpa_graph_pure16_compile_tuned_fused     18.41    18.46   1.29       1.29      0.0136  -
+fp16   8     sdpa_graph_pure16_compile_v3          23.76    23.76   1.00       1.00  -  -
+int8   8     sdpa_graph_pure16_compile_v3          20.45    20.47   1.16       1.16      0.0120  -
+fp16   8     sdpa_graph_pure16_compile_v4          23.76    23.76   1.00       1.00  -  -
+int8   8     sdpa_graph_pure16_compile_v4          18.49    18.52   1.28       1.28      0.0120  -
+fp16   8     sdpa_graph_pure16_compile_v4w         23.76    23.76   1.00       1.00  -  -
+int8   8     sdpa_graph_pure16_compile_v4w         18.64    18.66   1.27       1.27      0.0113  -
+fp16   8     sdpa_graph_pure16_compile_v4c         23.76    23.76   1.00       1.00  -  -
+int8   8     sdpa_graph_pure16_compile_v4c         14.07    14.08   1.69       1.69      0.0136  -
+fp16   16    sdpa_graph_pure16_compile_tuned_fused     46.89    46.90   1.00       1.00  -  -
+int8   16    sdpa_graph_pure16_compile_tuned_fused     35.44    35.71   1.32       1.32      0.0137  -
+fp16   16    sdpa_graph_pure16_compile_v3          46.89    46.90   1.00       1.00  -  -
+int8   16    sdpa_graph_pure16_compile_v3          38.04    38.11   1.23       1.23      0.0119  -
+fp16   16    sdpa_graph_pure16_compile_v4          46.89    46.90   1.00       1.00  -  -
+int8   16    sdpa_graph_pure16_compile_v4          34.41    34.47   1.36       1.36      0.0119  -
+fp16   16    sdpa_graph_pure16_compile_v4w         46.89    46.90   1.00       1.00  -  -
+int8   16    sdpa_graph_pure16_compile_v4w         38.82    38.83   1.21       1.21      0.0113  -
+fp16   16    sdpa_graph_pure16_compile_v4c         46.89    46.90   1.00       1.00  -  -
+int8   16    sdpa_graph_pure16_compile_v4c         26.80    26.83   1.75       1.75      0.0138  -
+fp16   32    sdpa_graph_pure16_compile_tuned_fused     91.34    91.85   1.00       1.00  -  -
+int8   32    sdpa_graph_pure16_compile_tuned_fused     68.92    69.11   1.33       1.33      0.0138  -
+fp16   32    sdpa_graph_pure16_compile_v3          91.34    91.85   1.00       1.00  -  -
+int8   32    sdpa_graph_pure16_compile_v3          71.17    71.20   1.28       1.28      0.0118  -
+fp16   32    sdpa_graph_pure16_compile_v4          91.34    91.85   1.00       1.00  -  -
+int8   32    sdpa_graph_pure16_compile_v4          63.75    64.36   1.43       1.43      0.0118  -
+fp16   32    sdpa_graph_pure16_compile_v4w         91.34    91.85   1.00       1.00  -  -
+int8   32    sdpa_graph_pure16_compile_v4w         73.33    73.36   1.25       1.25      0.0112  -
+fp16   32    sdpa_graph_pure16_compile_v4c         91.34    91.85   1.00       1.00  -  -
+int8   32    sdpa_graph_pure16_compile_v4c         50.82    51.29   1.80       1.80      0.0138  -
+== accuracy
+v4c: {"mode": "int8", "csb": false, "final_latent_rel_l2_vs_fp32": 0.12974566221237183, "per_image_rel_l2_median": 0.11693853884935379, "per_image_rel_l2_max": 0.28465402126312256, "wall_s": 1.4710163439995085, "decoded_psnr_db_median": 28.856630325317383, "decoded_psnr_db_min": 21.411407470703125}
+v4: {"mode": "int8", "csb": false, "final_latent_rel_l2_vs_fp32": 0.10873428732156754, "per_image_rel_l2_median": 0.0623147152364254, "per_image_rel_l2_max": 0.2874886095523834, "wall_s": 1.786983001000408, "decoded_psnr_db_median": 32.87571716308594, "decoded_psnr_db_min": 22.027509689331055}
+v4w: {"mode": "int8", "csb": false, "final_latent_rel_l2_vs_fp32": 0.09608915448188782, "per_image_rel_l2_median": 0.05715298280119896, "per_image_rel_l2_max": 0.2753083407878876, "wall_s": 1.9204490720003378, "decoded_psnr_db_median": 33.83708572387695, "decoded_psnr_db_min": 22.200376510620117}
+ALL_DONE

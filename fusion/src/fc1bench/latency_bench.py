@@ -22,6 +22,13 @@ Scaffold names are '_'-joined tokens:
             torch.compile can fuse it into the producer kernel (use together with compile)
   fused     hand-fused DiT block (fused_ops.py): residual+LayerNorm+modulate+quant, GELU+quant and
             row-quant Triton kernels around the INT GEMMs; implies pure16 (INT modes only)
+  v3        fused block v3 (fused_gemm.py): residual adds in the proj/fc2 GEMM epilogues, GELU and
+            128-column group quantization in the fc1 epilogue; implies fused (INT modes only)
+  tattn     v3 with the single-pass Triton attention (fused_attn.py) instead of SDPA; implies v3
+  v4        fused block with CUTLASS INT8 GEMMs (cutlass_gemm.py) for qkv and proj(+residual), v3 MLP
+            (fc1 GELU + 128-column group quant, grouped fc2 + residual); implies fused
+  v4w       as v4 with 256-column groups in the MLP
+  v4c       CUTLASS for all four projections with per-token scales (v2 numerics) + GELU-quant kernel
 """
 import argparse
 from collections import defaultdict
@@ -44,7 +51,7 @@ from .tuning import Bank, key as bank_key, tune
 
 FLOAT_MODES = {"fp32": torch.float32, "fp16": torch.float16, "bf16": torch.bfloat16}
 QUANT_MODES = {"int8": 8, "int4": 4}
-TOKENS = {"baseline", "sdpa", "graph", "fp16io", "tuned", "pure16", "compile", "fuseq", "fused"}
+TOKENS = {"baseline", "sdpa", "graph", "fp16io", "tuned", "pure16", "compile", "fuseq", "fused", "v3", "tattn", "v4", "v4w", "v4c"}
 
 
 @dataclass(frozen=True)
@@ -58,6 +65,9 @@ class Scaffold:
     compile: bool = False
     fuseq: bool = False
     fused: bool = False
+    v3: bool = False
+    tattn: bool = False
+    v4: str = ""
 
     @staticmethod
     def parse(name):
@@ -65,21 +75,27 @@ class Scaffold:
         unknown = set(tokens) - TOKENS
         if unknown:
             raise ValueError(f"Unknown scaffold token(s) {sorted(unknown)} in {name!r}; use {sorted(TOKENS)}")
-        fused = "fused" in tokens
+        tattn = "tattn" in tokens
+        v4s = [tok for tok in tokens if tok in ("v4", "v4w", "v4c")]
+        if len(v4s) > 1:
+            raise ValueError("use at most one of v4, v4w, v4c")
+        v4 = v4s[0] if v4s else ""
+        v3 = "v3" in tokens or tattn
+        fused = "fused" in tokens or v3 or bool(v4)
         pure16 = "pure16" in tokens or fused
         if fused and "sdpa" not in tokens:
             raise ValueError("'fused' uses scaled_dot_product_attention; add the 'sdpa' token")
         return Scaffold(name, attention="sdpa" if "sdpa" in tokens else "explicit",
                         graphs="graph" in tokens, fp16io="fp16io" in tokens or pure16,
                         tuned="tuned" in tokens, pure16=pure16, compile="compile" in tokens,
-                        fuseq="fuseq" in tokens, fused=fused)
+                        fuseq="fuseq" in tokens, fused=fused, v3=v3, tattn=tattn, v4=v4)
 
     def effective(self, mode):
         """Knobs that actually change this mode (float modes ignore INT-only knobs)."""
         if mode in FLOAT_MODES:
             return (self.attention, self.graphs, self.pure16, self.compile)
         return (self.attention, self.graphs, self.fp16io, self.tuned, self.pure16, self.compile, self.fuseq,
-                self.fused)
+                self.fused, self.v3, self.tattn, self.v4)
 
 
 def frequency_table(dim, max_period=10000):
@@ -152,6 +168,15 @@ def build(models, state, args, mode, batch, scaffold, bank):
         for name in names:
             model.get_submodule(name).use_custom_op = scaffold.compile
             model.get_submodule(name).quant_mode = "torch" if scaffold.fuseq else "kernel"
+        if scaffold.v4:
+            # Pick CUTLASS tile configs for every v4 GEMM shape on real activations, before any
+            # torch.compile tracing or CUDA graph capture.
+            from .fused_ops import fused_forward_with_cfg
+            x, t, y = make_inputs(batch, args.image_size, getattr(args, "seed", 1))
+            with torch.inference_mode():
+                fused_forward_with_cfg(model, x.half(), t, y, getattr(args, "cfg", 1.5), version=4,
+                                       v4=scaffold.v4, tuning=True)
+            torch.cuda.synchronize()
     return model, model_dtype, names, conversions
 
 
@@ -165,7 +190,9 @@ def make_forward(model, dtype, cfg, scaffold=None, compile_mode="default"):
     def forward(x, t, y):
         if fused:
             from .fused_ops import fused_forward_with_cfg
-            return fused_forward_with_cfg(model, x.to(dtype), t, y, cfg)
+            version = 4 if scaffold.v4 else 3 if scaffold.v3 else 2
+            return fused_forward_with_cfg(model, x.to(dtype), t, y, cfg, version=version,
+                                          triton_attn=scaffold.tattn, v4=scaffold.v4 or "v4")
         if pure:
             # Native FP16 end to end: only the input latent needs casting (autocast would
             # cast it at the patch-embedding conv anyway). Output is FP16 as under autocast.
@@ -285,8 +312,9 @@ def kernel_profile(call, out_path, iters=3):
         elif low.startswith("triton_"):
             group = "norm" if "norm" in low else "elementwise_other"   # other torch.compile kernels
             group = "layernorm" if group == "norm" else group
-        elif ("_tiled" in low or "_epilogue" in low or "i8" in low or "int8" in low or "imma" in low
-              or "_s8" in low or "s8s8" in low or "i16832" in low or "i8816" in low):
+        elif ("_tiled" in low or "_epilogue" in low or "_gemm_v3" in low or "i8" in low or "int8" in low
+              or "imma" in low or "_s8" in low or "s8s8" in low or "i16832" in low or "i8816" in low
+              or "signed char" in low or "gemmshape<16, 8, 32>" in low):
             # cuBLASLt INT8 kernels are named e.g. cutlass_80_tensorop_i16832gemm_s8_128x64_...
             group = "int_gemm"
         elif "flash" in low or "fmha" in low or "attention" in low or "softmax" in low:

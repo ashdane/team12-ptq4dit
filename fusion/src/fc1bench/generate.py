@@ -54,7 +54,9 @@ def main(argv=None):
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('--dit-repo', required=True)
     p.add_argument('--checkpoint', required=True)
-    p.add_argument('--output', required=True, help='Shared root; each mode gets its own directory')
+    p.add_argument('--output', required=True, help='Shared root; each mode (or --label) gets its own directory')
+    p.add_argument('--label', help='Directory name under --output (default: the mode); lets several INT8 '
+                                   'variants share one root, e.g. int8_v4c')
     p.add_argument('--mode', choices=['fp32','fp16','int8','int4','fake8','fake4'], required=True)
     p.add_argument('--image-size', type=int, choices=[256,512], default=256)
     p.add_argument('--num-samples', type=int, default=10000)
@@ -70,6 +72,9 @@ def main(argv=None):
     p.add_argument('--scaffold', help='latency_bench scaffold to generate with (e.g. sdpa_graph_pure16_compile_tuned_fused); '
                                       'default: legacy autocast + explicit attention path')
     p.add_argument('--tf32', action='store_true', help='Allow TF32 matmuls (official DiT/PTQ4DiT FP32 sampling setting)')
+    p.add_argument('--labels', help='Comma-separated ImageNet class ids used for every batch, in order and repeated to '
+                                    'fill it (default: random labels from the batch seed). Noise is unchanged.')
+    p.add_argument('--save-png', action='store_true', help='Also save every image as img_<index>_c<class>.png')
     args = p.parse_args(argv)
     if min(args.num_samples, args.batch_size) < 1 or not np.isfinite(args.cfg) or args.cfg < 1:
         p.error('Counts must be positive and finite cfg >= 1')
@@ -84,15 +89,18 @@ def main(argv=None):
     if args.scaffold:
         from .latency_bench import Scaffold
         scaffold = Scaffold.parse(args.scaffold)
-    out = Path(args.output).resolve()/args.mode
+    label = args.label or args.mode
+    if not label.replace('_', '').isalnum():
+        p.error('--label must be alphanumeric with underscores')
+    out = Path(args.output).resolve()/label
     out.mkdir(parents=True, exist_ok=True)
     manifest_path = out/'manifest.json'
     dtype = {'fp32':torch.float32, 'fp16':torch.float16}.get(args.mode, getattr(torch,args.quant_dtype))
-    manifest = dict(mode=args.mode, checkpoint_sha256=sha256(args.checkpoint),
+    manifest = dict(mode=args.mode, label=label, checkpoint_sha256=sha256(args.checkpoint),
                     dit_commit=git_record(args.dit_repo), image_size=args.image_size,
                     num_samples=args.num_samples, batch_size=args.batch_size, steps=args.steps,
                     cfg=args.cfg, seed=args.seed, scope=args.scope, vae=args.vae,
-                    vae_revision=args.vae_revision, dtype=str(dtype),
+                    vae_revision=args.vae_revision, dtype=str(dtype), fixed_labels=args.labels,
                     source_sha256={f.name:sha256(f) for f in sorted(Path(__file__).parent.glob('*.py'))},
                     attention=('explicit timm attention; fused_attn=False' if scaffold is None or scaffold.attention != 'sdpa'
                                else 'scaled_dot_product_attention (timm fused_attn=True)'),
@@ -229,7 +237,10 @@ def _generate_batches(args, out, manifest, manifest_path, diffusion, vae, forwar
                 # Fixed batch shape allows a tuned bank; final batch is trimmed after generation.
                 with matched_rng(args.seed + start):
                     z = torch.randn(args.batch_size,4,args.image_size//8,args.image_size//8,device='cuda')
-                    labels = torch.randint(0,1000,(args.batch_size,),device='cuda')
+                    labels = torch.randint(0,1000,(args.batch_size,),device='cuda')   # keeps the RNG stream
+                    if args.labels:
+                        fixed = [int(c) for c in args.labels.split(',')]
+                        labels = torch.tensor((fixed * args.batch_size)[:args.batch_size], device='cuda')
                     y = torch.cat([labels, torch.full_like(labels,1000)])
                     z = torch.cat([z,z])
                     torch.cuda.synchronize()
@@ -259,6 +270,10 @@ def _generate_batches(args, out, manifest, manifest_path, diffusion, vae, forwar
                     if start == 0:
                         from PIL import Image
                         for i,img in enumerate(images[:4]): Image.fromarray(img).save(out/f'preview_{i}.png')
+                    if args.save_png:
+                        from PIL import Image
+                        for i,img in enumerate(images):
+                            Image.fromarray(img).save(out/f'img_{start+i:05d}_c{int(labels[i]):03d}.png')
                     del z,y,labels,latent,decoded,images
                 print(f'{args.mode}: {start+n}/{args.num_samples} images; sampling {sampling_s:.2f}s/batch',flush=True)
                 manifest['completed_samples'] = start+n

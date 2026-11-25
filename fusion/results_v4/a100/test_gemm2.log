@@ -1,0 +1,23 @@
+test_gelu_group_quant (__main__.FusedGemmTests.test_gelu_group_quant) ... gelu_gq M=2048 G=128: INT8 mismatch fraction 4.26e-05 (max |dq| 1), scale max rel diff 4.23e-06
+gelu_gq M=16384 G=128: INT8 mismatch fraction 4.30e-05 (max |dq| 1), scale max rel diff 4.85e-06
+gelu_gq M=2048 G=256: INT8 mismatch fraction 3.97e-05 (max |dq| 1), scale max rel diff 4.14e-06
+gelu_gq M=16384 G=256: INT8 mismatch fraction 3.84e-05 (max |dq| 1), scale max rel diff 4.33e-06
+ok
+test_mlp_chain_vs_per_token (__main__.FusedGemmTests.test_mlp_chain_vs_per_token)
+fc1 -> GELU -> group quant -> fc2 is at least as close to FP32 as per-token quant. ... MLP chain rel L2 vs FP32: group-128 8.83e-03, group-256 9.64e-03, per-token 1.25e-02
+ok
+test_plain (__main__.FusedGemmTests.test_plain) ... plain qkv M=2048: rel L2 2.07e-04
+plain qkv M=16384: rel L2 2.07e-04
+ok
+test_residual (__main__.FusedGemmTests.test_residual) ... residual proj group=0 M=2048: rel L2 2.08e-04
+residual fc2 group=128 M=2048: rel L2 2.08e-04
+residual fc2 group=256 M=2048: rel L2 2.08e-04
+residual proj group=0 M=16384: rel L2 2.08e-04
+residual fc2 group=128 M=16384: rel L2 2.08e-04
+residual fc2 group=256 M=16384: rel L2 2.08e-04
+ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 200.260s
+
+OK

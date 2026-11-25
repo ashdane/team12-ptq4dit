@@ -291,6 +291,12 @@ def prepare_fused(model):
         lin = [blk.adaLN_modulation[1] for blk in model.blocks]
         model.register_buffer("_fc1bench_adaln_w", torch.cat([l.weight for l in lin], 0).contiguous(), persistent=False)
         model.register_buffer("_fc1bench_adaln_b", torch.cat([l.bias for l in lin], 0).contiguous(), persistent=False)
+        # Re-point every block's adaLN Linear at its slice of the batched buffer instead of keeping
+        # a second full FP16 copy of these weights (28 x 6C x C, about 446 MB for DiT-XL/2).
+        rows = lin[0].weight.shape[0]
+        for i, l in enumerate(lin):
+            l.weight = torch.nn.Parameter(model._fc1bench_adaln_w[i * rows:(i + 1) * rows], requires_grad=False)
+            l.bias = torch.nn.Parameter(model._fc1bench_adaln_b[i * rows:(i + 1) * rows], requires_grad=False)
     return model
 
 
@@ -347,11 +353,126 @@ def fused_dit_forward(model, x, t, y, block_hook=None, fast=FAST_DEFAULT):
     return model.unpatchify(out)
 
 
-def fused_forward_with_cfg(model, x, t, y, cfg_scale, block_hook=None, fast=FAST_DEFAULT):
+def fused_dit_forward_v3(model, x, t, y, block_hook=None, fast=FAST_DEFAULT, triton_attn=False):
+    """v3 block: LN -> qkv -> SDPA -> row-quant -> proj(+residual) -> LN -> fc1(+GELU+quant) -> fc2(+residual).
+
+    The INT8 GEMMs come from fused_gemm.py: the attention and MLP residual adds run in the proj and
+    fc2 epilogues, and fc1 writes INT8 GELU activations with one scale per 128 columns, which fc2
+    applies in its main loop. Between GEMMs only LayerNorm+modulate+quant and the attention-output
+    quantization remain as separate passes.
+    """
+    from .fused_gemm import gemm_gelu_gq, gemm_plain, gemm_res
+    prepare_fused(model)
+    x = model.x_embedder(x) + model.pos_embed
+    c = model.t_embedder(t) + model.y_embedder(y, False)
+    n_img, tokens, hidden = x.shape
+    heads = model.blocks[0].attn.num_heads
+    hd = hidden // heads
+    m = n_img * tokens
+    eps = model.blocks[0].norm1.eps
+    six = 6 * hidden
+    mods = F.linear(F.silu(c), model._fc1bench_adaln_w, model._fc1bench_adaln_b).contiguous()
+    xs = x.reshape(m, hidden).contiguous()
+    for i, blk in enumerate(model.blocks):
+        if block_hook is not None:
+            block_hook(i, "start")
+        mod = mods[:, i * six:(i + 1) * six]
+        base = i * six
+        q, s = ln_mod_quant(xs, mod, 0, hidden, tokens, eps, fast)
+        a, p, f1, f2 = blk.attn.qkv, blk.attn.proj, blk.mlp.fc1, blk.mlp.fc2
+        qkv = gemm_plain(q, s, a.weight, a.weight_scale, a.bias)
+        if triton_attn:
+            from .fused_attn import dit_attention
+            o = dit_attention(qkv, n_img, tokens, heads)
+        else:
+            qkv = qkv.view(n_img, tokens, 3, heads, hd).permute(2, 0, 3, 1, 4)
+            o = F.scaled_dot_product_attention(qkv[0], qkv[1], qkv[2])
+            o = o.transpose(1, 2).reshape(m, hidden)
+        q, s = row_quant(o, fast)
+        xs = gemm_res(q, s, p.weight, p.weight_scale, p.bias, xs, mods, base + 2 * hidden, tokens, False)
+        q, s = ln_mod_quant(xs, mod, 3 * hidden, 4 * hidden, tokens, eps, fast)
+        hq, hs = gemm_gelu_gq(q, s, f1.weight, f1.weight_scale, f1.bias)
+        xs = gemm_res(hq, hs, f2.weight, f2.weight_scale, f2.bias, xs, mods, base + 5 * hidden, tokens, True)
+        if block_hook is not None:
+            block_hook(i, "end")
+    out = model.final_layer(xs.view(n_img, tokens, hidden), c)
+    return model.unpatchify(out)
+
+
+def fused_dit_forward_v4(model, x, t, y, block_hook=None, fast=FAST_DEFAULT, variant="cg", group=128,
+                         tuning=False):
+    """v4 block: CUTLASS INT8 GEMMs (cutlass_gemm.py) with fused scale/bias/residual epilogues.
+
+    variant "cg": CUTLASS qkv and proj(+attention residual); fc1(+GELU+group quant) and grouped
+                  fc2(+MLP residual) from fused_gemm.py with `group` columns per scale (v3 numerics).
+    variant "cc": CUTLASS for all four projections with per-token activation scales (v2 numerics):
+                  fc1 -> GELU+quant kernel -> fc2(+MLP residual).
+    tuning=True runs eagerly and picks the CUTLASS tile config for every shape it meets.
+    """
+    from . import cutlass_gemm as cgm
+    from .fused_gemm import gemm_gelu_gq, gemm_res
+    prepare_fused(model)
+    x = model.x_embedder(x) + model.pos_embed
+    c = model.t_embedder(t) + model.y_embedder(y, False)
+    n_img, tokens, hidden = x.shape
+    heads = model.blocks[0].attn.num_heads
+    hd = hidden // heads
+    m = n_img * tokens
+    eps = model.blocks[0].norm1.eps
+    six = 6 * hidden
+    mods = F.linear(F.silu(c), model._fc1bench_adaln_w, model._fc1bench_adaln_b).contiguous()
+    xs = x.reshape(m, hidden).contiguous()
+
+    def plain(q, s, lin):
+        if tuning:
+            cgm.tune("plain", q, s, lin.weight, lin.weight_scale, lin.bias, tokens)
+        return cgm.cutlass_gemm(q, s, lin.weight, lin.weight_scale, lin.bias, tokens)
+
+    def res(q, s, lin, r, off):
+        if tuning:
+            cgm.tune("res", q, s, lin.weight, lin.weight_scale, lin.bias, tokens, r, mods, off)
+        return cgm.cutlass_gemm_res(q, s, lin.weight, lin.weight_scale, lin.bias, r, mods, off, tokens)
+
+    for i, blk in enumerate(model.blocks):
+        if block_hook is not None:
+            block_hook(i, "start")
+        mod = mods[:, i * six:(i + 1) * six]
+        base = i * six
+        q, s = ln_mod_quant(xs, mod, 0, hidden, tokens, eps, fast)
+        a, p, f1, f2 = blk.attn.qkv, blk.attn.proj, blk.mlp.fc1, blk.mlp.fc2
+        qkv = plain(q, s, a).view(n_img, tokens, 3, heads, hd).permute(2, 0, 3, 1, 4)
+        o = F.scaled_dot_product_attention(qkv[0], qkv[1], qkv[2])
+        o = o.transpose(1, 2).reshape(m, hidden)
+        q, s = row_quant(o, fast)
+        xs = res(q, s, p, xs, base + 2 * hidden)
+        q, s = ln_mod_quant(xs, mod, 3 * hidden, 4 * hidden, tokens, eps, fast)
+        if variant == "cg":
+            hq, hs = gemm_gelu_gq(q, s, f1.weight, f1.weight_scale, f1.bias, group)
+            xs = gemm_res(hq, hs, f2.weight, f2.weight_scale, f2.bias, xs, mods, base + 5 * hidden, tokens, True)
+        else:
+            hq, hs = gelu_quant(plain(q, s, f1), None, fast)
+            xs = res(hq, hs, f2, xs, base + 5 * hidden)
+        if block_hook is not None:
+            block_hook(i, "end")
+    out = model.final_layer(xs.view(n_img, tokens, hidden), c)
+    return model.unpatchify(out)
+
+
+V4_VARIANTS = {"v4": ("cg", 128), "v4w": ("cg", 256), "v4c": ("cc", 128)}
+
+
+def fused_forward_with_cfg(model, x, t, y, cfg_scale, block_hook=None, fast=FAST_DEFAULT, version=2,
+                           triton_attn=False, v4="v4", tuning=False):
     """Same CFG combination as the official DiT.forward_with_cfg (guidance on 3 channels)."""
     half = x[: len(x) // 2]
     combined = torch.cat([half, half], dim=0)
-    model_out = fused_dit_forward(model, combined, t, y, block_hook, fast)
+    if version == 4:
+        variant, group = V4_VARIANTS[v4]
+        model_out = fused_dit_forward_v4(model, combined, t, y, block_hook, fast, variant, group, tuning)
+    elif version == 3:
+        model_out = fused_dit_forward_v3(model, combined, t, y, block_hook, fast, triton_attn)
+    else:
+        model_out = fused_dit_forward(model, combined, t, y, block_hook, fast)
     eps, rest = model_out[:, :3], model_out[:, 3:]
     cond_eps, uncond_eps = torch.split(eps, len(eps) // 2, dim=0)
     half_eps = uncond_eps + cfg_scale * (cond_eps - uncond_eps)

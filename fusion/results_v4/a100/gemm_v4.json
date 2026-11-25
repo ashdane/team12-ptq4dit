@@ -1,0 +1,294 @@
+{
+  "gpu": "NVIDIA A100-SXM4-40GB",
+  "torch": "2.14.1+cu130",
+  "results": [
+    {
+      "layer": "qkv",
+      "m": 2048,
+      "n": 3456,
+      "k": 1152,
+      "v2_config": {
+        "bm": 64,
+        "bn": 128,
+        "bk": 128,
+        "warps": 4,
+        "stages": 3,
+        "group_m": 8,
+        "layout": "nk",
+        "backend": "triton"
+      },
+      "v3_plain_cfg": "BM: 128, BN: 64, BK: 128, num_warps: 4, num_ctas: 1, num_stages: 3, maxnreg: None",
+      "ms": {
+        "fp16": 0.10700800418853759,
+        "lt_main": 0.0549888014793396,
+        "v2": 0.0834559977054596,
+        "v3_plain": 0.06789119839668274,
+        "cutlass_plain": 0.04116480052471161
+      },
+      "tops": {
+        "fp16": 152.3947117382721,
+        "lt_main": 296.5595450944142,
+        "v2": 195.4018213233006,
+        "v3_plain": 240.19982467707928,
+        "cutlass_plain": 396.15044271161923
+      }
+    },
+    {
+      "layer": "proj",
+      "m": 2048,
+      "n": 1152,
+      "k": 1152,
+      "v2_config": {
+        "bm": 64,
+        "bn": 128,
+        "bk": 128,
+        "warps": 4,
+        "stages": 3,
+        "group_m": 8,
+        "layout": "nk",
+        "backend": "triton"
+      },
+      "v3_plain_cfg": "BM: 64, BN: 128, BK: 128, num_warps: 4, num_ctas: 1, num_stages: 3, maxnreg: None",
+      "ms": {
+        "fp16": 0.031027200818061828,
+        "lt_main": 0.02467840015888214,
+        "v2": 0.026521599292755126,
+        "v3_plain": 0.02682879865169525,
+        "v3_res": 0.03061760067939758,
+        "cutlass_plain": 0.021913599967956544,
+        "cutlass_res": 0.023244799673557283
+      },
+      "tops": {
+        "fp16": 175.1952429055622,
+        "lt_main": 220.26622264829288,
+        "v2": 204.9581521837145,
+        "v3_plain": 202.6113078923317,
+        "v3_res": 177.5389927159685,
+        "cutlass_plain": 248.05682279263098,
+        "cutlass_res": 233.85092839426162
+      }
+    },
+    {
+      "layer": "fc1",
+      "m": 2048,
+      "n": 4608,
+      "k": 1152,
+      "v2_config": {
+        "bm": 64,
+        "bn": 128,
+        "bk": 128,
+        "warps": 4,
+        "stages": 3,
+        "group_m": 8,
+        "layout": "nk",
+        "backend": "triton"
+      },
+      "v3_plain_cfg": "BM: 64, BN: 128, BK: 128, num_warps: 4, num_ctas: 1, num_stages: 3, maxnreg: None",
+      "v3_gelu_gq_cfg": "BM: 64, BN: 128, BK: 128, num_warps: 4, num_ctas: 1, num_stages: 3, maxnreg: None",
+      "v3_gelu_gq256_cfg": "BM: 64, BN: 256, BK: 128, num_warps: 8, num_ctas: 1, num_stages: 3, maxnreg: None",
+      "ms": {
+        "fp16": 0.142848002910614,
+        "lt_main": 0.07301120162010193,
+        "v2": 0.08560640215873719,
+        "v3_plain": 0.08857600092887878,
+        "v3_gelu_gq": 0.10055680274963379,
+        "v3_gelu_gq256": 0.1274880051612854,
+        "cutlass_plain": 0.05928959846496582
+      },
+      "tops": {
+        "fp16": 152.21264205986608,
+        "lt_main": 297.8073426203343,
+        "v2": 253.9911897673512,
+        "v3_plain": 245.47588181880715,
+        "v3_gelu_gq": 216.22875172489697,
+        "v3_gelu_gq256": 170.55151116759993,
+        "cutlass_plain": 366.72995768133063
+      }
+    },
+    {
+      "layer": "fc2",
+      "m": 2048,
+      "n": 1152,
+      "k": 4608,
+      "v2_config": {
+        "bm": 64,
+        "bn": 128,
+        "bk": 128,
+        "warps": 4,
+        "stages": 3,
+        "group_m": 8,
+        "layout": "nk",
+        "backend": "triton"
+      },
+      "v3_plain_cfg": "BM: 64, BN: 128, BK: 128, num_warps: 4, num_ctas: 1, num_stages: 3, maxnreg: None",
+      "v3_res_grouped_cfg": "BM: 64, BN: 128, BK: 64, num_warps: 4, num_ctas: 1, num_stages: 3, maxnreg: None",
+      "v3_res_grouped256_cfg": "BM: 64, BN: 64, BK: 128, num_warps: 4, num_ctas: 1, num_stages: 3, maxnreg: None",
+      "ms": {
+        "fp16": 0.11499520540237426,
+        "lt_main": 0.07219200134277344,
+        "v2": 0.08243200182914734,
+        "v3_plain": 0.08417279720306396,
+        "v3_res": 0.08796160221099854,
+        "v3_res_grouped": 0.1112064003944397,
+        "v3_res_grouped256": 0.09994239807128906,
+        "cutlass_plain": 0.06318079829216003,
+        "cutlass_res": 0.06707199811935424
+      },
+      "tops": {
+        "fp16": 189.07981302280518,
+        "lt_main": 301.186717802173,
+        "v2": 263.77221774943894,
+        "v3_plain": 258.3170888754607,
+        "v3_res": 247.19049436870384,
+        "v3_res_grouped": 195.52176726230192,
+        "v3_res_grouped256": 217.55803698536923,
+        "cutlass_plain": 344.1436721874734,
+        "cutlass_res": 324.17808542557464
+      }
+    },
+    {
+      "layer": "qkv",
+      "m": 16384,
+      "n": 3456,
+      "k": 1152,
+      "v2_config": {
+        "bm": 64,
+        "bn": 128,
+        "bk": 128,
+        "warps": 4,
+        "stages": 3,
+        "group_m": 8,
+        "layout": "nk",
+        "backend": "triton"
+      },
+      "v3_plain_cfg": "BM: 64, BN: 128, BK: 128, num_warps: 4, num_ctas: 1, num_stages: 3, maxnreg: None",
+      "ms": {
+        "fp16": 0.5976064205169678,
+        "lt_main": 0.43622398376464844,
+        "v2": 0.4847616195678711,
+        "v3_plain": 0.49008641242980955,
+        "cutlass_plain": 0.318668794631958
+      },
+      "tops": {
+        "fp16": 218.3035977142683,
+        "lt_main": 299.06570127144954,
+        "v2": 269.1212058667001,
+        "v3_plain": 266.19720177344135,
+        "cutlass_plain": 409.38941563660944
+      }
+    },
+    {
+      "layer": "proj",
+      "m": 16384,
+      "n": 1152,
+      "k": 1152,
+      "v2_config": {
+        "bm": 64,
+        "bn": 128,
+        "bk": 128,
+        "warps": 4,
+        "stages": 3,
+        "group_m": 8,
+        "layout": "nk",
+        "backend": "triton"
+      },
+      "v3_plain_cfg": "BM: 64, BN: 128, BK: 128, num_warps: 4, num_ctas: 1, num_stages: 3, maxnreg: None",
+      "ms": {
+        "fp16": 0.23019518852233886,
+        "lt_main": 0.15615999698638916,
+        "v2": 0.1667072057723999,
+        "v3_plain": 0.1703935980796814,
+        "v3_res": 0.19517439603805542,
+        "cutlass_plain": 0.11059199571609497,
+        "cutlass_res": 0.12840960025787354
+      },
+      "tops": {
+        "fp16": 188.91161084272588,
+        "lt_main": 278.4742873412726,
+        "v2": 260.85581406343533,
+        "v3_plain": 255.21231056852454,
+        "v3_res": 222.8086509027594,
+        "cutlass_plain": 393.2160152316629,
+        "cutlass_res": 338.6549275495746
+      }
+    },
+    {
+      "layer": "fc1",
+      "m": 16384,
+      "n": 4608,
+      "k": 1152,
+      "v2_config": {
+        "bm": 64,
+        "bn": 128,
+        "bk": 128,
+        "warps": 4,
+        "stages": 3,
+        "group_m": 8,
+        "layout": "nk",
+        "backend": "triton"
+      },
+      "v3_plain_cfg": "BM: 64, BN: 128, BK: 128, num_warps: 4, num_ctas: 1, num_stages: 3, maxnreg: None",
+      "v3_gelu_gq_cfg": "BM: 64, BN: 128, BK: 128, num_warps: 4, num_ctas: 1, num_stages: 3, maxnreg: None",
+      "v3_gelu_gq256_cfg": "BM: 64, BN: 256, BK: 128, num_warps: 8, num_ctas: 1, num_stages: 3, maxnreg: None",
+      "ms": {
+        "fp16": 1.0268671989440918,
+        "lt_main": 0.5359615802764892,
+        "v2": 0.6296576023101806,
+        "v3_plain": 0.6469632148742676,
+        "v3_gelu_gq": 0.7183360099792481,
+        "v3_gelu_gq256": 0.8963071823120117,
+        "cutlass_plain": 0.42741761207580564
+      },
+      "tops": {
+        "fp16": 169.3950061574326,
+        "lt_main": 324.5497100711314,
+        "v2": 276.2551819430126,
+        "v3_plain": 268.8656348441776,
+        "v3_gelu_gq": 242.15154617269587,
+        "v3_gelu_gq256": 194.06982217782559,
+        "cutlass_plain": 406.97006995853366
+      }
+    },
+    {
+      "layer": "fc2",
+      "m": 16384,
+      "n": 1152,
+      "k": 4608,
+      "v2_config": {
+        "bm": 32,
+        "bn": 64,
+        "bk": 64,
+        "warps": 4,
+        "stages": 2,
+        "group_m": 8,
+        "layout": "nk",
+        "backend": "torch_int_mm"
+      },
+      "v3_plain_cfg": "BM: 64, BN: 128, BK: 128, num_warps: 4, num_ctas: 1, num_stages: 3, maxnreg: None",
+      "v3_res_grouped_cfg": "BM: 64, BN: 128, BK: 64, num_warps: 4, num_ctas: 1, num_stages: 3, maxnreg: None",
+      "v3_res_grouped256_cfg": "BM: 128, BN: 128, BK: 128, num_warps: 8, num_ctas: 1, num_stages: 3, maxnreg: None",
+      "ms": {
+        "fp16": 0.7610367774963379,
+        "lt_main": 0.46592001914978026,
+        "v2": 0.525209617614746,
+        "v3_plain": 0.5756927967071533,
+        "v3_res": 0.5928959846496582,
+        "v3_res_grouped": 0.7051263809204101,
+        "v3_res_grouped256": 0.6597631931304931,
+        "cutlass_plain": 0.3604480028152466,
+        "cutlass_res": 0.3726336002349854
+      },
+      "tops": {
+        "fp16": 228.56474303416567,
+        "lt_main": 373.3391319081337,
+        "v2": 331.1938122496335,
+        "v3_plain": 302.1510369470263,
+        "v3_res": 293.3839661450645,
+        "v3_res_grouped": 246.6879416154391,
+        "v3_res_grouped256": 263.6494083015564,
+        "cutlass_plain": 482.58326895809967,
+        "cutlass_res": 466.8021761277252
+      }
+    }
+  ]
+}

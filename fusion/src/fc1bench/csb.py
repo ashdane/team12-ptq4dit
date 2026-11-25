@@ -233,8 +233,11 @@ def cmd_evaluate(args):
     labels = torch.randint(0, 1000, (n,), generator=g).cuda()
     noise = torch.cat([z, z])
     y = torch.cat([labels, torch.full_like(labels, 1000)])
-    scaffold = Scaffold("sdpa_pure16" + ("_fused" if args.fused else ""), attention="sdpa", fp16io=True,
-                        pure16=True, fused=args.fused)
+    v3 = args.v3 or args.tattn
+    fused = args.fused or v3 or bool(args.v4)
+    scaffold = Scaffold("sdpa_pure16" + ("_fused" if fused else "") + ("_v3" if v3 else "")
+                        + ("_tattn" if args.tattn else "") + (f"_{args.v4}" if args.v4 else ""), attention="sdpa",
+                        fp16io=True, pure16=True, fused=fused, v3=v3, tattn=args.tattn, v4=args.v4 or "")
 
     def sample(model, dtype, sc):
         fwd = make_forward(model, dtype, CFG, sc)
@@ -310,6 +313,12 @@ def main(argv=None):
             s.add_argument("--decode", action="store_true")
             s.add_argument("--fused", action="store_true",
                            help="INT modes use the hand-fused block forward (fused_ops.py, fast quantization)")
+            s.add_argument("--v3", action="store_true",
+                           help="INT modes use the v3 fused block (fused_gemm.py epilogues); implies --fused")
+            s.add_argument("--tattn", action="store_true",
+                           help="v3 block with the single-pass Triton attention (fused_attn.py); implies --v3")
+            s.add_argument("--v4", choices=["v4", "v4w", "v4c"],
+                           help="INT modes use a v4 CUTLASS fused block variant")
             s.add_argument("--no-csb", action="store_true", help="Skip the CSB-folded variants")
     args = p.parse_args(argv)
     torch.set_grad_enabled(False)

@@ -23,8 +23,9 @@ def group(name):
         return "inductor_fused_quant"
     if low.startswith("triton_"):
         return "inductor_elementwise_norm"
-    if ("_tiled" in low or "_epilogue" in low or "i16832" in low or "i8816" in low or "_s8" in low
-            or "imma" in low or "int8" in low):
+    if ("_tiled" in low or "_epilogue" in low or "_gemm_v3" in low or "i16832" in low or "i8816" in low
+            or "_s8" in low or "imma" in low or "int8" in low or "signed char" in low
+            or "gemmshape<16, 8, 32>" in low):
         return "int_gemm"
     if "flash" in low or "fmha" in low or "attention" in low:
         return "attention"

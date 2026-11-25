@@ -1,0 +1,64 @@
+== tests
+ok
+test_plain (__main__.FusedGemmTests.test_plain) ... plain qkv M=2048: rel L2 2.07e-04
+plain qkv M=16384: rel L2 2.07e-04
+ok
+test_residual (__main__.FusedGemmTests.test_residual) ... residual proj grouped=False M=2048: rel L2 2.08e-04
+residual fc2 grouped=True M=2048: rel L2 2.08e-04
+residual proj grouped=False M=16384: rel L2 2.08e-04
+residual fc2 grouped=True M=16384: rel L2 2.08e-04
+ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 145.175s
+
+OK
+n_img=8: rel L2 vs SDPA 1.59e-04; SDPA 53.7 us, fused 87.9 us (0.61x)
+n_img=64: rel L2 vs SDPA 1.58e-04; SDPA 218.3 us, fused 317.3 us (0.69x)
+ok
+
+----------------------------------------------------------------------
+Ran 1 test in 29.082s
+
+OK
+== bench: sdpa_graph_pure16_compile_tuned sdpa_graph_pure16_compile_tuned_fused sdpa_graph_pure16_compile_v3 sdpa_graph_pure16_compile_tattn
+mode   batch scaffold                          median_ms   p90_ms  x_same  x_bestfp16  relL2_fp16  relL2_fp32
+fp16   4     sdpa_graph_pure16_compile_tuned       12.50    12.51   1.00       1.00  -  -
+int8   4     sdpa_graph_pure16_compile_tuned       12.85    12.87   0.97       0.97      0.0138  -
+fp16   4     sdpa_graph_pure16_compile_tuned_fused     12.50    12.51   1.00       1.00  -  -
+int8   4     sdpa_graph_pure16_compile_tuned_fused     10.43    10.44   1.20       1.20      0.0138  -
+fp16   4     sdpa_graph_pure16_compile_v3          12.50    12.51   1.00       1.00  -  -
+int8   4     sdpa_graph_pure16_compile_v3          11.32    11.34   1.10       1.10      0.0118  -
+fp16   4     sdpa_graph_pure16_compile_tattn       12.50    12.51   1.00       1.00  -  -
+int8   4     sdpa_graph_pure16_compile_tattn       11.75    11.79   1.06       1.06      0.0117  -
+fp16   8     sdpa_graph_pure16_compile_tuned       23.79    23.80   1.00       1.00  -  -
+int8   8     sdpa_graph_pure16_compile_tuned       23.17    23.19   1.03       1.03      0.0135  -
+fp16   8     sdpa_graph_pure16_compile_tuned_fused     23.79    23.80   1.00       1.00  -  -
+int8   8     sdpa_graph_pure16_compile_tuned_fused     18.49    18.53   1.29       1.29      0.0136  -
+fp16   8     sdpa_graph_pure16_compile_v3          23.79    23.80   1.00       1.00  -  -
+int8   8     sdpa_graph_pure16_compile_v3          20.46    20.54   1.16       1.16      0.0120  -
+fp16   8     sdpa_graph_pure16_compile_tattn       23.79    23.80   1.00       1.00  -  -
+int8   8     sdpa_graph_pure16_compile_tattn       21.83    21.86   1.09       1.09      0.0120  -
+fp16   16    sdpa_graph_pure16_compile_tuned       46.89    46.92   1.00       1.00  -  -
+int8   16    sdpa_graph_pure16_compile_tuned       43.53    43.64   1.08       1.08      0.0137  -
+fp16   16    sdpa_graph_pure16_compile_tuned_fused     46.89    46.92   1.00       1.00  -  -
+int8   16    sdpa_graph_pure16_compile_tuned_fused     35.46    35.52   1.32       1.32      0.0137  -
+fp16   16    sdpa_graph_pure16_compile_v3          46.89    46.92   1.00       1.00  -  -
+int8   16    sdpa_graph_pure16_compile_v3          38.15    38.18   1.23       1.23      0.0119  -
+fp16   16    sdpa_graph_pure16_compile_tattn       46.89    46.92   1.00       1.00  -  -
+int8   16    sdpa_graph_pure16_compile_tattn       39.82    39.85   1.18       1.18      0.0118  -
+fp16   32    sdpa_graph_pure16_compile_tuned       91.37    91.77   1.00       1.00  -  -
+int8   32    sdpa_graph_pure16_compile_tuned       83.33    83.40   1.10       1.10      0.0137  -
+fp16   32    sdpa_graph_pure16_compile_tuned_fused     91.37    91.77   1.00       1.00  -  -
+int8   32    sdpa_graph_pure16_compile_tuned_fused     68.92    69.45   1.33       1.33      0.0138  -
+fp16   32    sdpa_graph_pure16_compile_v3          91.37    91.77   1.00       1.00  -  -
+int8   32    sdpa_graph_pure16_compile_v3          73.73    73.76   1.24       1.24      0.0118  -
+fp16   32    sdpa_graph_pure16_compile_tattn       91.37    91.77   1.00       1.00  -  -
+int8   32    sdpa_graph_pure16_compile_tattn       76.55    76.59   1.19       1.19      0.0118  -
+
+Saved /content/bench_a100/summary.csv
+== accuracy
+{"mode": "fp32", "csb": false, "final_latent_rel_l2_vs_fp32": 0.0, "per_image_rel_l2_median": 0.0, "per_image_rel_l2_max": 0.0, "wall_s": 24.08010324099996, "decoded_psnr_db_median": 126.02059936523438, "decoded_psnr_db_min": 126.02059936523438}
+{"mode": "fp16", "csb": false, "final_latent_rel_l2_vs_fp32": 0.019325394183397293, "per_image_rel_l2_median": 0.006617385894060135, "per_image_rel_l2_max": 0.05519695580005646, "wall_s": 3.4884500309999567, "decoded_psnr_db_median": 51.06630325317383, "decoded_psnr_db_min": 32.961952209472656}
+{"mode": "int8", "csb": false, "final_latent_rel_l2_vs_fp32": 0.10999424010515213, "per_image_rel_l2_median": 0.05820050835609436, "per_image_rel_l2_max": 0.2976473867893219, "wall_s": 58.35574565700017, "decoded_psnr_db_median": 32.51988220214844, "decoded_psnr_db_min": 21.877822875976562}
+ALL_DONE

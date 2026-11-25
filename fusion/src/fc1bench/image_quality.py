@@ -52,7 +52,8 @@ def main(argv=None):
     p.add_argument('--output', required=True, help='Generation root containing mode directories')
     p.add_argument('--reference', required=True, help='Official ADM ImageNet reference NPZ')
     p.add_argument('--adm-repo', required=True)
-    p.add_argument('--modes', nargs='+', default=['fp32','fp16','int8','int4'])
+    p.add_argument('--modes', nargs='+', default=['fp32','fp16','int8','int4'],
+                   help='Generation directories (modes or generate.py --label names); fp32 is the baseline')
     p.add_argument('--feature-batch', type=int, default=32)
     p.add_argument('--manifold-batch', type=int, default=1024)
     p.add_argument('--allow-small-sample', action='store_true', help='Label below-paper sample counts as exploratory')
@@ -61,10 +62,10 @@ def main(argv=None):
         p.error('Batch sizes must be positive')
     if 'fp32' not in args.modes or len(set(args.modes)) != len(args.modes):
         p.error('Include fp32 baseline and list each mode once')
-    allowed = {'fp32','fp16','int8','int4','fake8','fake4'}
-    if not set(args.modes) <= allowed:
-        p.error('Unknown generation mode')
     root = Path(args.output).resolve()
+    missing = [m for m in args.modes if not (root/m/'manifest.json').exists()]
+    if missing:
+        p.error(f'No generation manifest for {missing}')
     manifests = [json.loads((root/m/'manifest.json').read_text()) for m in args.modes]
     base = validate_manifests(manifests)
     target = 10000 if base['image_size']==256 else 5000
@@ -131,7 +132,7 @@ def main(argv=None):
                               Precision=float(precision),Recall=float(recall))
                 if not all(math.isfinite(v) for v in values.values()):
                     raise ValueError(f'Nonfinite metrics for {mode}')
-                row = dict(mode=mode,method=m['method'],**values,
+                row = dict(mode=mode,method=m['method'],scaffold=m.get('scaffold'),**values,
                            FID_method=fid_method,sFID_method=sfid_method,
                            samples_sha256=m['samples_sha256'],model_storage_bytes=m['model_storage_bytes'],
                            sampling_seconds=m['sampling_seconds'],
