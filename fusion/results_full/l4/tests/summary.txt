@@ -1,0 +1,5 @@
+test_fused_ops exit 0
+test_numerics exit 0
+test_optimized exit 0
+test_fused_gemm exit 0
+test_cutlass_gemm exit 0

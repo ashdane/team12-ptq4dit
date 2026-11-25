@@ -1,0 +1,180 @@
+{
+  "environment": {
+    "gpu": "NVIDIA A100-SXM4-40GB",
+    "capability": [
+      8,
+      0
+    ],
+    "torch": "2.14.1+cu130",
+    "triton": "3.8.0",
+    "cuda": "13.0",
+    "sources": {
+      "optimized.py": "437c90405c34254e06301acabf95e745ab86557504b6c196c8b43e1289cd191e",
+      "kernels.py": "393bb7fbc8cb68ce393ed7eef30f21a6f41c77f3e0d5d48f3587e8d2f66f4c59",
+      "quantization.py": "8cdc9e9c5bded789597cbaffe765266194ccb2911c0274f2982d942b007ac50d",
+      "tuning.py": "a3c2862a8ee680d2691db47defcef5b938a7f96ec513891c26fd3ba4ef4d3c58"
+    }
+  },
+  "entries": {
+    "2048_3456_1152_w8_float16": {
+      "bm": 64,
+      "bn": 128,
+      "bk": 128,
+      "warps": 4,
+      "stages": 3,
+      "group_m": 8,
+      "layout": "nk",
+      "backend": "triton"
+    },
+    "2048_1152_1152_w8_float16": {
+      "bm": 64,
+      "bn": 128,
+      "bk": 128,
+      "warps": 8,
+      "stages": 1,
+      "group_m": 8,
+      "layout": "nk",
+      "backend": "triton"
+    },
+    "2048_4608_1152_w8_float16": {
+      "bm": 64,
+      "bn": 128,
+      "bk": 128,
+      "warps": 4,
+      "stages": 3,
+      "group_m": 8,
+      "layout": "nk",
+      "backend": "triton"
+    },
+    "2048_1152_4608_w8_float16": {
+      "bm": 64,
+      "bn": 128,
+      "bk": 128,
+      "warps": 4,
+      "stages": 3,
+      "group_m": 8,
+      "layout": "nk",
+      "backend": "triton"
+    },
+    "4096_3456_1152_w8_float16": {
+      "bm": 64,
+      "bn": 128,
+      "bk": 128,
+      "warps": 4,
+      "stages": 3,
+      "group_m": 8,
+      "layout": "nk",
+      "backend": "triton"
+    },
+    "4096_1152_1152_w8_float16": {
+      "bm": 64,
+      "bn": 128,
+      "bk": 64,
+      "warps": 4,
+      "stages": 1,
+      "group_m": 8,
+      "layout": "nk",
+      "backend": "triton"
+    },
+    "4096_4608_1152_w8_float16": {
+      "bm": 64,
+      "bn": 128,
+      "bk": 128,
+      "warps": 4,
+      "stages": 3,
+      "group_m": 8,
+      "layout": "nk",
+      "backend": "triton"
+    },
+    "4096_1152_4608_w8_float16": {
+      "bm": 32,
+      "bn": 64,
+      "bk": 64,
+      "warps": 4,
+      "stages": 2,
+      "group_m": 8,
+      "layout": "nk",
+      "backend": "torch_int_mm"
+    },
+    "8192_3456_1152_w8_float16": {
+      "bm": 64,
+      "bn": 128,
+      "bk": 128,
+      "warps": 4,
+      "stages": 3,
+      "group_m": 8,
+      "layout": "nk",
+      "backend": "triton"
+    },
+    "8192_1152_1152_w8_float16": {
+      "bm": 64,
+      "bn": 128,
+      "bk": 128,
+      "warps": 4,
+      "stages": 3,
+      "group_m": 8,
+      "layout": "nk",
+      "backend": "triton"
+    },
+    "8192_4608_1152_w8_float16": {
+      "bm": 64,
+      "bn": 128,
+      "bk": 128,
+      "warps": 4,
+      "stages": 3,
+      "group_m": 8,
+      "layout": "nk",
+      "backend": "triton"
+    },
+    "8192_1152_4608_w8_float16": {
+      "bm": 64,
+      "bn": 128,
+      "bk": 128,
+      "warps": 4,
+      "stages": 3,
+      "group_m": 8,
+      "layout": "nk",
+      "backend": "triton"
+    },
+    "16384_3456_1152_w8_float16": {
+      "bm": 64,
+      "bn": 128,
+      "bk": 128,
+      "warps": 4,
+      "stages": 3,
+      "group_m": 8,
+      "layout": "nk",
+      "backend": "triton"
+    },
+    "16384_1152_1152_w8_float16": {
+      "bm": 64,
+      "bn": 128,
+      "bk": 128,
+      "warps": 4,
+      "stages": 3,
+      "group_m": 8,
+      "layout": "nk",
+      "backend": "triton"
+    },
+    "16384_4608_1152_w8_float16": {
+      "bm": 64,
+      "bn": 128,
+      "bk": 128,
+      "warps": 4,
+      "stages": 3,
+      "group_m": 8,
+      "layout": "nk",
+      "backend": "triton"
+    },
+    "16384_1152_4608_w8_float16": {
+      "bm": 32,
+      "bn": 64,
+      "bk": 64,
+      "warps": 4,
+      "stages": 2,
+      "group_m": 8,
+      "layout": "nk",
+      "backend": "torch_int_mm"
+    }
+  }
+}

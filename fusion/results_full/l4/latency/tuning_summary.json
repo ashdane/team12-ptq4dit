@@ -1,0 +1,258 @@
+{
+  "2048_3456_1152_w8_float16": {
+    "layer": "blocks.14.attn.qkv",
+    "input_dtype": "torch.float16",
+    "config": {
+      "bm": 64,
+      "bn": 128,
+      "bk": 64,
+      "warps": 4,
+      "stages": 1,
+      "group_m": 8,
+      "layout": "nk",
+      "backend": "triton"
+    },
+    "holdout_layer_median_ms": 0.2031999945640564,
+    "holdout_float_linear_median_ms": 0.27807360887527466
+  },
+  "2048_1152_1152_w8_float16": {
+    "layer": "blocks.14.attn.proj",
+    "input_dtype": "torch.float16",
+    "config": {
+      "bm": 64,
+      "bn": 128,
+      "bk": 64,
+      "warps": 4,
+      "stages": 1,
+      "group_m": 8,
+      "layout": "nk",
+      "backend": "triton"
+    },
+    "holdout_layer_median_ms": 0.14264320135116576,
+    "holdout_float_linear_median_ms": 0.09136639833450318
+  },
+  "2048_4608_1152_w8_float16": {
+    "layer": "blocks.14.mlp.fc1",
+    "input_dtype": "torch.float16",
+    "config": {
+      "bm": 64,
+      "bn": 128,
+      "bk": 64,
+      "warps": 4,
+      "stages": 1,
+      "group_m": 8,
+      "layout": "nk",
+      "backend": "triton"
+    },
+    "holdout_layer_median_ms": 0.27386559247970577,
+    "holdout_float_linear_median_ms": 0.38870400190353394
+  },
+  "2048_1152_4608_w8_float16": {
+    "layer": "blocks.14.mlp.fc2",
+    "input_dtype": "torch.float16",
+    "config": {
+      "bm": 64,
+      "bn": 128,
+      "bk": 128,
+      "warps": 4,
+      "stages": 3,
+      "group_m": 8,
+      "layout": "nk",
+      "backend": "triton"
+    },
+    "holdout_layer_median_ms": 0.27993919849395754,
+    "holdout_float_linear_median_ms": 0.34903680086135863
+  },
+  "4096_3456_1152_w8_float16": {
+    "layer": "blocks.14.attn.qkv",
+    "input_dtype": "torch.float16",
+    "config": {
+      "bm": 64,
+      "bn": 128,
+      "bk": 64,
+      "warps": 4,
+      "stages": 1,
+      "group_m": 8,
+      "layout": "nk",
+      "backend": "triton"
+    },
+    "holdout_layer_median_ms": 0.48763837814331057,
+    "holdout_float_linear_median_ms": 0.7190847873687745
+  },
+  "4096_1152_1152_w8_float16": {
+    "layer": "blocks.14.attn.proj",
+    "input_dtype": "torch.float16",
+    "config": {
+      "bm": 64,
+      "bn": 128,
+      "bk": 64,
+      "warps": 4,
+      "stages": 1,
+      "group_m": 8,
+      "layout": "nk",
+      "backend": "triton"
+    },
+    "holdout_layer_median_ms": 0.1605791985988617,
+    "holdout_float_linear_median_ms": 0.16515839695930482
+  },
+  "4096_4608_1152_w8_float16": {
+    "layer": "blocks.14.mlp.fc1",
+    "input_dtype": "torch.float16",
+    "config": {
+      "bm": 64,
+      "bn": 128,
+      "bk": 64,
+      "warps": 4,
+      "stages": 1,
+      "group_m": 8,
+      "layout": "nk",
+      "backend": "triton"
+    },
+    "holdout_layer_median_ms": 0.653993582725525,
+    "holdout_float_linear_median_ms": 0.987443208694458
+  },
+  "4096_1152_4608_w8_float16": {
+    "layer": "blocks.14.mlp.fc2",
+    "input_dtype": "torch.float16",
+    "config": {
+      "bm": 64,
+      "bn": 128,
+      "bk": 64,
+      "warps": 4,
+      "stages": 1,
+      "group_m": 8,
+      "layout": "nk",
+      "backend": "triton"
+    },
+    "holdout_layer_median_ms": 0.692303991317749,
+    "holdout_float_linear_median_ms": 0.7761919975280762
+  },
+  "8192_3456_1152_w8_float16": {
+    "layer": "blocks.14.attn.qkv",
+    "input_dtype": "torch.float16",
+    "config": {
+      "bm": 64,
+      "bn": 128,
+      "bk": 64,
+      "warps": 4,
+      "stages": 1,
+      "group_m": 8,
+      "layout": "nk",
+      "backend": "triton"
+    },
+    "holdout_layer_median_ms": 0.9775424003601074,
+    "holdout_float_linear_median_ms": 1.4564767837524415
+  },
+  "8192_1152_1152_w8_float16": {
+    "layer": "blocks.14.attn.proj",
+    "input_dtype": "torch.float16",
+    "config": {
+      "bm": 64,
+      "bn": 128,
+      "bk": 64,
+      "warps": 4,
+      "stages": 1,
+      "group_m": 8,
+      "layout": "nk",
+      "backend": "triton"
+    },
+    "holdout_layer_median_ms": 0.35830399990081785,
+    "holdout_float_linear_median_ms": 0.4180191993713379
+  },
+  "8192_4608_1152_w8_float16": {
+    "layer": "blocks.14.mlp.fc1",
+    "input_dtype": "torch.float16",
+    "config": {
+      "bm": 64,
+      "bn": 128,
+      "bk": 64,
+      "warps": 4,
+      "stages": 1,
+      "group_m": 8,
+      "layout": "nk",
+      "backend": "triton"
+    },
+    "holdout_layer_median_ms": 1.2823647975921633,
+    "holdout_float_linear_median_ms": 2.0160736083984374
+  },
+  "8192_1152_4608_w8_float16": {
+    "layer": "blocks.14.mlp.fc2",
+    "input_dtype": "torch.float16",
+    "config": {
+      "bm": 64,
+      "bn": 128,
+      "bk": 64,
+      "warps": 4,
+      "stages": 1,
+      "group_m": 8,
+      "layout": "nk",
+      "backend": "triton"
+    },
+    "holdout_layer_median_ms": 1.520911979675293,
+    "holdout_float_linear_median_ms": 1.9356351852416993
+  },
+  "16384_3456_1152_w8_float16": {
+    "layer": "blocks.14.attn.qkv",
+    "input_dtype": "torch.float16",
+    "config": {
+      "bm": 64,
+      "bn": 128,
+      "bk": 64,
+      "warps": 4,
+      "stages": 1,
+      "group_m": 8,
+      "layout": "nk",
+      "backend": "triton"
+    },
+    "holdout_layer_median_ms": 2.00034236907959,
+    "holdout_float_linear_median_ms": 3.2204160690307617
+  },
+  "16384_1152_1152_w8_float16": {
+    "layer": "blocks.14.attn.proj",
+    "input_dtype": "torch.float16",
+    "config": {
+      "bm": 64,
+      "bn": 128,
+      "bk": 64,
+      "warps": 4,
+      "stages": 1,
+      "group_m": 8,
+      "layout": "nk",
+      "backend": "triton"
+    },
+    "holdout_layer_median_ms": 0.9586912155151368,
+    "holdout_float_linear_median_ms": 1.1161407947540285
+  },
+  "16384_4608_1152_w8_float16": {
+    "layer": "blocks.14.mlp.fc1",
+    "input_dtype": "torch.float16",
+    "config": {
+      "bm": 64,
+      "bn": 128,
+      "bk": 64,
+      "warps": 4,
+      "stages": 1,
+      "group_m": 8,
+      "layout": "nk",
+      "backend": "triton"
+    },
+    "holdout_layer_median_ms": 2.7044159889221193,
+    "holdout_float_linear_median_ms": 4.332655906677246
+  },
+  "16384_1152_4608_w8_float16": {
+    "layer": "blocks.14.mlp.fc2",
+    "input_dtype": "torch.float16",
+    "config": {
+      "bm": 64,
+      "bn": 128,
+      "bk": 64,
+      "warps": 4,
+      "stages": 1,
+      "group_m": 8,
+      "layout": "nk",
+      "backend": "triton"
+    },
+    "holdout_layer_median_ms": 3.459884834289551,
+    "holdout_float_linear_median_ms": 5.372243118286133
+  }
+}

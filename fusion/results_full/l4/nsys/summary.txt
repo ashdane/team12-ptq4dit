@@ -1,0 +1,194 @@
+
+== step_fp16_sdpa_graph_pure16_compile_tuned_b32: step 436.25 ms (events) | GPU busy 436.25 ms | idle gaps -0.03 ms | 271 kernels/step
+   fp16_gemm                      347.56 ms  (79.7%)
+   inductor_elementwise_norm       65.36 ms  (15.0%)
+   attention                       23.04 ms  ( 5.3%)
+   other                            0.29 ms  ( 0.1%)
+      205.96 ms  void cutlass::Kernel2<cutlass_80_tensorop_f16_s16816gemm_relu_f16_256x128_32x3_tn_align8>(
+      138.38 ms  ampere_fp16_s1688gemm_fp16_128x128_ldg8_relu_f2f_stages_32x1_tn
+       34.07 ms  triton_poi_fused_gelu_view_6
+       23.04 ms  void pytorch_flash::flash_fwd_kernel<Flash_fwd_kernel_traits<(int)96, (int)128, (int)64, (
+       18.16 ms  triton_red_fused_add_mul_native_layer_norm_split_unsqueeze_view_8
+       11.59 ms  triton_red_fused_add_mul_native_layer_norm_split_unsqueeze_view_7
+
+== step_fp16_sdpa_graph_pure16_compile_tuned_b4: step 47.97 ms (events) | GPU busy 47.61 ms | idle gaps 0.34 ms | 274 kernels/step
+   fp16_gemm                       40.86 ms  (85.8%)
+   inductor_elementwise_norm        3.84 ms  ( 8.1%)
+   attention                        2.88 ms  ( 6.0%)
+   other                            0.03 ms  ( 0.1%)
+       28.76 ms  ampere_fp16_s1688gemm_fp16_128x128_ldg8_relu_f2f_stages_32x1_tn
+        9.89 ms  void cutlass::Kernel2<cutlass_80_tensorop_f16_s16816gemm_relu_f16_256x128_32x3_tn_align8>(
+        2.88 ms  void pytorch_flash::flash_fwd_kernel<Flash_fwd_kernel_traits<(int)96, (int)128, (int)64, (
+        2.13 ms  void cutlass::Kernel2<cutlass_80_wmma_tensorop_f16_s161616gemm_f16_16x16_128x1_tn_align8>(
+        1.42 ms  triton_poi_fused_gelu_view_9
+        1.37 ms  triton_red_fused_add_mul_native_layer_norm_split_unsqueeze_view_11
+
+== step_int8_sdpa_graph_pure16_compile_tuned_b32: step 354.11 ms (events) | GPU busy 354.07 ms | idle gaps -0.01 ms | 383 kernels/step
+   int_gemm                       202.23 ms  (57.1%)
+   inductor_elementwise_norm       66.90 ms  (18.9%)
+   int_activation_quant            56.29 ms  (15.9%)
+   attention                       25.10 ms  ( 7.1%)
+   fp16_gemm                        3.20 ms  ( 0.9%)
+   other                            0.34 ms  ( 0.1%)
+      202.23 ms  _tiled
+       56.29 ms  _quantize_fused
+       33.92 ms  triton_poi_fused_gelu_quant_linear_view_6
+       25.10 ms  void pytorch_flash::flash_fwd_kernel<Flash_fwd_kernel_traits<(int)96, (int)128, (int)64, (
+       19.39 ms  triton_red_fused_add_mul_native_layer_norm_quant_linear_split_unsqueeze_view_8
+       12.04 ms  triton_red_fused_add_mul_native_layer_norm_quant_linear_split_unsqueeze_view_7
+
+== step_int8_sdpa_graph_pure16_compile_tuned_b4: step 32.36 ms (events) | GPU busy 32.27 ms | idle gaps 0.05 ms | 386 kernels/step
+   int_gemm                        19.91 ms  (61.7%)
+   int_activation_quant             4.28 ms  (13.3%)
+   inductor_elementwise_norm        3.44 ms  (10.7%)
+   attention                        2.56 ms  ( 7.9%)
+   fp16_gemm                        2.05 ms  ( 6.4%)
+   other                            0.03 ms  ( 0.1%)
+       19.91 ms  _tiled
+        4.28 ms  _quantize_fused
+        2.56 ms  void pytorch_flash::flash_fwd_kernel<Flash_fwd_kernel_traits<(int)96, (int)128, (int)64, (
+        1.97 ms  void cutlass::Kernel2<cutlass_80_wmma_tensorop_f16_s161616gemm_f16_16x16_128x1_tn_align8>(
+        1.26 ms  triton_poi_fused_gelu_quant_linear_view_9
+        1.24 ms  triton_red_fused_add_mul_native_layer_norm_quant_linear_split_unsqueeze_view_11
+
+== step_int8_sdpa_graph_pure16_compile_tuned_fused_b32: step 288.78 ms (events) | GPU busy 288.75 ms | idle gaps -0.01 ms | 269 kernels/step
+   int_gemm                       202.92 ms  (70.3%)
+   fused_producer_quant            57.49 ms  (19.9%)
+   attention                       24.91 ms  ( 8.6%)
+   fp16_gemm                        2.64 ms  ( 0.9%)
+   inductor_elementwise_norm        0.46 ms  ( 0.2%)
+   other                            0.35 ms  ( 0.1%)
+      202.92 ms  _tiled
+       30.78 ms  _act_quant
+       26.36 ms  _res_ln_mod_quant
+       24.91 ms  void pytorch_flash::flash_fwd_kernel<Flash_fwd_kernel_traits<(int)96, (int)128, (int)64, (
+        2.20 ms  ampere_fp16_s1688gemm_fp16_128x128_ldg8_relu_f2f_stages_32x1_tn
+        0.42 ms  triton_red_fused_add_clone_expand_mul_native_layer_norm_slice_split_unsqueeze_view_6
+
+== step_int8_sdpa_graph_pure16_compile_tuned_fused_b4: step 27.52 ms (events) | GPU busy 27.44 ms | idle gaps 0.03 ms | 269 kernels/step
+   int_gemm                        19.47 ms  (71.0%)
+   fused_producer_quant             3.38 ms  (12.3%)
+   attention                        2.54 ms  ( 9.3%)
+   fp16_gemm                        1.97 ms  ( 7.2%)
+   inductor_elementwise_norm        0.04 ms  ( 0.2%)
+   other                            0.03 ms  ( 0.1%)
+       19.47 ms  _tiled
+        2.54 ms  void pytorch_flash::flash_fwd_kernel<Flash_fwd_kernel_traits<(int)96, (int)128, (int)64, (
+        1.88 ms  void cutlass::Kernel2<cutlass_80_wmma_tensorop_f16_s161616gemm_f16_16x16_128x1_tn_align8>(
+        1.80 ms  _act_quant
+        1.57 ms  _res_ln_mod_quant
+        0.07 ms  void cutlass::Kernel2<cutlass_80_wmma_tensorop_f16_s161616gemm_f16_16x16_128x2_tn_align8>(
+
+== step_int8_sdpa_graph_pure16_compile_v3_b32: step 234.63 ms (events) | GPU busy 234.65 ms | idle gaps -0.07 ms | 241 kernels/step
+   int_gemm                       194.52 ms  (82.9%)
+   attention                       20.58 ms  ( 8.8%)
+   fused_producer_quant            16.44 ms  ( 7.0%)
+   fp16_gemm                        2.50 ms  ( 1.1%)
+   other                            0.33 ms  ( 0.1%)
+   inductor_elementwise_norm        0.29 ms  ( 0.1%)
+      194.52 ms  _gemm_v3
+       20.58 ms  void pytorch_flash::flash_fwd_kernel<Flash_fwd_kernel_traits<(int)96, (int)128, (int)64, (
+       11.31 ms  _res_ln_mod_quant
+        4.79 ms  _act_quant
+        2.18 ms  ampere_fp16_s1688gemm_fp16_128x128_ldg8_relu_f2f_stages_32x1_tn
+        0.34 ms  triton_poi_fused__to_copy__unsafe_view_add_cat_clone_convolution_gemm_res_ln_mod_quant_sli
+
+== step_int8_sdpa_graph_pure16_compile_v3_b4: step 27.40 ms (events) | GPU busy 27.33 ms | idle gaps 0.03 ms | 241 kernels/step
+   int_gemm                        21.55 ms  (78.8%)
+   attention                        2.31 ms  ( 8.5%)
+   fp16_gemm                        1.96 ms  ( 7.2%)
+   fused_producer_quant             1.44 ms  ( 5.3%)
+   inductor_elementwise_norm        0.04 ms  ( 0.2%)
+   other                            0.03 ms  ( 0.1%)
+       21.55 ms  _gemm_v3
+        2.31 ms  void pytorch_flash::flash_fwd_kernel<Flash_fwd_kernel_traits<(int)96, (int)128, (int)64, (
+        1.88 ms  void cutlass::Kernel2<cutlass_80_wmma_tensorop_f16_s161616gemm_f16_16x16_128x1_tn_align8>(
+        1.07 ms  _res_ln_mod_quant
+        0.34 ms  _act_quant
+        0.07 ms  void cutlass::Kernel2<cutlass_80_wmma_tensorop_f16_s161616gemm_f16_16x16_128x2_tn_align8>(
+
+== step_int8_sdpa_graph_pure16_compile_v4_b32: step 229.44 ms (events) | GPU busy 229.45 ms | idle gaps -0.04 ms | 241 kernels/step
+   int_gemm                       188.21 ms  (82.0%)
+   attention                       21.07 ms  ( 9.2%)
+   fused_producer_quant            16.96 ms  ( 7.4%)
+   fp16_gemm                        2.54 ms  ( 1.1%)
+   other                            0.34 ms  ( 0.1%)
+   inductor_elementwise_norm        0.32 ms  ( 0.1%)
+      132.81 ms  _gemm_v3
+       39.63 ms  void cutlass::Kernel2<cutlass::gemm::kernel::DefaultGemmWithVisitor<signed char, cutlass::
+       21.07 ms  void pytorch_flash::flash_fwd_kernel<Flash_fwd_kernel_traits<(int)96, (int)128, (int)64, (
+       15.77 ms  void cutlass::Kernel2<cutlass::gemm::kernel::DefaultGemmWithVisitor<signed char, cutlass::
+       11.83 ms  _res_ln_mod_quant
+        4.80 ms  _act_quant
+
+== step_int8_sdpa_graph_pure16_compile_v4_b4: step 25.36 ms (events) | GPU busy 25.30 ms | idle gaps 0.02 ms | 241 kernels/step
+   int_gemm                        19.67 ms  (77.7%)
+   attention                        2.22 ms  ( 8.8%)
+   fp16_gemm                        1.96 ms  ( 7.7%)
+   fused_producer_quant             1.38 ms  ( 5.5%)
+   inductor_elementwise_norm        0.04 ms  ( 0.2%)
+   other                            0.03 ms  ( 0.1%)
+       13.65 ms  _gemm_v3
+        4.19 ms  void cutlass::Kernel2<cutlass::gemm::kernel::DefaultGemmWithVisitor<signed char, cutlass::
+        2.22 ms  void pytorch_flash::flash_fwd_kernel<Flash_fwd_kernel_traits<(int)96, (int)128, (int)64, (
+        1.88 ms  void cutlass::Kernel2<cutlass_80_wmma_tensorop_f16_s161616gemm_f16_16x16_128x1_tn_align8>(
+        1.84 ms  void cutlass::Kernel2<cutlass::gemm::kernel::DefaultGemmWithVisitor<signed char, cutlass::
+        1.03 ms  _res_ln_mod_quant
+
+== step_int8_sdpa_graph_pure16_compile_v4c_b32: step 223.22 ms (events) | GPU busy 223.23 ms | idle gaps -0.04 ms | 269 kernels/step
+   int_gemm                       155.97 ms  (69.9%)
+   fused_producer_quant            43.08 ms  (19.3%)
+   attention                       21.00 ms  ( 9.4%)
+   fp16_gemm                        2.53 ms  ( 1.1%)
+   other                            0.34 ms  ( 0.2%)
+   inductor_elementwise_norm        0.31 ms  ( 0.1%)
+       52.77 ms  void cutlass::Kernel2<cutlass::gemm::kernel::DefaultGemmWithVisitor<signed char, cutlass::
+       46.77 ms  void cutlass::Kernel2<cutlass::gemm::kernel::DefaultGemmWithVisitor<signed char, cutlass::
+       39.09 ms  void cutlass::Kernel2<cutlass::gemm::kernel::DefaultGemmWithVisitor<signed char, cutlass::
+       30.84 ms  _act_quant
+       21.00 ms  void pytorch_flash::flash_fwd_kernel<Flash_fwd_kernel_traits<(int)96, (int)128, (int)64, (
+       17.34 ms  void cutlass::Kernel2<cutlass::gemm::kernel::DefaultGemmWithVisitor<signed char, cutlass::
+
+== step_int8_sdpa_graph_pure16_compile_v4c_b4: step 24.22 ms (events) | GPU busy 24.16 ms | idle gaps 0.03 ms | 269 kernels/step
+   int_gemm                        17.43 ms  (72.2%)
+   fused_producer_quant             2.54 ms  (10.5%)
+   attention                        2.15 ms  ( 8.9%)
+   fp16_gemm                        1.97 ms  ( 8.1%)
+   inductor_elementwise_norm        0.04 ms  ( 0.2%)
+   other                            0.03 ms  ( 0.1%)
+       10.13 ms  void cutlass::Kernel2<cutlass::gemm::kernel::DefaultGemmWithVisitor<signed char, cutlass::
+        7.30 ms  void cutlass::Kernel2<cutlass::gemm::kernel::DefaultGemmWithVisitor<signed char, cutlass::
+        2.15 ms  void pytorch_flash::flash_fwd_kernel<Flash_fwd_kernel_traits<(int)96, (int)128, (int)64, (
+        1.88 ms  void cutlass::Kernel2<cutlass_80_wmma_tensorop_f16_s161616gemm_f16_16x16_128x1_tn_align8>(
+        1.51 ms  _act_quant
+        1.00 ms  _res_ln_mod_quant
+
+== step_int8_sdpa_graph_pure16_compile_v4w_b32: step 223.74 ms (events) | GPU busy 223.77 ms | idle gaps -0.06 ms | 241 kernels/step
+   int_gemm                       183.85 ms  (82.2%)
+   attention                       20.62 ms  ( 9.2%)
+   fused_producer_quant            16.22 ms  ( 7.2%)
+   fp16_gemm                        2.47 ms  ( 1.1%)
+   other                            0.33 ms  ( 0.1%)
+   inductor_elementwise_norm        0.27 ms  ( 0.1%)
+      136.93 ms  _gemm_v3
+       33.13 ms  void cutlass::Kernel2<cutlass::gemm::kernel::DefaultGemmWithVisitor<signed char, cutlass::
+       20.62 ms  void pytorch_flash::flash_fwd_kernel<Flash_fwd_kernel_traits<(int)96, (int)128, (int)64, (
+       13.79 ms  void cutlass::Kernel2<cutlass::gemm::kernel::DefaultGemmWithVisitor<signed char, cutlass::
+       11.09 ms  _res_ln_mod_quant
+        4.79 ms  _act_quant
+
+== step_int8_sdpa_graph_pure16_compile_v4w_b4: step 25.92 ms (events) | GPU busy 25.87 ms | idle gaps 0.02 ms | 241 kernels/step
+   int_gemm                        20.50 ms  (79.2%)
+   attention                        2.06 ms  ( 8.0%)
+   fp16_gemm                        1.95 ms  ( 7.6%)
+   fused_producer_quant             1.29 ms  ( 5.0%)
+   inductor_elementwise_norm        0.04 ms  ( 0.2%)
+   other                            0.02 ms  ( 0.1%)
+       14.81 ms  _gemm_v3
+        4.24 ms  void cutlass::Kernel2<cutlass::gemm::kernel::DefaultGemmWithVisitor<signed char, cutlass::
+        2.06 ms  void pytorch_flash::flash_fwd_kernel<Flash_fwd_kernel_traits<(int)96, (int)128, (int)64, (
+        1.88 ms  void cutlass::Kernel2<cutlass_80_wmma_tensorop_f16_s161616gemm_f16_16x16_128x1_tn_align8>(
+        1.45 ms  void cutlass::Kernel2<cutlass::gemm::kernel::DefaultGemmWithVisitor<signed char, cutlass::
+        0.96 ms  _res_ln_mod_quant
+
+Saved /content/full/nsys/nsys_summary.csv

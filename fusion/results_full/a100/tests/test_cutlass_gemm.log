@@ -1,0 +1,30 @@
+test_all_shapes_both_epilogues (__main__.CutlassGemmTests.test_all_shapes_both_epilogues) ...   cutlass plain M=2048 N=3456 K=1152: (128, 128, 64, 64, 64, 3) 52.4 us (311 TOPS)
+  cutlass res M=2048 N=3456 K=1152: (128, 128, 64, 64, 64, 3) 53.7 us (304 TOPS)
+M=2048 qkv: plain rel L2 2.07e-04, residual rel L2 2.08e-04
+  cutlass plain M=2048 N=1152 K=1152: (128, 128, 64, 64, 64, 3) 21.9 us (248 TOPS)
+  cutlass res M=2048 N=1152 K=1152: (128, 128, 64, 64, 64, 3) 23.2 us (234 TOPS)
+M=2048 proj: plain rel L2 2.08e-04, residual rel L2 2.07e-04
+  cutlass plain M=2048 N=4608 K=1152: (128, 128, 64, 64, 64, 3) 59.1 us (368 TOPS)
+  cutlass res M=2048 N=4608 K=1152: (128, 128, 64, 64, 64, 5) 74.1 us (293 TOPS)
+M=2048 fc1: plain rel L2 2.07e-04, residual rel L2 2.07e-04
+  cutlass plain M=2048 N=1152 K=4608: (128, 128, 64, 64, 64, 5) 63.0 us (345 TOPS)
+  cutlass res M=2048 N=1152 K=4608: (128, 128, 64, 64, 64, 5) 66.9 us (325 TOPS)
+M=2048 fc2: plain rel L2 2.07e-04, residual rel L2 2.07e-04
+  cutlass plain M=16384 N=3456 K=1152: (128, 128, 64, 64, 64, 5) 305.5 us (427 TOPS)
+  cutlass res M=16384 N=3456 K=1152: (128, 128, 64, 64, 64, 5) 342.7 us (381 TOPS)
+M=16384 qkv: plain rel L2 2.07e-04, residual rel L2 2.07e-04
+  cutlass plain M=16384 N=1152 K=1152: (128, 128, 64, 64, 64, 3) 110.3 us (394 TOPS)
+  cutlass res M=16384 N=1152 K=1152: (128, 128, 64, 64, 64, 5) 126.2 us (345 TOPS)
+M=16384 proj: plain rel L2 2.07e-04, residual rel L2 2.08e-04
+  cutlass plain M=16384 N=4608 K=1152: (128, 128, 64, 64, 64, 3) 422.5 us (412 TOPS)
+  cutlass res M=16384 N=4608 K=1152: (128, 128, 64, 64, 64, 5) 463.8 us (375 TOPS)
+M=16384 fc1: plain rel L2 2.07e-04, residual rel L2 2.07e-04
+  cutlass plain M=16384 N=1152 K=4608: (128, 128, 64, 64, 64, 5) 348.3 us (499 TOPS)
+  cutlass res M=16384 N=1152 K=4608: (128, 128, 64, 64, 64, 5) 363.1 us (479 TOPS)
+M=16384 fc2: plain rel L2 2.07e-04, residual rel L2 2.07e-04
+ok
+
+----------------------------------------------------------------------
+Ran 1 test in 9.073s
+
+OK

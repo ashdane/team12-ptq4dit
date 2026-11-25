@@ -1,0 +1,608 @@
+[ref ] fp32 b4
+[run ] fp16  b4   sdpa_graph_pure16_compile_tuned
+USDT:2026-11-24 22:51:06 27604:27604 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-24 22:51:06 27604:27604 SyncActivityProfilerHandler.cpp:46] profiler_stop
+       median 12.48 ms  p90 12.49 ms
+[tune] int8 b4 sdpa_graph_pure16_compile_tuned
+  tuning 2048_3456_1152_w8_float16 on captured blocks.14.attn.qkv input (torch.float16)
+Tuning 2048_3456_1152_w8_float16: c00 {'bm': 16, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_3456_1152_w8_float16: c01 {'bm': 16, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_3456_1152_w8_float16: c02 {'bm': 16, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_3456_1152_w8_float16: c03 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_3456_1152_w8_float16: c04 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_3456_1152_w8_float16: c05 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_3456_1152_w8_float16: c06 {'bm': 32, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_3456_1152_w8_float16: c07 {'bm': 32, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_3456_1152_w8_float16: c08 {'bm': 32, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_3456_1152_w8_float16: c09 {'bm': 64, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_3456_1152_w8_float16: c10 {'bm': 64, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_3456_1152_w8_float16: c11 {'bm': 64, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_3456_1152_w8_float16: c12 {'bm': 64, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_3456_1152_w8_float16: c13 {'bm': 64, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_3456_1152_w8_float16: c14 {'bm': 64, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_3456_1152_w8_float16: c15 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_3456_1152_w8_float16: c16 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_3456_1152_w8_float16: c17 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_3456_1152_w8_float16: c18 {'bm': 128, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_3456_1152_w8_float16: c19 {'bm': 128, 'bn': 64, 'bk': 128, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_3456_1152_w8_float16: c20 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_3456_1152_w8_float16: c21 {'bm': 128, 'bn': 128, 'bk': 64, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_3456_1152_w8_float16: c22 {'bm': 64, 'bn': 256, 'bk': 128, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_3456_1152_w8_float16: c23 {'bm': 128, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_3456_1152_w8_float16: c24 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'torch_int_mm'}
+  tuning 2048_1152_1152_w8_float16 on captured blocks.14.attn.proj input (torch.float16)
+Tuning 2048_1152_1152_w8_float16: c00 {'bm': 16, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_1152_1152_w8_float16: c01 {'bm': 16, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_1152_1152_w8_float16: c02 {'bm': 16, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_1152_1152_w8_float16: c03 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_1152_1152_w8_float16: c04 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_1152_1152_w8_float16: c05 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_1152_1152_w8_float16: c06 {'bm': 32, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_1152_1152_w8_float16: c07 {'bm': 32, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_1152_1152_w8_float16: c08 {'bm': 32, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_1152_1152_w8_float16: c09 {'bm': 64, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_1152_1152_w8_float16: c10 {'bm': 64, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_1152_1152_w8_float16: c11 {'bm': 64, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_1152_1152_w8_float16: c12 {'bm': 64, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_1152_1152_w8_float16: c13 {'bm': 64, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_1152_1152_w8_float16: c14 {'bm': 64, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_1152_1152_w8_float16: c15 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_1152_1152_w8_float16: c16 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_1152_1152_w8_float16: c17 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_1152_1152_w8_float16: c18 {'bm': 128, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_1152_1152_w8_float16: c19 {'bm': 128, 'bn': 64, 'bk': 128, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_1152_1152_w8_float16: c20 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_1152_1152_w8_float16: c21 {'bm': 128, 'bn': 128, 'bk': 64, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_1152_1152_w8_float16: c22 {'bm': 64, 'bn': 256, 'bk': 128, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_1152_1152_w8_float16: c23 {'bm': 128, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_1152_1152_w8_float16: c24 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'torch_int_mm'}
+  tuning 2048_4608_1152_w8_float16 on captured blocks.14.mlp.fc1 input (torch.float16)
+Tuning 2048_4608_1152_w8_float16: c00 {'bm': 16, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_4608_1152_w8_float16: c01 {'bm': 16, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_4608_1152_w8_float16: c02 {'bm': 16, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_4608_1152_w8_float16: c03 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_4608_1152_w8_float16: c04 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_4608_1152_w8_float16: c05 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_4608_1152_w8_float16: c06 {'bm': 32, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_4608_1152_w8_float16: c07 {'bm': 32, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_4608_1152_w8_float16: c08 {'bm': 32, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_4608_1152_w8_float16: c09 {'bm': 64, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_4608_1152_w8_float16: c10 {'bm': 64, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_4608_1152_w8_float16: c11 {'bm': 64, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_4608_1152_w8_float16: c12 {'bm': 64, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_4608_1152_w8_float16: c13 {'bm': 64, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_4608_1152_w8_float16: c14 {'bm': 64, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_4608_1152_w8_float16: c15 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_4608_1152_w8_float16: c16 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_4608_1152_w8_float16: c17 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_4608_1152_w8_float16: c18 {'bm': 128, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_4608_1152_w8_float16: c19 {'bm': 128, 'bn': 64, 'bk': 128, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_4608_1152_w8_float16: c20 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_4608_1152_w8_float16: c21 {'bm': 128, 'bn': 128, 'bk': 64, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_4608_1152_w8_float16: c22 {'bm': 64, 'bn': 256, 'bk': 128, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_4608_1152_w8_float16: c23 {'bm': 128, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_4608_1152_w8_float16: c24 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'torch_int_mm'}
+  tuning 2048_1152_4608_w8_float16 on captured blocks.14.mlp.fc2 input (torch.float16)
+Tuning 2048_1152_4608_w8_float16: c00 {'bm': 16, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_1152_4608_w8_float16: c01 {'bm': 16, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_1152_4608_w8_float16: c02 {'bm': 16, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_1152_4608_w8_float16: c03 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_1152_4608_w8_float16: c04 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_1152_4608_w8_float16: c05 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_1152_4608_w8_float16: c06 {'bm': 32, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_1152_4608_w8_float16: c07 {'bm': 32, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_1152_4608_w8_float16: c08 {'bm': 32, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_1152_4608_w8_float16: c09 {'bm': 64, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_1152_4608_w8_float16: c10 {'bm': 64, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_1152_4608_w8_float16: c11 {'bm': 64, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_1152_4608_w8_float16: c12 {'bm': 64, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_1152_4608_w8_float16: c13 {'bm': 64, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_1152_4608_w8_float16: c14 {'bm': 64, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_1152_4608_w8_float16: c15 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_1152_4608_w8_float16: c16 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_1152_4608_w8_float16: c17 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_1152_4608_w8_float16: c18 {'bm': 128, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_1152_4608_w8_float16: c19 {'bm': 128, 'bn': 64, 'bk': 128, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_1152_4608_w8_float16: c20 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_1152_4608_w8_float16: c21 {'bm': 128, 'bn': 128, 'bk': 64, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_1152_4608_w8_float16: c22 {'bm': 64, 'bn': 256, 'bk': 128, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_1152_4608_w8_float16: c23 {'bm': 128, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 2048_1152_4608_w8_float16: c24 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'torch_int_mm'}
+[run ] int8  b4   sdpa_graph_pure16_compile_tuned
+USDT:2026-11-24 22:51:56 27604:27604 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-24 22:51:56 27604:27604 SyncActivityProfilerHandler.cpp:46] profiler_stop
+       median 13.04 ms  p90 13.06 ms
+[tune] int8 b4 sdpa_graph_pure16_compile_tuned_fused
+[run ] int8  b4   sdpa_graph_pure16_compile_tuned_fused
+USDT:2026-11-24 22:52:35 27604:27604 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-24 22:52:35 27604:27604 SyncActivityProfilerHandler.cpp:46] profiler_stop
+       median 10.65 ms  p90 10.67 ms
+[run ] int8  b4   sdpa_graph_pure16_compile_v3
+USDT:2026-11-24 22:52:56 27604:27604 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-24 22:52:56 27604:27604 SyncActivityProfilerHandler.cpp:46] profiler_stop
+       median 11.00 ms  p90 11.04 ms
+[run ] int8  b4   sdpa_graph_pure16_compile_v4
+  cutlass plain M=2048 N=3456 K=1152: (128, 128, 64, 64, 64, 3) 42.1 us (388 TOPS)
+  cutlass res M=2048 N=1152 K=1152: (128, 128, 64, 64, 64, 3) 23.9 us (227 TOPS)
+USDT:2026-11-24 22:53:13 27604:27604 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-24 22:53:13 27604:27604 SyncActivityProfilerHandler.cpp:46] profiler_stop
+       median 10.10 ms  p90 10.13 ms
+[run ] int8  b4   sdpa_graph_pure16_compile_v4w
+USDT:2026-11-24 22:53:31 27604:27604 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-24 22:53:31 27604:27604 SyncActivityProfilerHandler.cpp:46] profiler_stop
+       median 10.52 ms  p90 10.53 ms
+[run ] int8  b4   sdpa_graph_pure16_compile_v4c
+  cutlass plain M=2048 N=4608 K=1152: (128, 128, 64, 64, 64, 3) 60.1 us (362 TOPS)
+  cutlass res M=2048 N=1152 K=4608: (128, 128, 64, 64, 64, 5) 67.6 us (322 TOPS)
+USDT:2026-11-24 22:53:47 27604:27604 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-24 22:53:47 27604:27604 SyncActivityProfilerHandler.cpp:46] profiler_stop
+       median 8.39 ms  p90 10.58 ms
+[ref ] fp32 b8
+[run ] fp16  b8   sdpa_graph_pure16_compile_tuned
+USDT:2026-11-24 22:54:16 27604:27604 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-24 22:54:16 27604:27604 SyncActivityProfilerHandler.cpp:46] profiler_stop
+       median 23.77 ms  p90 23.78 ms
+[tune] int8 b8 sdpa_graph_pure16_compile_tuned
+  tuning 4096_3456_1152_w8_float16 on captured blocks.14.attn.qkv input (torch.float16)
+Tuning 4096_3456_1152_w8_float16: c00 {'bm': 16, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_3456_1152_w8_float16: c01 {'bm': 16, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_3456_1152_w8_float16: c02 {'bm': 16, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_3456_1152_w8_float16: c03 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_3456_1152_w8_float16: c04 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_3456_1152_w8_float16: c05 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_3456_1152_w8_float16: c06 {'bm': 32, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_3456_1152_w8_float16: c07 {'bm': 32, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_3456_1152_w8_float16: c08 {'bm': 32, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_3456_1152_w8_float16: c09 {'bm': 64, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_3456_1152_w8_float16: c10 {'bm': 64, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_3456_1152_w8_float16: c11 {'bm': 64, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_3456_1152_w8_float16: c12 {'bm': 64, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_3456_1152_w8_float16: c13 {'bm': 64, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_3456_1152_w8_float16: c14 {'bm': 64, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_3456_1152_w8_float16: c15 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_3456_1152_w8_float16: c16 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_3456_1152_w8_float16: c17 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_3456_1152_w8_float16: c18 {'bm': 128, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_3456_1152_w8_float16: c19 {'bm': 128, 'bn': 64, 'bk': 128, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_3456_1152_w8_float16: c20 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_3456_1152_w8_float16: c21 {'bm': 128, 'bn': 128, 'bk': 64, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_3456_1152_w8_float16: c22 {'bm': 64, 'bn': 256, 'bk': 128, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_3456_1152_w8_float16: c23 {'bm': 128, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_3456_1152_w8_float16: c24 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'torch_int_mm'}
+  tuning 4096_1152_1152_w8_float16 on captured blocks.14.attn.proj input (torch.float16)
+Tuning 4096_1152_1152_w8_float16: c00 {'bm': 16, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_1152_1152_w8_float16: c01 {'bm': 16, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_1152_1152_w8_float16: c02 {'bm': 16, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_1152_1152_w8_float16: c03 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_1152_1152_w8_float16: c04 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_1152_1152_w8_float16: c05 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_1152_1152_w8_float16: c06 {'bm': 32, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_1152_1152_w8_float16: c07 {'bm': 32, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_1152_1152_w8_float16: c08 {'bm': 32, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_1152_1152_w8_float16: c09 {'bm': 64, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_1152_1152_w8_float16: c10 {'bm': 64, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_1152_1152_w8_float16: c11 {'bm': 64, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_1152_1152_w8_float16: c12 {'bm': 64, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_1152_1152_w8_float16: c13 {'bm': 64, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_1152_1152_w8_float16: c14 {'bm': 64, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_1152_1152_w8_float16: c15 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_1152_1152_w8_float16: c16 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_1152_1152_w8_float16: c17 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_1152_1152_w8_float16: c18 {'bm': 128, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_1152_1152_w8_float16: c19 {'bm': 128, 'bn': 64, 'bk': 128, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_1152_1152_w8_float16: c20 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_1152_1152_w8_float16: c21 {'bm': 128, 'bn': 128, 'bk': 64, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_1152_1152_w8_float16: c22 {'bm': 64, 'bn': 256, 'bk': 128, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_1152_1152_w8_float16: c23 {'bm': 128, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_1152_1152_w8_float16: c24 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'torch_int_mm'}
+  tuning 4096_4608_1152_w8_float16 on captured blocks.14.mlp.fc1 input (torch.float16)
+Tuning 4096_4608_1152_w8_float16: c00 {'bm': 16, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_4608_1152_w8_float16: c01 {'bm': 16, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_4608_1152_w8_float16: c02 {'bm': 16, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_4608_1152_w8_float16: c03 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_4608_1152_w8_float16: c04 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_4608_1152_w8_float16: c05 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_4608_1152_w8_float16: c06 {'bm': 32, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_4608_1152_w8_float16: c07 {'bm': 32, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_4608_1152_w8_float16: c08 {'bm': 32, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_4608_1152_w8_float16: c09 {'bm': 64, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_4608_1152_w8_float16: c10 {'bm': 64, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_4608_1152_w8_float16: c11 {'bm': 64, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_4608_1152_w8_float16: c12 {'bm': 64, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_4608_1152_w8_float16: c13 {'bm': 64, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_4608_1152_w8_float16: c14 {'bm': 64, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_4608_1152_w8_float16: c15 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_4608_1152_w8_float16: c16 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_4608_1152_w8_float16: c17 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_4608_1152_w8_float16: c18 {'bm': 128, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_4608_1152_w8_float16: c19 {'bm': 128, 'bn': 64, 'bk': 128, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_4608_1152_w8_float16: c20 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_4608_1152_w8_float16: c21 {'bm': 128, 'bn': 128, 'bk': 64, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_4608_1152_w8_float16: c22 {'bm': 64, 'bn': 256, 'bk': 128, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_4608_1152_w8_float16: c23 {'bm': 128, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_4608_1152_w8_float16: c24 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'torch_int_mm'}
+  tuning 4096_1152_4608_w8_float16 on captured blocks.14.mlp.fc2 input (torch.float16)
+Tuning 4096_1152_4608_w8_float16: c00 {'bm': 16, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_1152_4608_w8_float16: c01 {'bm': 16, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_1152_4608_w8_float16: c02 {'bm': 16, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_1152_4608_w8_float16: c03 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_1152_4608_w8_float16: c04 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_1152_4608_w8_float16: c05 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_1152_4608_w8_float16: c06 {'bm': 32, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_1152_4608_w8_float16: c07 {'bm': 32, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_1152_4608_w8_float16: c08 {'bm': 32, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_1152_4608_w8_float16: c09 {'bm': 64, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_1152_4608_w8_float16: c10 {'bm': 64, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_1152_4608_w8_float16: c11 {'bm': 64, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_1152_4608_w8_float16: c12 {'bm': 64, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_1152_4608_w8_float16: c13 {'bm': 64, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_1152_4608_w8_float16: c14 {'bm': 64, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_1152_4608_w8_float16: c15 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_1152_4608_w8_float16: c16 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_1152_4608_w8_float16: c17 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_1152_4608_w8_float16: c18 {'bm': 128, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_1152_4608_w8_float16: c19 {'bm': 128, 'bn': 64, 'bk': 128, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_1152_4608_w8_float16: c20 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_1152_4608_w8_float16: c21 {'bm': 128, 'bn': 128, 'bk': 64, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_1152_4608_w8_float16: c22 {'bm': 64, 'bn': 256, 'bk': 128, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_1152_4608_w8_float16: c23 {'bm': 128, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 4096_1152_4608_w8_float16: c24 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'torch_int_mm'}
+[run ] int8  b8   sdpa_graph_pure16_compile_tuned
+USDT:2026-11-24 22:55:09 27604:27604 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-24 22:55:09 27604:27604 SyncActivityProfilerHandler.cpp:46] profiler_stop
+       median 23.20 ms  p90 23.24 ms
+[tune] int8 b8 sdpa_graph_pure16_compile_tuned_fused
+[run ] int8  b8   sdpa_graph_pure16_compile_tuned_fused
+USDT:2026-11-24 22:55:50 27604:27604 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-24 22:55:50 27604:27604 SyncActivityProfilerHandler.cpp:46] profiler_stop
+       median 18.52 ms  p90 18.55 ms
+[run ] int8  b8   sdpa_graph_pure16_compile_v3
+USDT:2026-11-24 22:56:14 27604:27604 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-24 22:56:14 27604:27604 SyncActivityProfilerHandler.cpp:46] profiler_stop
+       median 19.82 ms  p90 19.84 ms
+[run ] int8  b8   sdpa_graph_pure16_compile_v4
+  cutlass plain M=4096 N=3456 K=1152: (128, 128, 64, 64, 64, 3) 80.8 us (404 TOPS)
+  cutlass res M=4096 N=1152 K=1152: (128, 128, 64, 64, 64, 3) 36.9 us (295 TOPS)
+USDT:2026-11-24 22:56:33 27604:27604 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-24 22:56:33 27604:27604 SyncActivityProfilerHandler.cpp:46] profiler_stop
+       median 17.87 ms  p90 17.91 ms
+[run ] int8  b8   sdpa_graph_pure16_compile_v4w
+USDT:2026-11-24 22:56:53 27604:27604 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-24 22:56:53 27604:27604 SyncActivityProfilerHandler.cpp:46] profiler_stop
+       median 20.13 ms  p90 20.15 ms
+[run ] int8  b8   sdpa_graph_pure16_compile_v4c
+  cutlass plain M=4096 N=4608 K=1152: (128, 128, 64, 64, 64, 3) 107.6 us (404 TOPS)
+  cutlass res M=4096 N=1152 K=4608: (128, 128, 64, 64, 64, 5) 99.4 us (438 TOPS)
+USDT:2026-11-24 22:57:11 27604:27604 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-24 22:57:11 27604:27604 SyncActivityProfilerHandler.cpp:46] profiler_stop
+       median 13.98 ms  p90 14.10 ms
+[ref ] fp32 b16
+[run ] fp16  b16  sdpa_graph_pure16_compile_tuned
+USDT:2026-11-24 22:57:43 27604:27604 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-24 22:57:43 27604:27604 SyncActivityProfilerHandler.cpp:46] profiler_stop
+       median 46.88 ms  p90 46.90 ms
+[tune] int8 b16 sdpa_graph_pure16_compile_tuned
+  tuning 8192_3456_1152_w8_float16 on captured blocks.14.attn.qkv input (torch.float16)
+Tuning 8192_3456_1152_w8_float16: c00 {'bm': 16, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_3456_1152_w8_float16: c01 {'bm': 16, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_3456_1152_w8_float16: c02 {'bm': 16, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_3456_1152_w8_float16: c03 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_3456_1152_w8_float16: c04 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_3456_1152_w8_float16: c05 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_3456_1152_w8_float16: c06 {'bm': 32, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_3456_1152_w8_float16: c07 {'bm': 32, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_3456_1152_w8_float16: c08 {'bm': 32, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_3456_1152_w8_float16: c09 {'bm': 64, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_3456_1152_w8_float16: c10 {'bm': 64, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_3456_1152_w8_float16: c11 {'bm': 64, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_3456_1152_w8_float16: c12 {'bm': 64, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_3456_1152_w8_float16: c13 {'bm': 64, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_3456_1152_w8_float16: c14 {'bm': 64, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_3456_1152_w8_float16: c15 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_3456_1152_w8_float16: c16 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_3456_1152_w8_float16: c17 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_3456_1152_w8_float16: c18 {'bm': 128, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_3456_1152_w8_float16: c19 {'bm': 128, 'bn': 64, 'bk': 128, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_3456_1152_w8_float16: c20 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_3456_1152_w8_float16: c21 {'bm': 128, 'bn': 128, 'bk': 64, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_3456_1152_w8_float16: c22 {'bm': 64, 'bn': 256, 'bk': 128, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_3456_1152_w8_float16: c23 {'bm': 128, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_3456_1152_w8_float16: c24 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'torch_int_mm'}
+  tuning 8192_1152_1152_w8_float16 on captured blocks.14.attn.proj input (torch.float16)
+Tuning 8192_1152_1152_w8_float16: c00 {'bm': 16, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_1152_1152_w8_float16: c01 {'bm': 16, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_1152_1152_w8_float16: c02 {'bm': 16, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_1152_1152_w8_float16: c03 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_1152_1152_w8_float16: c04 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_1152_1152_w8_float16: c05 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_1152_1152_w8_float16: c06 {'bm': 32, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_1152_1152_w8_float16: c07 {'bm': 32, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_1152_1152_w8_float16: c08 {'bm': 32, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_1152_1152_w8_float16: c09 {'bm': 64, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_1152_1152_w8_float16: c10 {'bm': 64, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_1152_1152_w8_float16: c11 {'bm': 64, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_1152_1152_w8_float16: c12 {'bm': 64, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_1152_1152_w8_float16: c13 {'bm': 64, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_1152_1152_w8_float16: c14 {'bm': 64, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_1152_1152_w8_float16: c15 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_1152_1152_w8_float16: c16 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_1152_1152_w8_float16: c17 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_1152_1152_w8_float16: c18 {'bm': 128, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_1152_1152_w8_float16: c19 {'bm': 128, 'bn': 64, 'bk': 128, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_1152_1152_w8_float16: c20 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_1152_1152_w8_float16: c21 {'bm': 128, 'bn': 128, 'bk': 64, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_1152_1152_w8_float16: c22 {'bm': 64, 'bn': 256, 'bk': 128, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_1152_1152_w8_float16: c23 {'bm': 128, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_1152_1152_w8_float16: c24 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'torch_int_mm'}
+  tuning 8192_4608_1152_w8_float16 on captured blocks.14.mlp.fc1 input (torch.float16)
+Tuning 8192_4608_1152_w8_float16: c00 {'bm': 16, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_4608_1152_w8_float16: c01 {'bm': 16, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_4608_1152_w8_float16: c02 {'bm': 16, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_4608_1152_w8_float16: c03 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_4608_1152_w8_float16: c04 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_4608_1152_w8_float16: c05 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_4608_1152_w8_float16: c06 {'bm': 32, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_4608_1152_w8_float16: c07 {'bm': 32, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_4608_1152_w8_float16: c08 {'bm': 32, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_4608_1152_w8_float16: c09 {'bm': 64, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_4608_1152_w8_float16: c10 {'bm': 64, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_4608_1152_w8_float16: c11 {'bm': 64, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_4608_1152_w8_float16: c12 {'bm': 64, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_4608_1152_w8_float16: c13 {'bm': 64, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_4608_1152_w8_float16: c14 {'bm': 64, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_4608_1152_w8_float16: c15 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_4608_1152_w8_float16: c16 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_4608_1152_w8_float16: c17 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_4608_1152_w8_float16: c18 {'bm': 128, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_4608_1152_w8_float16: c19 {'bm': 128, 'bn': 64, 'bk': 128, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_4608_1152_w8_float16: c20 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_4608_1152_w8_float16: c21 {'bm': 128, 'bn': 128, 'bk': 64, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_4608_1152_w8_float16: c22 {'bm': 64, 'bn': 256, 'bk': 128, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_4608_1152_w8_float16: c23 {'bm': 128, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_4608_1152_w8_float16: c24 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'torch_int_mm'}
+  tuning 8192_1152_4608_w8_float16 on captured blocks.14.mlp.fc2 input (torch.float16)
+Tuning 8192_1152_4608_w8_float16: c00 {'bm': 16, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_1152_4608_w8_float16: c01 {'bm': 16, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_1152_4608_w8_float16: c02 {'bm': 16, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_1152_4608_w8_float16: c03 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_1152_4608_w8_float16: c04 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_1152_4608_w8_float16: c05 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_1152_4608_w8_float16: c06 {'bm': 32, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_1152_4608_w8_float16: c07 {'bm': 32, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_1152_4608_w8_float16: c08 {'bm': 32, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_1152_4608_w8_float16: c09 {'bm': 64, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_1152_4608_w8_float16: c10 {'bm': 64, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_1152_4608_w8_float16: c11 {'bm': 64, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_1152_4608_w8_float16: c12 {'bm': 64, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_1152_4608_w8_float16: c13 {'bm': 64, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_1152_4608_w8_float16: c14 {'bm': 64, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_1152_4608_w8_float16: c15 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_1152_4608_w8_float16: c16 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_1152_4608_w8_float16: c17 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_1152_4608_w8_float16: c18 {'bm': 128, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_1152_4608_w8_float16: c19 {'bm': 128, 'bn': 64, 'bk': 128, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_1152_4608_w8_float16: c20 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_1152_4608_w8_float16: c21 {'bm': 128, 'bn': 128, 'bk': 64, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_1152_4608_w8_float16: c22 {'bm': 64, 'bn': 256, 'bk': 128, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_1152_4608_w8_float16: c23 {'bm': 128, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 8192_1152_4608_w8_float16: c24 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'torch_int_mm'}
+[run ] int8  b16  sdpa_graph_pure16_compile_tuned
+USDT:2026-11-24 22:58:41 27604:27604 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-24 22:58:42 27604:27604 SyncActivityProfilerHandler.cpp:46] profiler_stop
+       median 43.77 ms  p90 43.81 ms
+[tune] int8 b16 sdpa_graph_pure16_compile_tuned_fused
+[run ] int8  b16  sdpa_graph_pure16_compile_tuned_fused
+USDT:2026-11-24 22:59:27 27604:27604 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-24 22:59:28 27604:27604 SyncActivityProfilerHandler.cpp:46] profiler_stop
+       median 35.64 ms  p90 35.70 ms
+[run ] int8  b16  sdpa_graph_pure16_compile_v3
+USDT:2026-11-24 22:59:55 27604:27604 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-24 22:59:56 27604:27604 SyncActivityProfilerHandler.cpp:46] profiler_stop
+       median 36.73 ms  p90 36.75 ms
+[run ] int8  b16  sdpa_graph_pure16_compile_v4
+  cutlass plain M=8192 N=3456 K=1152: (128, 128, 64, 64, 64, 3) 156.2 us (418 TOPS)
+  cutlass res M=8192 N=1152 K=1152: (128, 128, 64, 64, 64, 5) 75.8 us (287 TOPS)
+USDT:2026-11-24 23:00:18 27604:27604 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-24 23:00:18 27604:27604 SyncActivityProfilerHandler.cpp:46] profiler_stop
+       median 33.11 ms  p90 33.14 ms
+[run ] int8  b16  sdpa_graph_pure16_compile_v4w
+USDT:2026-11-24 23:00:41 27604:27604 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-24 23:00:41 27604:27604 SyncActivityProfilerHandler.cpp:46] profiler_stop
+       median 35.39 ms  p90 35.41 ms
+[run ] int8  b16  sdpa_graph_pure16_compile_v4c
+  cutlass plain M=8192 N=4608 K=1152: (128, 128, 64, 64, 64, 3) 209.6 us (415 TOPS)
+  cutlass res M=8192 N=1152 K=4608: (128, 128, 64, 64, 64, 5) 189.6 us (459 TOPS)
+USDT:2026-11-24 23:01:04 27604:27604 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-24 23:01:04 27604:27604 SyncActivityProfilerHandler.cpp:46] profiler_stop
+       median 26.80 ms  p90 26.99 ms
+[ref ] fp32 b32
+[run ] fp16  b32  sdpa_graph_pure16_compile_tuned
+USDT:2026-11-24 23:01:41 27604:27604 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-24 23:01:41 27604:27604 SyncActivityProfilerHandler.cpp:46] profiler_stop
+       median 91.37 ms  p90 91.92 ms
+[tune] int8 b32 sdpa_graph_pure16_compile_tuned
+  tuning 16384_3456_1152_w8_float16 on captured blocks.14.attn.qkv input (torch.float16)
+Tuning 16384_3456_1152_w8_float16: c00 {'bm': 16, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_3456_1152_w8_float16: c01 {'bm': 16, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_3456_1152_w8_float16: c02 {'bm': 16, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_3456_1152_w8_float16: c03 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_3456_1152_w8_float16: c04 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_3456_1152_w8_float16: c05 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_3456_1152_w8_float16: c06 {'bm': 32, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_3456_1152_w8_float16: c07 {'bm': 32, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_3456_1152_w8_float16: c08 {'bm': 32, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_3456_1152_w8_float16: c09 {'bm': 64, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_3456_1152_w8_float16: c10 {'bm': 64, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_3456_1152_w8_float16: c11 {'bm': 64, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_3456_1152_w8_float16: c12 {'bm': 64, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_3456_1152_w8_float16: c13 {'bm': 64, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_3456_1152_w8_float16: c14 {'bm': 64, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_3456_1152_w8_float16: c15 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_3456_1152_w8_float16: c16 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_3456_1152_w8_float16: c17 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_3456_1152_w8_float16: c18 {'bm': 128, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_3456_1152_w8_float16: c19 {'bm': 128, 'bn': 64, 'bk': 128, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_3456_1152_w8_float16: c20 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_3456_1152_w8_float16: c21 {'bm': 128, 'bn': 128, 'bk': 64, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_3456_1152_w8_float16: c22 {'bm': 64, 'bn': 256, 'bk': 128, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_3456_1152_w8_float16: c23 {'bm': 128, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_3456_1152_w8_float16: c24 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'torch_int_mm'}
+  tuning 16384_1152_1152_w8_float16 on captured blocks.14.attn.proj input (torch.float16)
+Tuning 16384_1152_1152_w8_float16: c00 {'bm': 16, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_1152_1152_w8_float16: c01 {'bm': 16, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_1152_1152_w8_float16: c02 {'bm': 16, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_1152_1152_w8_float16: c03 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_1152_1152_w8_float16: c04 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_1152_1152_w8_float16: c05 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_1152_1152_w8_float16: c06 {'bm': 32, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_1152_1152_w8_float16: c07 {'bm': 32, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_1152_1152_w8_float16: c08 {'bm': 32, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_1152_1152_w8_float16: c09 {'bm': 64, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_1152_1152_w8_float16: c10 {'bm': 64, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_1152_1152_w8_float16: c11 {'bm': 64, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_1152_1152_w8_float16: c12 {'bm': 64, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_1152_1152_w8_float16: c13 {'bm': 64, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_1152_1152_w8_float16: c14 {'bm': 64, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_1152_1152_w8_float16: c15 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_1152_1152_w8_float16: c16 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_1152_1152_w8_float16: c17 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_1152_1152_w8_float16: c18 {'bm': 128, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_1152_1152_w8_float16: c19 {'bm': 128, 'bn': 64, 'bk': 128, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_1152_1152_w8_float16: c20 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_1152_1152_w8_float16: c21 {'bm': 128, 'bn': 128, 'bk': 64, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_1152_1152_w8_float16: c22 {'bm': 64, 'bn': 256, 'bk': 128, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_1152_1152_w8_float16: c23 {'bm': 128, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_1152_1152_w8_float16: c24 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'torch_int_mm'}
+  tuning 16384_4608_1152_w8_float16 on captured blocks.14.mlp.fc1 input (torch.float16)
+Tuning 16384_4608_1152_w8_float16: c00 {'bm': 16, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_4608_1152_w8_float16: c01 {'bm': 16, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_4608_1152_w8_float16: c02 {'bm': 16, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_4608_1152_w8_float16: c03 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_4608_1152_w8_float16: c04 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_4608_1152_w8_float16: c05 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_4608_1152_w8_float16: c06 {'bm': 32, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_4608_1152_w8_float16: c07 {'bm': 32, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_4608_1152_w8_float16: c08 {'bm': 32, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_4608_1152_w8_float16: c09 {'bm': 64, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_4608_1152_w8_float16: c10 {'bm': 64, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_4608_1152_w8_float16: c11 {'bm': 64, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_4608_1152_w8_float16: c12 {'bm': 64, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_4608_1152_w8_float16: c13 {'bm': 64, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_4608_1152_w8_float16: c14 {'bm': 64, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_4608_1152_w8_float16: c15 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_4608_1152_w8_float16: c16 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_4608_1152_w8_float16: c17 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_4608_1152_w8_float16: c18 {'bm': 128, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_4608_1152_w8_float16: c19 {'bm': 128, 'bn': 64, 'bk': 128, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_4608_1152_w8_float16: c20 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_4608_1152_w8_float16: c21 {'bm': 128, 'bn': 128, 'bk': 64, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_4608_1152_w8_float16: c22 {'bm': 64, 'bn': 256, 'bk': 128, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_4608_1152_w8_float16: c23 {'bm': 128, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_4608_1152_w8_float16: c24 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'torch_int_mm'}
+  tuning 16384_1152_4608_w8_float16 on captured blocks.14.mlp.fc2 input (torch.float16)
+Tuning 16384_1152_4608_w8_float16: c00 {'bm': 16, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_1152_4608_w8_float16: c01 {'bm': 16, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_1152_4608_w8_float16: c02 {'bm': 16, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_1152_4608_w8_float16: c03 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_1152_4608_w8_float16: c04 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_1152_4608_w8_float16: c05 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_1152_4608_w8_float16: c06 {'bm': 32, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_1152_4608_w8_float16: c07 {'bm': 32, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_1152_4608_w8_float16: c08 {'bm': 32, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_1152_4608_w8_float16: c09 {'bm': 64, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_1152_4608_w8_float16: c10 {'bm': 64, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_1152_4608_w8_float16: c11 {'bm': 64, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_1152_4608_w8_float16: c12 {'bm': 64, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_1152_4608_w8_float16: c13 {'bm': 64, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_1152_4608_w8_float16: c14 {'bm': 64, 'bn': 128, 'bk': 64, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_1152_4608_w8_float16: c15 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 1, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_1152_4608_w8_float16: c16 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_1152_4608_w8_float16: c17 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_1152_4608_w8_float16: c18 {'bm': 128, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_1152_4608_w8_float16: c19 {'bm': 128, 'bn': 64, 'bk': 128, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_1152_4608_w8_float16: c20 {'bm': 64, 'bn': 128, 'bk': 128, 'warps': 4, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_1152_4608_w8_float16: c21 {'bm': 128, 'bn': 128, 'bk': 64, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_1152_4608_w8_float16: c22 {'bm': 64, 'bn': 256, 'bk': 128, 'warps': 8, 'stages': 3, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_1152_4608_w8_float16: c23 {'bm': 128, 'bn': 128, 'bk': 128, 'warps': 8, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'triton'}
+Tuning 16384_1152_4608_w8_float16: c24 {'bm': 32, 'bn': 64, 'bk': 64, 'warps': 4, 'stages': 2, 'group_m': 8, 'layout': 'nk', 'backend': 'torch_int_mm'}
+[run ] int8  b32  sdpa_graph_pure16_compile_tuned
+USDT:2026-11-24 23:02:34 27604:27604 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-24 23:02:34 27604:27604 SyncActivityProfilerHandler.cpp:46] profiler_stop
+       median 83.33 ms  p90 83.86 ms
+[tune] int8 b32 sdpa_graph_pure16_compile_tuned_fused
+[run ] int8  b32  sdpa_graph_pure16_compile_tuned_fused
+USDT:2026-11-24 23:03:23 27604:27604 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-24 23:03:23 27604:27604 SyncActivityProfilerHandler.cpp:46] profiler_stop
+       median 68.99 ms  p90 69.45 ms
+[run ] int8  b32  sdpa_graph_pure16_compile_v3
+USDT:2026-11-24 23:03:59 27604:27604 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-24 23:03:59 27604:27604 SyncActivityProfilerHandler.cpp:46] profiler_stop
+       median 71.07 ms  p90 71.10 ms
+[run ] int8  b32  sdpa_graph_pure16_compile_v4
+  cutlass plain M=16384 N=3456 K=1152: (128, 128, 64, 64, 64, 3) 312.3 us (418 TOPS)
+  cutlass res M=16384 N=1152 K=1152: (128, 128, 64, 64, 64, 5) 129.4 us (336 TOPS)
+USDT:2026-11-24 23:04:30 27604:27604 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-24 23:04:30 27604:27604 SyncActivityProfilerHandler.cpp:46] profiler_stop
+       median 64.20 ms  p90 64.23 ms
+[run ] int8  b32  sdpa_graph_pure16_compile_v4w
+USDT:2026-11-24 23:05:00 27604:27604 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-24 23:05:00 27604:27604 SyncActivityProfilerHandler.cpp:46] profiler_stop
+       median 67.26 ms  p90 67.31 ms
+[run ] int8  b32  sdpa_graph_pure16_compile_v4c
+  cutlass plain M=16384 N=4608 K=1152: (128, 128, 64, 64, 64, 3) 416.4 us (418 TOPS)
+  cutlass res M=16384 N=1152 K=4608: (128, 128, 64, 64, 64, 5) 353.5 us (492 TOPS)
+USDT:2026-11-24 23:05:30 27604:27604 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-11-24 23:05:30 27604:27604 SyncActivityProfilerHandler.cpp:46] profiler_stop
+       median 50.96 ms  p90 51.38 ms
+
+mode   batch scaffold                          median_ms   p90_ms  x_same  x_bestfp16  relL2_fp16  relL2_fp32
+fp16   4     sdpa_graph_pure16_compile_tuned       12.48    12.49   1.00       1.00  -      0.0013
+int8   4     sdpa_graph_pure16_compile_tuned       13.04    13.06   0.96       0.96      0.0138      0.0138
+fp16   4     sdpa_graph_pure16_compile_tuned_fused     12.48    12.49   1.00       1.00  -      0.0013
+int8   4     sdpa_graph_pure16_compile_tuned_fused     10.65    10.67   1.17       1.17      0.0138      0.0138
+fp16   4     sdpa_graph_pure16_compile_v3          12.48    12.49   1.00       1.00  -      0.0013
+int8   4     sdpa_graph_pure16_compile_v3          11.00    11.04   1.14       1.14      0.0118      0.0118
+fp16   4     sdpa_graph_pure16_compile_v4          12.48    12.49   1.00       1.00  -      0.0013
+int8   4     sdpa_graph_pure16_compile_v4          10.10    10.13   1.24       1.24      0.0118      0.0118
+fp16   4     sdpa_graph_pure16_compile_v4w         12.48    12.49   1.00       1.00  -      0.0013
+int8   4     sdpa_graph_pure16_compile_v4w         10.52    10.53   1.19       1.19      0.0113      0.0113
+fp16   4     sdpa_graph_pure16_compile_v4c         12.48    12.49   1.00       1.00  -      0.0013
+int8   4     sdpa_graph_pure16_compile_v4c          8.39    10.58   1.49       1.49      0.0138      0.0137
+fp16   8     sdpa_graph_pure16_compile_tuned       23.77    23.78   1.00       1.00  -      0.0013
+int8   8     sdpa_graph_pure16_compile_tuned       23.20    23.24   1.02       1.02      0.0135      0.0135
+fp16   8     sdpa_graph_pure16_compile_tuned_fused     23.77    23.78   1.00       1.00  -      0.0013
+int8   8     sdpa_graph_pure16_compile_tuned_fused     18.52    18.55   1.28       1.28      0.0136      0.0136
+fp16   8     sdpa_graph_pure16_compile_v3          23.77    23.78   1.00       1.00  -      0.0013
+int8   8     sdpa_graph_pure16_compile_v3          19.82    19.84   1.20       1.20      0.0120      0.0120
+fp16   8     sdpa_graph_pure16_compile_v4          23.77    23.78   1.00       1.00  -      0.0013
+int8   8     sdpa_graph_pure16_compile_v4          17.87    17.91   1.33       1.33      0.0119      0.0120
+fp16   8     sdpa_graph_pure16_compile_v4w         23.77    23.78   1.00       1.00  -      0.0013
+int8   8     sdpa_graph_pure16_compile_v4w         20.13    20.15   1.18       1.18      0.0113      0.0113
+fp16   8     sdpa_graph_pure16_compile_v4c         23.77    23.78   1.00       1.00  -      0.0013
+int8   8     sdpa_graph_pure16_compile_v4c         13.98    14.10   1.70       1.70      0.0136      0.0135
+fp16   16    sdpa_graph_pure16_compile_tuned       46.88    46.90   1.00       1.00  -      0.0013
+int8   16    sdpa_graph_pure16_compile_tuned       43.77    43.81   1.07       1.07      0.0137      0.0137
+fp16   16    sdpa_graph_pure16_compile_tuned_fused     46.88    46.90   1.00       1.00  -      0.0013
+int8   16    sdpa_graph_pure16_compile_tuned_fused     35.64    35.70   1.32       1.32      0.0137      0.0137
+fp16   16    sdpa_graph_pure16_compile_v3          46.88    46.90   1.00       1.00  -      0.0013
+int8   16    sdpa_graph_pure16_compile_v3          36.73    36.75   1.28       1.28      0.0119      0.0119
+fp16   16    sdpa_graph_pure16_compile_v4          46.88    46.90   1.00       1.00  -      0.0013
+int8   16    sdpa_graph_pure16_compile_v4          33.11    33.14   1.42       1.42      0.0119      0.0119
+fp16   16    sdpa_graph_pure16_compile_v4w         46.88    46.90   1.00       1.00  -      0.0013
+int8   16    sdpa_graph_pure16_compile_v4w         35.39    35.41   1.32       1.32      0.0113      0.0113
+fp16   16    sdpa_graph_pure16_compile_v4c         46.88    46.90   1.00       1.00  -      0.0013
+int8   16    sdpa_graph_pure16_compile_v4c         26.80    26.99   1.75       1.75      0.0138      0.0137
+fp16   32    sdpa_graph_pure16_compile_tuned       91.37    91.92   1.00       1.00  -      0.0012
+int8   32    sdpa_graph_pure16_compile_tuned       83.33    83.86   1.10       1.10      0.0137      0.0137
+fp16   32    sdpa_graph_pure16_compile_tuned_fused     91.37    91.92   1.00       1.00  -      0.0012
+int8   32    sdpa_graph_pure16_compile_tuned_fused     68.99    69.45   1.32       1.32      0.0138      0.0137
+fp16   32    sdpa_graph_pure16_compile_v3          91.37    91.92   1.00       1.00  -      0.0012
+int8   32    sdpa_graph_pure16_compile_v3          71.07    71.10   1.29       1.29      0.0118      0.0118
+fp16   32    sdpa_graph_pure16_compile_v4          91.37    91.92   1.00       1.00  -      0.0012
+int8   32    sdpa_graph_pure16_compile_v4          64.20    64.23   1.42       1.42      0.0118      0.0118
+fp16   32    sdpa_graph_pure16_compile_v4w         91.37    91.92   1.00       1.00  -      0.0012
+int8   32    sdpa_graph_pure16_compile_v4w         67.26    67.31   1.36       1.36      0.0112      0.0112
+fp16   32    sdpa_graph_pure16_compile_v4c         91.37    91.92   1.00       1.00  -      0.0012
+int8   32    sdpa_graph_pure16_compile_v4c         50.96    51.38   1.79       1.79      0.0138      0.0137
+
+Saved /content/full/latency/summary.csv

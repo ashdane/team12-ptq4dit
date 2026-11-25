@@ -1,0 +1,17 @@
+/usr/local/lib/python3.13/dist-packages/torch/jit/_script.py:1491: FutureWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.
+  warnings.warn(
+/usr/local/lib/python3.13/dist-packages/torch/jit/_script.py:1491: FutureWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.
+  warnings.warn(
+/usr/local/lib/python3.13/dist-packages/torch/jit/_script.py:1643: FutureWarning: `torch.jit.interface` is deprecated. Please use `torch.compile` instead.
+  warnings.warn(
+/usr/local/lib/python3.13/dist-packages/huggingface_hub/utils/_validators.py:206: UserWarning: The `local_dir_use_symlinks` argument is deprecated and ignored in `hf_hub_download`. Downloading to a local directory does not use symlinks anymore.
+  warnings.warn(
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+WARNING:huggingface_hub.utils._http:Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+{"mode": "fp32", "csb": false, "final_latent_rel_l2_vs_fp32": 0.0, "per_image_rel_l2_median": 0.0, "per_image_rel_l2_max": 0.0, "wall_s": 23.743284960999517, "decoded_psnr_db_median": 126.02059936523438, "decoded_psnr_db_min": 126.02059936523438}
+{"mode": "fp16", "csb": false, "final_latent_rel_l2_vs_fp32": 0.019325394183397293, "per_image_rel_l2_median": 0.006617385894060135, "per_image_rel_l2_max": 0.05519695580005646, "wall_s": 3.4791658349995487, "decoded_psnr_db_median": 51.06630325317383, "decoded_psnr_db_min": 32.961952209472656}
+  cutlass plain M=8192 N=3456 K=1152: (128, 128, 64, 64, 64, 3) 156.1 us (418 TOPS)
+  cutlass res M=8192 N=1152 K=1152: (128, 128, 64, 64, 64, 5) 74.1 us (293 TOPS)
+  cutlass plain M=8192 N=4608 K=1152: (128, 128, 64, 64, 64, 5) 207.4 us (419 TOPS)
+  cutlass res M=8192 N=1152 K=4608: (128, 128, 64, 64, 64, 5) 187.3 us (464 TOPS)
+{"mode": "int8", "csb": false, "final_latent_rel_l2_vs_fp32": 0.12974566221237183, "per_image_rel_l2_median": 0.11693853884935379, "per_image_rel_l2_max": 0.28465402126312256, "wall_s": 1.4708053109998218, "decoded_psnr_db_median": 28.856630325317383, "decoded_psnr_db_min": 21.411407470703125}

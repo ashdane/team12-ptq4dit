@@ -1,0 +1,9 @@
+[03:47:11] fp32 exit 0
+[03:48:01] fp16 exit 0
+[03:48:54] int8 exit 0
+[03:49:48] int8_v2 exit 0
+[03:50:46] int8_v3 exit 0
+[03:56:29] int8_v4 exit 0
+[03:57:26] int8_v4w exit 0
+[03:58:21] int8_v4c exit 0
+saved showcase_grid_a100.png

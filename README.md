@@ -1,6 +1,6 @@
 # Team 12 · Quantized DiT-XL/2 inference
 
-Our approach accelerates image generation with DiT-XL/2 by running its attention and MLP projections in INT8. At batch 32, it reduced median denoising-step latency from **91.10 to 69.08 ms on A100 (1.32×)** and from **474.46 to 310.04 ms on L4 (1.53×)**. These speedups are relative to the fastest compiled FP16 configuration measured on the same GPU. PTQ4DiT is the research baseline. The repository also includes the authors’ released implementation. [PTQ4DiT code and usage](external/PTQ4DiT-main/README.md)
+Our approach accelerates image generation with DiT-XL/2 by running its attention and MLP projections in INT8. At batch 32, it reduced median denoising-step latency from **91.10 to 69.08 ms on A100 (1.32×)** and from **474.46 to 310.04 ms on L4 (1.53×)**. These speedups are relative to the fastest compiled FP16 configuration measured on the same GPU. In the [full benchmark of all kernel versions](#full-benchmark-of-all-kernel-versions), v4 reached **1.42× on A100 and 2.05× on L4** at batch 32, and v4c reached **1.79× on A100**. With 10,000 generated images on A100, v4 scored an FID of **6.25**, against 6.50 for FP32. PTQ4DiT is the research baseline. The repository also includes the authors’ released implementation. [PTQ4DiT code and usage](external/PTQ4DiT-main/README.md)
 
 ## How our approach works
 
@@ -20,6 +20,85 @@ Each timing covers one classifier-free guidance step on ImageNet 256×256 with g
 | 32 | 91.10 ms | 69.08 ms | 1.32× | 474.46 ms | 310.04 ms | 1.53× |
 
 A separate 16-image check ran the full 50-step sampler using matched noise and compared the decoded W8A8 images with FP32. Median PSNR was **29.16 dB on A100** and **29.50 dB on L4**. The earlier W8A8 and W4A8 experiments include a separate 250-image evaluation with FID, spatial FID, Inception Score, precision, and recall. [A100 paired check](fusion/results/a100/accuracy_fused.json) · [L4 paired check](fusion/results/l4/accuracy_fused.json) · [250-image baseline results](baseline/results/quality_250img/)
+
+## Full benchmark of all kernel versions
+
+Each GPU ran the same driver on eight configurations, using PyTorch 2.14.1 with CUDA 13.0, Triton 3.8.0 and CUTLASS 2c85f49. All five kernel test suites passed on both GPUs. [Benchmark driver](fusion/scripts/full_benchmark.sh) · [A100 results](fusion/results_full/a100/) · [L4 results](fusion/results_full/l4/)
+
+| Version | Design |
+| --- | --- |
+| FP32, FP16 | Pretrained model in floating point, compiled, with CUDA graphs |
+| INT8 unfused | W8A8 projections with integer GEMM tiles tuned on the GPU. Quantization and the other block operations run as separate kernels. |
+| v2 | Our approach described above. Triton kernels fuse activation quantization into the operations that produce the activations. |
+| v3 | The proj and fc2 GEMM epilogues add the gated residual. The fc1 epilogue applies GELU and quantizes its output in 128-column groups, which fc2 reads directly. [v3 GEMMs](fusion/src/fc1bench/fused_gemm.py) |
+| v4 | CUTLASS INT8 GEMMs for qkv and for proj with the residual add, combined with the v3 MLP. [CUTLASS GEMMs](fusion/src/fc1bench/cutlass_gemm.py) |
+| v4w | v4 with 256-column quantization groups in the MLP |
+| v4c | CUTLASS GEMMs for all four projections with one activation scale per token, as in v2, plus a fused GELU and quantization kernel |
+
+### Step latency
+
+Each value is the median latency of one classifier-free guidance step over 50 CUDA-event measurements after 10 warmups. The FP16 row gives the compiled FP16 time. The other rows give the speedup over FP16 on the same GPU and batch.
+
+| Version | A100 batch 4 | A100 batch 8 | A100 batch 16 | A100 batch 32 | L4 batch 4 | L4 batch 8 | L4 batch 16 | L4 batch 32 |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| FP16 | 12.48 ms | 23.77 ms | 46.88 ms | 91.37 ms | 48.20 ms | 109.50 ms | 236.88 ms | 455.09 ms |
+| INT8 unfused | 0.96× | 1.02× | 1.07× | 1.10× | 1.42× | 1.41× | 1.35× | 1.25× |
+| v2 | 1.17× | 1.28× | 1.32× | 1.32× | 1.75× | 1.74× | 1.64× | 1.51× |
+| v3 | 1.14× | 1.20× | 1.28× | 1.29× | 1.79× | 1.96× | 1.95× | 1.86× |
+| v4 | 1.24× | 1.33× | 1.42× | 1.42× | 1.90× | 2.17× | 2.17× | 2.05× |
+| v4w | 1.19× | 1.18× | 1.32× | 1.36× | 1.79× | 2.11× | 2.19× | 2.03× |
+| v4c | 1.49× | 1.70× | 1.75× | 1.79× | 1.90× | 2.07× | 2.24× | 2.05× |
+
+At batch 32, a step takes 64.20 ms with v4 and 50.96 ms with v4c on A100, and 222.11 ms with v4 and 222.29 ms with v4c on L4. A full 50-step sampling run for 32 images takes 4.68 s with FP16 and 2.65 s with v4c on A100, and 21.99 s with FP16 and 11.10 s with v4c on L4.
+
+### Image quality
+
+Every version generated the same images, with the same class labels, initial noise and sampling noise. Generation used batch 32, 50 DDPM steps, guidance scale 1.5 and the pinned `sd-vae-ft-ema` decoder, and the FP32 baseline used TF32 matrix multiplication. OpenAI's ADM evaluator computed the metrics against the ImageNet 256×256 reference batch. The PSNR column comes from a separate paired check of 16 images with matched noise, decoded and compared with FP32. Images per second is the sampling throughput during generation.
+
+**A100, 10,000 images per version**
+
+| Version | FID ↓ | sFID ↓ | IS ↑ | Precision ↑ | Recall ↑ | PSNR vs FP32 ↑ | Images/s ↑ |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| FP32 | 6.50 | 21.02 | 242.09 | 0.7837 | 0.6658 | – | 3.41 |
+| FP16 | 6.50 | 21.02 | 241.39 | 0.7843 | 0.6652 | 51.07 dB | 6.84 |
+| INT8 unfused | 6.74 | 21.45 | 235.75 | 0.7783 | 0.6722 | 28.98 dB | 7.49 |
+| v2 | 6.76 | 21.46 | 237.04 | 0.7789 | 0.6769 | 29.16 dB | 9.02 |
+| v3 | 6.23 | 20.32 | 248.89 | 0.7907 | 0.6590 | 32.52 dB | 8.78 |
+| v4 | 6.25 | 20.31 | 248.96 | 0.7893 | 0.6617 | 32.88 dB | 9.70 |
+| v4w | 6.33 | 20.62 | 245.34 | 0.7886 | 0.6646 | 33.84 dB | 9.29 |
+| v4c | 6.75 | 21.49 | 236.65 | 0.7785 | 0.6746 | 28.86 dB | 12.09 |
+
+For the same setting with 10,000 images, the PTQ4DiT authors report FID 6.02, sFID 21.77, IS 246.24 and precision 0.7812 for FP32, and FID 5.45, sFID 19.50, IS 250.68 and precision 0.7882 for PTQ4DiT W8A8. [PTQ4DiT paper](https://arxiv.org/abs/2405.16005)
+
+**L4, 5,000 images per version**
+
+| Version | FID ↓ | sFID ↓ | IS ↑ | Precision ↑ | Recall ↑ | PSNR vs FP32 ↑ | Images/s ↑ |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| FP32 | 10.59 | 38.29 | 234.22 | 0.7826 | 0.7430 | – | 0.71 |
+| FP16 | 10.62 | 38.26 | 232.92 | 0.7854 | 0.7414 | 50.34 dB | 1.44 |
+| INT8 unfused | 10.88 | 38.82 | 226.49 | 0.7726 | 0.7470 | 28.69 dB | 1.79 |
+| v2 | 10.91 | 38.86 | 226.02 | 0.7736 | 0.7434 | 29.38 dB | 2.17 |
+| v3 | 10.29 | 37.54 | 239.99 | 0.7946 | 0.7381 | 34.13 dB | 2.67 |
+| v4 | 10.24 | 37.55 | 241.75 | 0.7872 | 0.7409 | 32.37 dB | 2.78 |
+| v4w | 10.38 | 37.87 | 234.41 | 0.7786 | 0.7441 | 32.82 dB | 2.86 |
+| v4c | 10.91 | 38.84 | 225.60 | 0.7748 | 0.7475 | 28.94 dB | 2.87 |
+
+### Sample images
+
+Each version generated the same ten ImageNet classes with the same noise. Rows are versions and columns are classes. [Showcase script](fusion/scripts/showcase.sh) · [L4 grid](fusion/results_full/l4/showcase/showcase_grid_l4.jpg)
+
+![Samples from every version on A100](fusion/results_full/a100/showcase/showcase_grid_a100.jpg)
+
+### Run the full benchmark
+
+After step 1 of [Run our approach](#run-our-approach), run the following from `fusion/` on a runtime with Nsight Systems installed. The arguments are the GPU tag and the number of images per version. Results go to `/content/full` and `/content/showcase`.
+
+```bash
+git clone https://github.com/NVIDIA/cutlass.git /content/cutlass
+git -C /content/cutlass checkout 2c85f497547eb441f0fe80bfb0fb2e6f9add1719
+bash scripts/full_benchmark.sh a100 10000
+bash scripts/showcase.sh a100
+```
 
 ## Run our approach
 

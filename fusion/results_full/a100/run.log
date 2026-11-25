@@ -1,0 +1,58 @@
+[22:47:42] start gpu=a100 images=10000
+[22:47:45] stage s0_env done
+[22:47:45] tests
+[22:50:29] stage s1_tests done
+[22:50:29] latency
+[23:05:43] stage s2_latency done
+[23:05:43] accuracy
+[23:07:08] accuracy int8 exit 0
+[23:08:35] accuracy v2 exit 0
+[23:10:22] accuracy v3 exit 0
+[23:11:50] accuracy v4 exit 0
+[23:13:18] accuracy v4w exit 0
+[23:14:45] accuracy v4c exit 0
+[23:14:45] stage s3_accuracy done
+[23:14:45] nsys
+[23:15:45] nsys step_fp16_sdpa_graph_pure16_compile_tuned_b4
+[23:16:44] nsys step_int8_sdpa_graph_pure16_compile_tuned_b4
+[23:17:35] nsys step_int8_sdpa_graph_pure16_compile_tuned_fused_b4
+[23:18:27] nsys step_int8_sdpa_graph_pure16_compile_v3_b4
+[23:19:17] nsys step_int8_sdpa_graph_pure16_compile_v4_b4
+[23:20:06] nsys step_int8_sdpa_graph_pure16_compile_v4w_b4
+[23:20:54] nsys step_int8_sdpa_graph_pure16_compile_v4c_b4
+[23:21:54] nsys step_fp16_sdpa_graph_pure16_compile_tuned_b32
+[23:22:55] nsys step_int8_sdpa_graph_pure16_compile_tuned_b32
+[23:23:48] nsys step_int8_sdpa_graph_pure16_compile_tuned_fused_b32
+[23:24:44] nsys step_int8_sdpa_graph_pure16_compile_v3_b32
+[23:25:38] nsys step_int8_sdpa_graph_pure16_compile_v4_b32
+[23:26:29] nsys step_int8_sdpa_graph_pure16_compile_v4w_b32
+[23:27:21] nsys step_int8_sdpa_graph_pure16_compile_v4c_b32
+[23:27:22] stage s4_nsys done
+[23:27:22] generate fp32 (10000 images)
+[00:20:10] generate fp32 exit 0
+[00:20:10] stage gen_fp32 done
+[00:20:10] generate fp16 (10000 images)
+[00:50:01] generate fp16 exit 0
+[00:50:01] stage gen_fp16 done
+[00:50:01] generate int8 (10000 images)
+[01:17:46] generate int8 exit 0
+[01:17:46] stage gen_int8 done
+[01:17:46] generate int8_v2 (10000 images)
+[01:41:48] generate int8_v2 exit 0
+[01:41:48] stage gen_int8_v2 done
+[01:41:48] generate int8_v3 (10000 images)
+[02:06:22] generate int8_v3 exit 0
+[02:06:22] stage gen_int8_v3 done
+[02:06:22] generate int8_v4 (10000 images)
+[02:29:06] generate int8_v4 exit 0
+[02:29:06] stage gen_int8_v4 done
+[02:29:06] generate int8_v4w (10000 images)
+[02:52:34] generate int8_v4w exit 0
+[02:52:34] stage gen_int8_v4w done
+[02:52:34] generate int8_v4c (10000 images)
+[03:11:55] generate int8_v4c exit 0
+[03:11:55] stage gen_int8_v4c done
+[03:11:55] quality
+[03:45:05] quality exit 0
+[03:45:05] stage s6_quality done
+[03:45:05] all done

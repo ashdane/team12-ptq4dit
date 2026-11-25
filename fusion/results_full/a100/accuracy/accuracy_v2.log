@@ -1,0 +1,13 @@
+/usr/local/lib/python3.13/dist-packages/torch/jit/_script.py:1491: FutureWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.
+  warnings.warn(
+/usr/local/lib/python3.13/dist-packages/torch/jit/_script.py:1491: FutureWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.
+  warnings.warn(
+/usr/local/lib/python3.13/dist-packages/torch/jit/_script.py:1643: FutureWarning: `torch.jit.interface` is deprecated. Please use `torch.compile` instead.
+  warnings.warn(
+/usr/local/lib/python3.13/dist-packages/huggingface_hub/utils/_validators.py:206: UserWarning: The `local_dir_use_symlinks` argument is deprecated and ignored in `hf_hub_download`. Downloading to a local directory does not use symlinks anymore.
+  warnings.warn(
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+WARNING:huggingface_hub.utils._http:Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+{"mode": "fp32", "csb": false, "final_latent_rel_l2_vs_fp32": 0.0, "per_image_rel_l2_median": 0.0, "per_image_rel_l2_max": 0.0, "wall_s": 23.75830283600044, "decoded_psnr_db_median": 126.02059936523438, "decoded_psnr_db_min": 126.02059936523438}
+{"mode": "fp16", "csb": false, "final_latent_rel_l2_vs_fp32": 0.019325394183397293, "per_image_rel_l2_median": 0.006617385894060135, "per_image_rel_l2_max": 0.05519695580005646, "wall_s": 3.4863595930000884, "decoded_psnr_db_median": 51.06630325317383, "decoded_psnr_db_min": 32.961952209472656}
+{"mode": "int8", "csb": false, "final_latent_rel_l2_vs_fp32": 0.1370297372341156, "per_image_rel_l2_median": 0.09185304492712021, "per_image_rel_l2_max": 0.28682592511177063, "wall_s": 8.99838213699968, "decoded_psnr_db_median": 29.159345626831055, "decoded_psnr_db_min": 21.33123779296875}

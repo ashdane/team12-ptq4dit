@@ -1,0 +1,29 @@
+test_gelu_quant (__main__.FusedOpsTests.test_gelu_quant) ... gelu_quant M=2048 exact: INT8 mismatch fraction 0.00e+00 (max |dq| 0), scale max rel diff 0.00e+00
+gelu_quant M=2048 fast (tanh.approx): INT8 mismatch fraction 1.88e-05 (max |dq| 1), scale max rel diff 0.00e+00
+gelu_quant M=16384 exact: INT8 mismatch fraction 0.00e+00 (max |dq| 0), scale max rel diff 0.00e+00
+gelu_quant M=16384 fast (tanh.approx): INT8 mismatch fraction 1.82e-05 (max |dq| 1), scale max rel diff 0.00e+00
+gelu_quant (bx) exact: INT8 mismatch fraction 0.00e+00 (max |dq| 0), scale max rel diff 0.00e+00
+ok
+test_ln_and_res_ln (__main__.FusedOpsTests.test_ln_and_res_ln) ... /usr/local/lib/python3.13/dist-packages/triton/compiler/code_generator.py:643: DeprecationWarning: AnnAssign.__init__ missing 1 required positional argument: 'simple'. This will become an error in Python 3.15.
+  init_node = ast.AnnAssign(target=st_target, value=default_value, annotation=annotation)
+ln_mod_quant M=2048 fast=False: INT8 mismatch fraction 1.27e-06 (max |dq| 1), scale max rel diff 2.85e-07
+  residual stream M=2048: exact fraction 1.000000
+res_ln_mod_quant M=2048 fast=False: INT8 mismatch fraction 4.24e-07 (max |dq| 1), scale max rel diff 2.40e-07
+ln_mod_quant M=2048 fast=True: INT8 mismatch fraction 1.27e-06 (max |dq| 1), scale max rel diff 2.85e-07
+  residual stream M=2048: exact fraction 1.000000
+res_ln_mod_quant M=2048 fast=True: INT8 mismatch fraction 4.24e-07 (max |dq| 1), scale max rel diff 2.62e-07
+ln_mod_quant M=16384 fast=False: INT8 mismatch fraction 5.83e-07 (max |dq| 1), scale max rel diff 3.02e-07
+  residual stream M=16384: exact fraction 1.000000
+res_ln_mod_quant M=16384 fast=False: INT8 mismatch fraction 6.89e-07 (max |dq| 1), scale max rel diff 3.35e-07
+ln_mod_quant M=16384 fast=True: INT8 mismatch fraction 5.30e-07 (max |dq| 1), scale max rel diff 3.02e-07
+  residual stream M=16384: exact fraction 1.000000
+res_ln_mod_quant M=16384 fast=True: INT8 mismatch fraction 6.89e-07 (max |dq| 1), scale max rel diff 3.35e-07
+ok
+test_row_quant (__main__.FusedOpsTests.test_row_quant) ... row_quant exact: bit-identical to quantize_native
+row_quant fast: INT8 mismatch fraction 0.00e+00 (max |dq| 0), scale max rel diff 0.00e+00
+ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 92.055s
+
+OK

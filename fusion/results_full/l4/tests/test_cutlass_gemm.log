@@ -1,0 +1,30 @@
+test_all_shapes_both_epilogues (__main__.CutlassGemmTests.test_all_shapes_both_epilogues) ...   cutlass plain M=2048 N=3456 K=1152: (128, 256, 64, 64, 64, 3) 111.1 us (147 TOPS)
+  cutlass res M=2048 N=3456 K=1152: (128, 128, 64, 64, 64, 3) 115.4 us (141 TOPS)
+M=2048 qkv: plain rel L2 2.07e-04, residual rel L2 2.07e-04
+  cutlass plain M=2048 N=1152 K=1152: (128, 128, 64, 64, 64, 5) 40.8 us (133 TOPS)
+  cutlass res M=2048 N=1152 K=1152: (128, 128, 64, 64, 64, 5) 43.8 us (124 TOPS)
+M=2048 proj: plain rel L2 2.07e-04, residual rel L2 2.07e-04
+  cutlass plain M=2048 N=4608 K=1152: (128, 128, 64, 64, 64, 5) 146.2 us (149 TOPS)
+  cutlass res M=2048 N=4608 K=1152: (128, 128, 64, 64, 64, 3) 162.1 us (134 TOPS)
+M=2048 fc1: plain rel L2 2.07e-04, residual rel L2 2.08e-04
+  cutlass plain M=2048 N=1152 K=4608: (128, 128, 64, 64, 64, 5) 137.8 us (158 TOPS)
+  cutlass res M=2048 N=1152 K=4608: (128, 128, 64, 64, 64, 5) 140.7 us (155 TOPS)
+M=2048 fc2: plain rel L2 2.07e-04, residual rel L2 2.07e-04
+  cutlass plain M=16384 N=3456 K=1152: (256, 128, 64, 64, 64, 3) 1291.2 us (101 TOPS)
+  cutlass res M=16384 N=3456 K=1152: (128, 256, 64, 64, 64, 3) 1736.0 us (75 TOPS)
+M=16384 qkv: plain rel L2 2.07e-04, residual rel L2 2.07e-04
+  cutlass plain M=16384 N=1152 K=1152: (128, 128, 64, 64, 64, 5) 420.1 us (104 TOPS)
+  cutlass res M=16384 N=1152 K=1152: (256, 128, 64, 64, 64, 3) 568.8 us (76 TOPS)
+M=16384 proj: plain rel L2 2.07e-04, residual rel L2 2.07e-04
+  cutlass plain M=16384 N=4608 K=1152: (128, 256, 64, 64, 64, 3) 1738.6 us (100 TOPS)
+  cutlass res M=16384 N=4608 K=1152: (128, 256, 64, 64, 64, 3) 2361.9 us (74 TOPS)
+M=16384 fc1: plain rel L2 2.07e-04, residual rel L2 2.07e-04
+  cutlass plain M=16384 N=1152 K=4608: (128, 256, 64, 64, 64, 3) 1611.7 us (108 TOPS)
+  cutlass res M=16384 N=1152 K=4608: (128, 256, 64, 64, 64, 3) 1756.9 us (99 TOPS)
+M=16384 fc2: plain rel L2 2.07e-04, residual rel L2 2.08e-04
+ok
+
+----------------------------------------------------------------------
+Ran 1 test in 36.671s
+
+OK

@@ -1,0 +1,15 @@
+/usr/local/lib/python3.13/dist-packages/torch/jit/_script.py:1491: FutureWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.
+  warnings.warn(
+/usr/local/lib/python3.13/dist-packages/torch/jit/_script.py:1491: FutureWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.
+  warnings.warn(
+/usr/local/lib/python3.13/dist-packages/torch/jit/_script.py:1643: FutureWarning: `torch.jit.interface` is deprecated. Please use `torch.compile` instead.
+  warnings.warn(
+W1124 23:54:03.403000 29187 torch/_inductor/utils.py:1806] [0/0] Not enough SMs to use max_autotune_gemm mode
+Capture range started in the application.
+Capture range ended in the application.
+Generating '/tmp/nsys-report-2358.qdstrm'
+[1/1] [0%                          ] step_fp16_sdpa_graph_pure16_compile_tuned_b32.nsys-repProcessing events...
+[1/1] [0%                          ] step_fp16_sdpa_graph_pure16_compile_tuned_b32.nsys-rep[1/1] [====25%                     ] step_fp16_sdpa_graph_pure16_compile_tuned_b32.nsys-rep[1/1] [============54%             ] step_fp16_sdpa_graph_pure16_compile_tuned_b32.nsys-rep[1/1] [============55%             ] step_fp16_sdpa_graph_pure16_compile_tuned_b32.nsys-rep[1/1] [============56%             ] step_fp16_sdpa_graph_pure16_compile_tuned_b32.nsys-rep[1/1] [============57%             ] step_fp16_sdpa_graph_pure16_compile_tuned_b32.nsys-rep[1/1] [=============58%            ] step_fp16_sdpa_graph_pure16_compile_tuned_b32.nsys-rep[1/1] [=============59%            ] step_fp16_sdpa_graph_pure16_compile_tuned_b32.nsys-rep[1/1] [=============60%            ] step_fp16_sdpa_graph_pure16_compile_tuned_b32.nsys-rep[1/1] [==============61%           ] step_fp16_sdpa_graph_pure16_compile_tuned_b32.nsys-rep[1/1] [==============62%           ] step_fp16_sdpa_graph_pure16_compile_tuned_b32.nsys-rep[1/1] [==============63%           ] step_fp16_sdpa_graph_pure16_compile_tuned_b32.nsys-rep[1/1] [==============64%           ] step_fp16_sdpa_graph_pure16_compile_tuned_b32.nsys-rep[1/1] [===================82%      ] step_fp16_sdpa_graph_pure16_compile_tuned_b32.nsys-rep[1/1] [========================100%] step_fp16_sdpa_graph_pure16_compile_tuned_b32.nsys-rep[1/1] [========================100%] step_fp16_sdpa_graph_pure16_compile_tuned_b32.nsys-rep
+{"mode": "fp16", "scaffold": "sdpa_graph_pure16_compile_tuned", "batch": 32, "replays": 20, "ms_per_step_cuda_event": 436.252734375}
+Generated:
+	/content/full/nsys/step_fp16_sdpa_graph_pure16_compile_tuned_b32.nsys-rep
